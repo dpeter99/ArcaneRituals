@@ -134,7 +134,7 @@ public class Arcanerituals  {
             reg.register(IForgeContainerType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();
                 return new WitchAltarContainer(windowId,proxy.getClientWorld(), pos, inv, proxy.getClientPlayer());
-            }).setRegistryName("witch_altar"));
+            }).setRegistryName("witch_altar_continer"));
         }
     }
 

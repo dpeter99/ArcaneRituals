@@ -52,7 +52,7 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
     private ItemStackHandler getHandler(){
         if(handler == null){
-            handler = new ItemStackHandler(1){
+            handler = new ItemStackHandler(5){
                 @Override
                 public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
                     return stack.getItem() == Items.DIAMOND;

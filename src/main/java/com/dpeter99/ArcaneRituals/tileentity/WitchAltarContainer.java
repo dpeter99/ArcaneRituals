@@ -28,11 +28,14 @@ public class WitchAltarContainer extends Container
         this.playerEntity = playerEntity;
         this.playerInventory = new InvWrapper( playerInventory);
 
-
         tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-            addSlot(new SlotItemHandler(h, 0, 64, 24));
+            addSlot(new SlotItemHandler(h, 0, 26, 17));
+            addSlot(new SlotItemHandler(h, 1, 26, 102));
+            addSlot(new SlotItemHandler(h, 2, 132, 102));
+            addSlot(new SlotItemHandler(h, 3, 132, 17));
+            addSlot(new SlotItemHandler(h, 4, 80, 17));
         });
-        layoutPlayerInventorySlots(10,70);
+        layoutPlayerInventorySlots(8,134);
 
     }
 

@@ -11,6 +11,9 @@ import net.minecraft.util.text.ITextComponent;
 
 public class WitchAltarScreen extends ContainerScreen<WitchAltarContainer> {
 
+    private static final int WIDTH = 175;
+    private static final int HEIGHT = 215;
+
     private ResourceLocation GUI = new ResourceLocation(Arcanerituals.MODID, "textures/gui/witch_altar.png");
 
 
@@ -35,7 +38,19 @@ public class WitchAltarScreen extends ContainerScreen<WitchAltarContainer> {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GUI);
         int relX = (this.width - this.xSize) / 2;
-        int relY = (this.height - this.ySize) / 2;
-        this.blit(relX, relY, 0, 0, this.xSize, this.ySize);
+        int relY = (this.height - HEIGHT) / 2;
+        this.blit(relX, relY, 0, 0, this.xSize, HEIGHT);
     }
+
+    @Override
+    public int getXSize() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getYSize() {
+        return HEIGHT;
+    }
+
+    
 }
