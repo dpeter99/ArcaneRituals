@@ -150,7 +150,8 @@ public class Arcanerituals  {
             //reg.register(IForgeContainerType.create(ContainerType::new).setRegistryName("witch_altar_continer"));
         }
 
-        public static void onRecipeSerializerRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> itemRegistryEvent){
+        @SubscribeEvent
+        public static void onRecipeSerializerRegistry(RegistryEvent.Register<IRecipeSerializer<?>> itemRegistryEvent){
             IForgeRegistry<IRecipeSerializer<?>> reg = itemRegistryEvent.getRegistry();
 
             reg.register(new AltarRecipe.Serializer().setRegistryName(AltarRecipe.RECIPE_TYPE_NAME));
