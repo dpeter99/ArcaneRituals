@@ -1,0 +1,7 @@
+{
+  "type": "arcanerituals:altar",
+  "ingredient": [
+    {"tag": "minecraft:acacia_logs"}
+  ],
+  "result": "minecraft:acacia_planks"
+}

@@ -2,6 +2,7 @@ package com.dpeter99.ArcaneRituals;
 
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
+import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
 import com.dpeter99.ArcaneRituals.item.ArcaneBook;
 import com.dpeter99.ArcaneRituals.item.BasicWand;
 import com.dpeter99.ArcaneRituals.item.ItemBloodBottle;
@@ -17,6 +18,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -148,6 +150,11 @@ public class Arcanerituals  {
             //reg.register(IForgeContainerType.create(ContainerType::new).setRegistryName("witch_altar_continer"));
         }
 
+        public static void onRecipeSerializerRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> itemRegistryEvent){
+            IForgeRegistry<IRecipeSerializer<?>> reg = itemRegistryEvent.getRegistry();
+
+            reg.register(new AltarRecipe.Serializer().setRegistryName(AltarRecipe.RECIPE_TYPE_NAME));
+        }
     }
 
 }
