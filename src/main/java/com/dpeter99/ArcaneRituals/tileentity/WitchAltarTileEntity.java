@@ -28,8 +28,31 @@ import javax.annotation.Nullable;
 
 public class WitchAltarTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
-    private LazyOptional<IItemHandler> lazy_inventory = LazyOptional.of(this::createHandler);
-    IItemHandler item_handler;
+    //private LazyOptional<IItemHandler> lazy_inventory = LazyOptional.of(this::createHandler);
+    //IItemHandler item_handler;
+
+    public final ItemStackHandler inventory = new ItemStackHandler(5) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            markDirty();
+            needRefreshRecipe = true;
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+            if(!isWorking()) {
+                return super.insertItem(slot, stack, simulate);
+            }
+            else{
+                return stack;
+            }
+        }
+    };
+
+    private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
+
 
     private boolean needRefreshRecipe = true;
 
@@ -37,10 +60,15 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
 
     private int bloodLevel = 0;
+    private int progress = 0;
+
+    private boolean isWorking() {
+        return this.progress > 0;
+    }
 
     protected final IIntArray altarData = new IIntArray() {
         public int get(int index) {
-            switch (index){
+            switch (index) {
                 case 0:
                     return bloodLevel;
                 default:
@@ -49,7 +77,7 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
         }
 
         public void set(int index, int value) {
-            switch(index) {
+            switch (index) {
                 case 0:
                     bloodLevel = value;
                 default:
@@ -63,16 +91,15 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
     };
 
 
-
     public WitchAltarTileEntity() {
         super(ArcaneTileEntities.witch_altar);
     }
 
-    public int getBloodLevel(){
+    public int getBloodLevel() {
         return bloodLevel;
     }
 
-    public boolean hasSpaceForBlood(){
+    public boolean hasSpaceForBlood() {
         return bloodLevel < 100;
     }
 
@@ -81,11 +108,10 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
         this.markDirty();
     }
 
-    public void addBlood(int i){
+    public void addBlood(int i) {
         bloodLevel += i;
         this.markDirty();
     }
-
 
 
     @Override
@@ -93,36 +119,56 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
         if (world.isRemote)
             return;
 
-        if(needRefreshRecipe){
+        if (needRefreshRecipe) {
             System.out.println("WO HOooo");
             findRecipe();
+            if (current_recipe != null) {
+                System.out.println(current_recipe.getId().toString());
+            }
             needRefreshRecipe = false;
         }
+
+        if (progress > 0) {
+            progress--;
+            if(progress <= 0 && current_recipe != null){
+                inventory.setStackInSlot(4,current_recipe.getRecipeOutput());
+                current_recipe = null;
+            }
+        }
+
     }
 
-    private void findRecipe(){
-        current_recipe = AltarRecipe.getRecipe(world,new AltarContext((IItemHandlerModifiable)lazy_inventory.cast())).orElse(null);
+    private void findRecipe() {
+        current_recipe = AltarRecipe.getRecipe(world, new AltarContext(inventory)).orElse(null);
+        if (current_recipe != null) {
+            progress = 100;
+            inventory.setStackInSlot(0,ItemStack.EMPTY);
+            inventory.setStackInSlot(1,ItemStack.EMPTY);
+            inventory.setStackInSlot(2,ItemStack.EMPTY);
+            inventory.setStackInSlot(3,ItemStack.EMPTY);
+            inventory.setStackInSlot(4,ItemStack.EMPTY);
+        }
     }
 
     @Override
     public void read(CompoundNBT nbt) {
-        CompoundNBT invTag = nbt.getCompound("inv");
-        lazy_inventory.ifPresent(h -> ((INBTSerializable<CompoundNBT>)h).deserializeNBT(invTag));
+        CompoundNBT invTag = nbt.getCompound("inventory");
+        inventory.deserializeNBT(invTag);
 
         bloodLevel = nbt.getInt("bloodLevel");
+        progress = nbt.getInt("progress");
 
         super.read(nbt);
     }
 
     @Override
     public CompoundNBT write(CompoundNBT nbt) {
-        lazy_inventory.ifPresent(h -> {
-            CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
-            nbt.put("inv", compound);
-        });
+        CompoundNBT inv_tag = inventory.serializeNBT();
 
-        //nbt.put("inventory",tag);
-        nbt.putInt("bloodLevel",bloodLevel);
+        nbt.put("inventory", inv_tag);
+
+        nbt.putInt("bloodLevel", bloodLevel);
+        nbt.putInt("progress", progress);
         return super.write(nbt);
     }
 
@@ -138,6 +184,7 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
         return new WitchAltarContainer(i, world, pos, playerInventory, altarData);
     }
 
+/*
     private IItemHandler createHandler() {
         item_handler = new ItemStackHandler(5){
             @Override
@@ -155,13 +202,13 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
         };
         return item_handler;
     }
-
+*/
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return lazy_inventory.cast();
+            return inventory_provider.cast();
         }
         return super.getCapability(cap, side);
     }

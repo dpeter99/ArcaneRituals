@@ -114,7 +114,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
      */
     @Override
     public ItemStack getRecipeOutput() {
-        return null;
+        return result;
     }
 
     @Override
