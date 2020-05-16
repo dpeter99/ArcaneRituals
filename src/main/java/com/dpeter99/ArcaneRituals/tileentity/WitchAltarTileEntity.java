@@ -13,6 +13,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -32,6 +33,13 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
     //IItemHandler item_handler;
 
     public final ItemStackHandler inventory = new ItemStackHandler(5) {
+
+        @Override
+        protected int getStackLimit(int slot, ItemStack stack)
+        {
+            return 1;
+        }
+
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
@@ -56,8 +64,8 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
     private boolean needRefreshRecipe = true;
 
-    private AltarRecipe current_recipe;
 
+    private String current_recipe;
 
     private int bloodLevel = 0;
     private int progress = 0;
@@ -116,31 +124,47 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
     @Override
     public void tick() {
+        boolean flag = false;
+
         if (world.isRemote)
             return;
 
         if (needRefreshRecipe) {
-            System.out.println("WO HOooo");
+
             findRecipe();
             if (current_recipe != null) {
-                System.out.println(current_recipe.getId().toString());
+                System.out.println("Recipe: " + current_recipe);
             }
             needRefreshRecipe = false;
+            flag = true;
         }
 
         if (progress > 0) {
             progress--;
             if(progress <= 0 && current_recipe != null){
-                inventory.setStackInSlot(4,current_recipe.getRecipeOutput());
+                System.out.println("Recipe finished: " + current_recipe);
+                inventory.setStackInSlot(4,getCurrent_recipe().getRecipeOutput());
                 current_recipe = null;
+                flag = true;
             }
+        }
+
+        if(flag){
+            this.markDirty();
         }
 
     }
 
     private void findRecipe() {
-        current_recipe = AltarRecipe.getRecipe(world, new AltarContext(inventory)).orElse(null);
-        if (current_recipe != null) {
+        if(isWorking()) {
+            System.out.printf("How did we get here");
+            return;
+        }
+
+        AltarRecipe recipe = AltarRecipe.getRecipe(world, new AltarContext(inventory)).orElse(null);
+        if (recipe != null) {
+            current_recipe = recipe.getId().toString();
+            System.out.println("Recipe found: " + recipe.getId().toString());
             progress = 100;
             inventory.setStackInSlot(0,ItemStack.EMPTY);
             inventory.setStackInSlot(1,ItemStack.EMPTY);
@@ -150,6 +174,10 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
         }
     }
 
+    private AltarRecipe getCurrent_recipe(){
+        return (AltarRecipe) world.getRecipeManager().getRecipe(ResourceLocation.tryCreate(current_recipe)).orElse(null);
+    }
+
     @Override
     public void read(CompoundNBT nbt) {
         CompoundNBT invTag = nbt.getCompound("inventory");
@@ -157,6 +185,8 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
         bloodLevel = nbt.getInt("bloodLevel");
         progress = nbt.getInt("progress");
+
+        current_recipe = nbt.getString("current_recipe");
 
         super.read(nbt);
     }
@@ -169,6 +199,8 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
         nbt.putInt("bloodLevel", bloodLevel);
         nbt.putInt("progress", progress);
+
+        nbt.putString("current_recipe", current_recipe != null ? current_recipe : "");
         return super.write(nbt);
     }
 
