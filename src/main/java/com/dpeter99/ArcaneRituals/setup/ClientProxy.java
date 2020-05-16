@@ -3,7 +3,6 @@ package com.dpeter99.ArcaneRituals.setup;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.screen.WitchAltarScreen;
 import com.dpeter99.ArcaneRituals.tileentity.ArcaneTileEntities;
-import javafx.stage.Screen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.player.PlayerEntity;

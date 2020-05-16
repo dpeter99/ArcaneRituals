@@ -13,9 +13,13 @@ import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -95,6 +99,11 @@ public class Arcanerituals  {
         LOGGER.info("HELLO from server starting");
     }
 
+    public static ResourceLocation location(String path)
+    {
+        return new ResourceLocation(MODID, path);
+    }
+
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
     // Event bus for receiving Registry Events)
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
@@ -126,16 +135,19 @@ public class Arcanerituals  {
             reg.register(TileEntityType.Builder.create(WitchAltarTileEntity::new, ArcaneBlocks.witch_altar).build(null).setRegistryName("witch_altar"));
         }
 
-
         @SubscribeEvent
         public static void onContainerRegistry(final RegistryEvent.Register<ContainerType<?>> itemRegistryEvent){
             IForgeRegistry<ContainerType<?>> reg = itemRegistryEvent.getRegistry();
 
             reg.register(IForgeContainerType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();
-                return new WitchAltarContainer(windowId,proxy.getClientWorld(), pos, inv, proxy.getClientPlayer());
+                return new WitchAltarContainer(windowId, proxy.getClientWorld(), pos, inv);
             }).setRegistryName("witch_altar_continer"));
+
+
+            //reg.register(IForgeContainerType.create(ContainerType::new).setRegistryName("witch_altar_continer"));
         }
+
     }
 
 }

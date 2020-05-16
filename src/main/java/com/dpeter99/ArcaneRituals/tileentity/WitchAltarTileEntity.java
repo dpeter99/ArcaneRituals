@@ -1,5 +1,7 @@
 package com.dpeter99.ArcaneRituals.tileentity;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -7,10 +9,17 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -25,21 +34,67 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
     private ItemStackHandler handler;
 
+    private int bloodLevel = 0;
+
+    protected final IIntArray altarData = new IIntArray() {
+        public int get(int index) {
+            switch (index){
+                case 0:
+                    return bloodLevel;
+                default:
+                    return 0;
+            }
+        }
+
+        public void set(int index, int value) {
+            switch(index) {
+                case 0:
+                    bloodLevel = value;
+                default:
+            }
+
+        }
+
+        public int size() {
+            return 1;
+        }
+    };
+
+
     public WitchAltarTileEntity() {
         super(ArcaneTileEntities.witch_altar);
     }
 
+    public int getBloodLevel(){
+        return bloodLevel;
+    }
+
+    public boolean hasSpaceForBlood(){
+        return bloodLevel < 100;
+    }
+
+    public void setBloodLevel(int bloodLevel) {
+        this.bloodLevel = bloodLevel;
+        this.markDirty();
+    }
+
+    public void addBlood(int i){
+        bloodLevel += i;
+        this.markDirty();
+    }
+
     @Override
     public void tick() {
-        if(world.isRemote){
-            //System.out.println("TEST");
-        }
+
     }
 
     @Override
     public void read(CompoundNBT compound) {
         CompoundNBT tag = compound.getCompound("inventory");
         getHandler().deserializeNBT(tag);
+
+        bloodLevel = compound.getInt("bloodLevel");
+
         super.read(compound);
     }
 
@@ -47,6 +102,7 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
     public CompoundNBT write(CompoundNBT compound) {
         CompoundNBT tag = handler.serializeNBT();
         compound.put("inventory",tag);
+        compound.putInt("bloodLevel",bloodLevel);
         return super.write(compound);
     }
 
@@ -55,7 +111,7 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
             handler = new ItemStackHandler(5){
                 @Override
                 public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                    return stack.getItem() == Items.DIAMOND;
+                    return true;// stack.getItem() == Items.DIAMOND;
                 }
             };
         }
@@ -80,6 +136,8 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
     @Nullable
     @Override
     public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-        return new WitchAltarContainer(i, world, pos, playerInventory, playerEntity);
+        return new WitchAltarContainer(i, world, pos, playerInventory, altarData);
     }
+
+
 }

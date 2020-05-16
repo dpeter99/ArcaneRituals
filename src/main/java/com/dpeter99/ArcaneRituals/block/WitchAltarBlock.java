@@ -1,5 +1,6 @@
 package com.dpeter99.ArcaneRituals.block;
 
+import com.dpeter99.ArcaneRituals.ArcaneItems;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -8,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -31,7 +33,6 @@ public class WitchAltarBlock extends Block {
 
         setRegistryName("witch_altar");
     }
-
 
     /**
      * Called throughout the code as a replacement for block instanceof BlockContainer
@@ -67,16 +68,27 @@ public class WitchAltarBlock extends Block {
         return new WitchAltarTileEntity();
     }
 
+
+
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult p_225533_6_) {
         if(!worldIn.isRemote){
-            TileEntity tileEntity = worldIn.getTileEntity(pos);
-            if(tileEntity instanceof INamedContainerProvider){
+            ItemStack current_item = player.inventory.getCurrentItem();
+            WitchAltarTileEntity tileEntity = (WitchAltarTileEntity) worldIn.getTileEntity(pos);
+
+            if(current_item.getItem() == ArcaneItems.blood_bottle) {
+                if(tileEntity.hasSpaceForBlood()) {
+                    current_item.shrink(1);
+                    tileEntity.addBlood(10);
+                }
+            }
+            else if(tileEntity instanceof INamedContainerProvider){
                 NetworkHooks.openGui((ServerPlayerEntity) player,(INamedContainerProvider)tileEntity,tileEntity.getPos());
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");
             }
+            return ActionResultType.CONSUME;
         }
-        return super.onBlockActivated(state, worldIn, pos, player, handIn, p_225533_6_);
+        return ActionResultType.CONSUME; // super.onBlockActivated(state, worldIn, pos, player, handIn, p_225533_6_);
     }
 }
