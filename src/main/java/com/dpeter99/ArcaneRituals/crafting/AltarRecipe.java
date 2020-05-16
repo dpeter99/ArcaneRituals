@@ -14,8 +14,11 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.datafix.fixes.WolfCollarColor;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
@@ -24,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AltarRecipe implements IRecipe<IInventory> {
+public class AltarRecipe implements IRecipe<AltarContext> {
 
     public static final String RECIPE_TYPE_NAME = "altar";
 
@@ -40,6 +43,12 @@ public class AltarRecipe implements IRecipe<IInventory> {
             return RECIPE_TYPE_ID.toString();
         }
     });
+
+    public static Optional<AltarRecipe> getRecipe(World world, AltarContext ctx)
+    {
+        return world.getRecipeManager().getRecipe(ALTAR, ctx, world);
+    }
+
 
     private final ResourceLocation id;
     private final String group;
@@ -61,7 +70,7 @@ public class AltarRecipe implements IRecipe<IInventory> {
      * @param worldIn
      */
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(AltarContext inv, World worldIn) {
 
         boolean found[] = new boolean[ingredients.size()];
         int found_c =0;
@@ -82,9 +91,10 @@ public class AltarRecipe implements IRecipe<IInventory> {
      * @param inv
      */
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack getCraftingResult(AltarContext inv) {
         return result;
     }
+
 
     /**
      * Used to determine if this recipe can fit in a grid of the given width/height
@@ -108,18 +118,25 @@ public class AltarRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public ResourceLocation getId() {
-        return null;
+    public ResourceLocation getId()
+    {
+        return id;
+    }
+
+    @Override
+    public String getGroup()
+    {
+        return group;
     }
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return null;
+        return SERIALIZER;
     }
 
     @Override
     public IRecipeType<?> getType() {
-        return null;
+        return ALTAR;
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>>
