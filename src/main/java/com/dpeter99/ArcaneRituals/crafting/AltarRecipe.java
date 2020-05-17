@@ -4,12 +4,10 @@ import com.dpeter99.ArcaneRituals.Arcanerituals;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.*;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
@@ -53,14 +51,18 @@ public class AltarRecipe implements IRecipe<AltarContext> {
     private final ResourceLocation id;
     private final String group;
 
+    public String altar_type;
     public List<Ingredient> ingredients;
     public ItemStack result;
+    public int fuel_amount;
 
-    public AltarRecipe(ResourceLocation id, String group, List<Ingredient> ingredients, ItemStack result) {
+    public AltarRecipe(ResourceLocation id, String group, List<Ingredient> ingredients, ItemStack result, int fuel_amount, String altar_type) {
         this.id = id;
         this.group = group;
         this.ingredients = ingredients;
         this.result = result;
+        this.fuel_amount = fuel_amount;
+        this.altar_type = altar_type;
     }
 
     /**
@@ -71,18 +73,43 @@ public class AltarRecipe implements IRecipe<AltarContext> {
      */
     @Override
     public boolean matches(AltarContext inv, World worldIn) {
+        if(inv.altar_type.equals(this.altar_type)){
+            if(inv.fuel_amount >= this.fuel_amount){
+/*
+                boolean found[] = new boolean[ingredients.size()];
+                int found_c =0;
 
-        boolean found[] = new boolean[ingredients.size()];
-        int found_c =0;
-        for (int i = 0; i < inv.getSizeInventory(); i++) {
-            for (int j = 0; j < ingredients.size();j++) {
-                if(!found[j] && ingredients.get(j).test(inv.getStackInSlot(i))){
-                    found[j] =  true;
-                    found_c ++;
+                for (int j = 0; j < ingredients.size();j++) {
+                    if(!found[j] && ingredients.get(j).test(inv.getStackInSlot(i))){
+                        found[j] =  true;
+                        found_c ++;
+                    }
                 }
+
+
+                return found_c == ingredients.size();
+
+ */
+
+                RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
+                java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
+                int i = 0;
+
+                for(int j = 0; j < inv.getSizeInventory(); ++j) {
+                    ItemStack itemstack = inv.getStackInSlot(j);
+                    if (!itemstack.isEmpty()) {
+                        ++i;
+                        inputs.add(itemstack);
+                    }
+                }
+
+                return i == this.ingredients.size() && net.minecraftforge.common.util.RecipeMatcher.findMatches(inputs,  this.ingredients) != null;
+
+
             }
         }
-        return found_c == ingredients.size();
+        return false;
+
     }
 
     /**
@@ -146,7 +173,8 @@ public class AltarRecipe implements IRecipe<AltarContext> {
         public AltarRecipe read(ResourceLocation recipeId, JsonObject json)
         {
             String group = JSONUtils.getString(json, "group", "");
-
+            int fuel = JSONUtils.getInt(json,"fuel_amount",0);
+            String altar_type = JSONUtils.getString(json,"altar_type","");
 
             JsonArray ingredientsArray = JSONUtils.getJsonArray(json, "ingredient");
             List<Ingredient> ingredient = new ArrayList<>();
@@ -158,7 +186,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
             ResourceLocation resourcelocation = new ResourceLocation(s1);
             ItemStack itemstack = new ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(resourcelocation)).orElseThrow(() -> new IllegalStateException("Item: " + s1 + " does not exist")));
 
-            return new AltarRecipe(recipeId, group, ingredient, itemstack);
+            return new AltarRecipe(recipeId, group, ingredient, itemstack, fuel, altar_type);
         }
 
         @Override
@@ -166,8 +194,10 @@ public class AltarRecipe implements IRecipe<AltarContext> {
         {
 
             String group = buffer.readString(32767);
-            ItemStack itemstack = buffer.readItemStack();
+            int fuel_amount = buffer.readVarInt();
+            String altar_type = buffer.readString();
 
+            ItemStack itemstack = buffer.readItemStack();
             int i = buffer.readVarInt();
             NonNullList<Ingredient> ingredients = NonNullList.withSize(i, Ingredient.EMPTY);
 
@@ -175,13 +205,17 @@ public class AltarRecipe implements IRecipe<AltarContext> {
                 ingredients.set(j, Ingredient.read(buffer));
             }
 
-            return new AltarRecipe(recipeId, group, ingredients, itemstack);
+            return new AltarRecipe(recipeId, group, ingredients, itemstack, fuel_amount, altar_type);
         }
 
         @Override
         public void write(PacketBuffer buffer, AltarRecipe recipe)
         {
             buffer.writeString(recipe.group);
+            buffer.writeVarInt(recipe.fuel_amount);
+            buffer.writeString(recipe.altar_type);
+
+
             buffer.writeVarInt(recipe.ingredients.size());
             for(Ingredient ingredient : recipe.ingredients) {
                 ingredient.write(buffer);

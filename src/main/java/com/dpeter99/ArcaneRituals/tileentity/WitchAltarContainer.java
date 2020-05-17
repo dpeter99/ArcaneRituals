@@ -18,11 +18,15 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
+import java.util.Random;
+
 public class WitchAltarContainer extends Container
 {
     private WitchAltarTileEntity tileEntity;
     private IItemHandler playerInventory;
     private final IIntArray altarData;
+
+    private int seed;
 
     public WitchAltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory) {
         this(id, world, pos, playerInventory, new IntArray(4));
@@ -37,19 +41,29 @@ public class WitchAltarContainer extends Container
         this.altarData = altarData;
 
         tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-            addSlot(new SlotItemHandler(h, 0, 21, 12));
-            addSlot(new SlotItemHandler(h, 1, 21, 115));
-            addSlot(new SlotItemHandler(h, 2, 138, 115));
-            addSlot(new SlotItemHandler(h, 3, 138, 12));
-            addSlot(new SlotItemHandler(h, 4, 80, 12));
+            addSlot(new SlotItemHandler(h, 0, 28, 12));
+            addSlot(new SlotItemHandler(h, 1, 28, 116));
+            addSlot(new SlotItemHandler(h, 2, 132, 116));
+            addSlot(new SlotItemHandler(h, 3, 132, 12));
+            addSlot(new SlotItemHandler(h, 4, 80, 13));
         });
         layoutPlayerInventorySlots(5,8,144);
 
         trackIntArray(altarData);
+
+        seed = new Random().nextInt(10000000);
     }
 
     public int getBloodLevel() {
         return altarData.get(0);
+    }
+
+    public int getProgress(){return altarData.get(1);}
+
+    public int getProgressFrom(){return altarData.get(2);}
+
+    public int getGlypSeed(){
+        return seed;
     }
 
     public WitchAltarTileEntity getTileEntity(){

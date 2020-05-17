@@ -54,8 +54,20 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
                 return super.insertItem(slot, stack, simulate);
             }
             else{
-                return stack;
+                return super.insertItem(slot, stack, simulate);
+                //return stack;
             }
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+            if(!isWorking()) {
+                return super.isItemValid(slot, stack);
+            }
+            else{
+                return false;
+            }
+
         }
     };
 
@@ -69,6 +81,7 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
     private int bloodLevel = 0;
     private int progress = 0;
+    private int progress_from = 0;
 
     private boolean isWorking() {
         return this.progress > 0;
@@ -79,6 +92,10 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
             switch (index) {
                 case 0:
                     return bloodLevel;
+                case 1:
+                    return progress;
+                case 2:
+                    return progress_from;
                 default:
                     return 0;
             }
@@ -88,13 +105,17 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
             switch (index) {
                 case 0:
                     bloodLevel = value;
+                case 1:
+                    progress = value;
+                case 2:
+                    progress_from = value;
                 default:
             }
 
         }
 
         public int size() {
-            return 1;
+            return 3;
         }
     };
 
@@ -113,11 +134,13 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
     public void setBloodLevel(int bloodLevel) {
         this.bloodLevel = bloodLevel;
+        needRefreshRecipe = true;
         this.markDirty();
     }
 
     public void addBlood(int i) {
         bloodLevel += i;
+        needRefreshRecipe = true;
         this.markDirty();
     }
 
@@ -143,8 +166,9 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
             progress--;
             if(progress <= 0 && current_recipe != null){
                 System.out.println("Recipe finished: " + current_recipe);
-                inventory.setStackInSlot(4,getCurrent_recipe().getRecipeOutput());
+                inventory.setStackInSlot(4,getCurrent_recipe().getRecipeOutput().copy());
                 current_recipe = null;
+                progress_from = 0;
                 flag = true;
             }
         }
@@ -161,16 +185,18 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
             return;
         }
 
-        AltarRecipe recipe = AltarRecipe.getRecipe(world, new AltarContext(inventory)).orElse(null);
+        AltarRecipe recipe = AltarRecipe.getRecipe(world, new AltarContext(inventory,bloodLevel,"witch_altar")).orElse(null);
         if (recipe != null) {
             current_recipe = recipe.getId().toString();
             System.out.println("Recipe found: " + recipe.getId().toString());
             progress = 100;
+            progress_from = 100;
             inventory.setStackInSlot(0,ItemStack.EMPTY);
             inventory.setStackInSlot(1,ItemStack.EMPTY);
             inventory.setStackInSlot(2,ItemStack.EMPTY);
             inventory.setStackInSlot(3,ItemStack.EMPTY);
             inventory.setStackInSlot(4,ItemStack.EMPTY);
+            bloodLevel -= recipe.fuel_amount;
         }
     }
 
@@ -185,6 +211,7 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
         bloodLevel = nbt.getInt("bloodLevel");
         progress = nbt.getInt("progress");
+        progress_from = nbt.getInt("progress_from");
 
         current_recipe = nbt.getString("current_recipe");
 
@@ -199,6 +226,7 @@ public class WitchAltarTileEntity extends TileEntity implements ITickableTileEnt
 
         nbt.putInt("bloodLevel", bloodLevel);
         nbt.putInt("progress", progress);
+        nbt.putInt("progress_from", progress_from);
 
         nbt.putString("current_recipe", current_recipe != null ? current_recipe : "");
         return super.write(nbt);
