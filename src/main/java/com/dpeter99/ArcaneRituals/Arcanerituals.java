@@ -1,5 +1,7 @@
 package com.dpeter99.ArcaneRituals;
 
+import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarBlock;
+import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
 import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
@@ -118,11 +120,14 @@ public class Arcanerituals  {
             IForgeRegistry<Block> reg = blockRegistryEvent.getRegistry();
 
             reg.register(new WitchAltarBlock());
+            reg.register(new NecromanticAltarBlock());
         }
 
         @SubscribeEvent
         public static void onItemRegistry(final RegistryEvent.Register<Item> itemRegistryEvent){
              IForgeRegistry<Item> reg = itemRegistryEvent.getRegistry();
+
+             reg.register(new Item(new Item.Properties()).setRegistryName("bat_wing"));
 
              reg.register(new BasicWand());
              reg.register(new ArcaneBook());
@@ -135,6 +140,7 @@ public class Arcanerituals  {
             IForgeRegistry<TileEntityType<?>> reg = itemRegistryEvent.getRegistry();
 
             reg.register(TileEntityType.Builder.create(WitchAltarTileEntity::new, ArcaneBlocks.witch_altar).build(null).setRegistryName("witch_altar"));
+            reg.register(TileEntityType.Builder.create(NecromanticAltarTileEntity::new, ArcaneBlocks.witch_altar).build(null).setRegistryName("necromantic_altar"));
         }
 
         @SubscribeEvent

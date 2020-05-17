@@ -8,4 +8,6 @@ public class ArcaneItems {
 
     public static final Item blood_bottle = null;
 
+    public static final Item basic_wand = null;
+
 }

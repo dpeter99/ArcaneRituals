@@ -1,9 +1,8 @@
-package com.dpeter99.ArcaneRituals.block;
+package com.dpeter99.ArcaneRituals.altars.necromantic;
 
 import com.dpeter99.ArcaneRituals.ArcaneItems;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,15 +22,13 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class WitchAltarBlock extends Block {
+public class NecromanticAltarBlock extends Block {
 
-    protected static final VoxelShape BASE_SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D);
-
-    public WitchAltarBlock() {
+    public NecromanticAltarBlock() {
         super(Properties.create(Material.IRON)
-        .notSolid());
+                .notSolid());
 
-        setRegistryName("witch_altar");
+        setRegistryName("necromantic_altar");
     }
 
     /**
@@ -49,10 +46,6 @@ public class WitchAltarBlock extends Block {
         return true;
     }
 
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return BASE_SHAPE;
-    }
-
     /**
      * Called throughout the code as a replacement for ITileEntityProvider.createNewTileEntity
      * Return the same thing you would from that function.
@@ -65,24 +58,17 @@ public class WitchAltarBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new WitchAltarTileEntity();
+        return new NecromanticAltarTileEntity();
     }
-
 
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult p_225533_6_) {
         if(!worldIn.isRemote){
             ItemStack current_item = player.inventory.getCurrentItem();
-            WitchAltarTileEntity tileEntity = (WitchAltarTileEntity) worldIn.getTileEntity(pos);
+            NecromanticAltarTileEntity tileEntity = (NecromanticAltarTileEntity) worldIn.getTileEntity(pos);
 
-            if(current_item.getItem() == ArcaneItems.blood_bottle) {
-                if(tileEntity.hasSpaceForBlood()) {
-                    current_item.shrink(1);
-                    tileEntity.addBlood(10);
-                }
-            }
-            else if(current_item.getItem() == ArcaneItems.basic_wand)
+            if(current_item.getItem() == ArcaneItems.basic_wand)
             {
                 tileEntity.startCrafting();
             }
@@ -96,3 +82,4 @@ public class WitchAltarBlock extends Block {
         return ActionResultType.CONSUME; // super.onBlockActivated(state, worldIn, pos, player, handIn, p_225533_6_);
     }
 }
+
