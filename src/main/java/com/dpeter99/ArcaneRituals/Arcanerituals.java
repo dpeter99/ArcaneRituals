@@ -1,6 +1,7 @@
 package com.dpeter99.ArcaneRituals;
 
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarBlock;
+import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
@@ -151,6 +152,11 @@ public class Arcanerituals  {
                 BlockPos pos = data.readBlockPos();
                 return new WitchAltarContainer(windowId, proxy.getClientWorld(), pos, inv);
             }).setRegistryName("witch_altar_continer"));
+
+            reg.register(IForgeContainerType.create((windowId, inv, data) -> {
+                BlockPos pos = data.readBlockPos();
+                return new NecromanticAltarContainer(windowId, proxy.getClientWorld(), pos, inv);
+            }).setRegistryName("necromantic_altar_container"));
 
 
             //reg.register(IForgeContainerType.create(ContainerType::new).setRegistryName("witch_altar_continer"));

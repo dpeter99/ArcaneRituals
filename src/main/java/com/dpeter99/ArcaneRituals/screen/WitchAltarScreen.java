@@ -2,7 +2,7 @@ package com.dpeter99.ArcaneRituals.screen;
 
 import com.dpeter99.ArcaneRituals.Arcanerituals;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
-import com.dpeter99.ArcaneRituals.util.TextureRegion;
+import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -174,26 +174,6 @@ public class WitchAltarScreen extends ContainerScreen<WitchAltarContainer> {
             text.add(container.getBloodLevel() + "/100" );
             this.renderTooltip(text,mouseX,mouseY);
         }
-    }
-
-    @Override
-    public int getXSize() {
-        return WIDTH;
-    }
-
-    @Override
-    public int getYSize() {
-        return HEIGHT;
-    }
-
-    @Override
-    public int getGuiLeft() {
-        return (this.width - this.xSize) / 2;
-    }
-
-    @Override
-    public int getGuiTop() {
-        return (this.height - HEIGHT) / 2;
     }
 
 }

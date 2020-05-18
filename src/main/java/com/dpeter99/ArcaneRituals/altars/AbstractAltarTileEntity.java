@@ -12,6 +12,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -67,6 +68,36 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
     };
 
     private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
+
+    public static final int PROGRESS = 0;
+    public static final int PROGRESS_FROM = 1;
+    protected final IIntArray altarData = new IIntArray() {
+        public int get(int index) {
+            switch (index) {
+                case PROGRESS:
+                    return progress;
+                case PROGRESS_FROM:
+                    return progress_from;
+                default:
+                    return 0;
+            }
+        }
+
+        public void set(int index, int value) {
+            switch (index) {
+                case PROGRESS:
+                    progress = value;
+                case PROGRESS_FROM:
+                    progress_from = value;
+                default:
+            }
+
+        }
+
+        public int size() {
+            return 3;
+        }
+    };
 
 
     protected int progress = 0;
