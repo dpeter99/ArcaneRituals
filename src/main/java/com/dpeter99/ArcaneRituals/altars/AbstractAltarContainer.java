@@ -58,9 +58,7 @@ public abstract class AbstractAltarContainer<T extends AbstractAltarTileEntity> 
      * @param playerIn
      */
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(),tileEntity.getPos()),playerIn, ArcaneBlocks.witch_altar);
-    }
+    public abstract boolean canInteractWith(PlayerEntity playerIn) ;
 
 
 

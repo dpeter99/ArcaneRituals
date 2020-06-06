@@ -10,4 +10,6 @@ public class ArcaneBlocks {
     public static final Block witch_altar = null;
 
 
+    public static final Block necromantic_altar = null;
+
 }

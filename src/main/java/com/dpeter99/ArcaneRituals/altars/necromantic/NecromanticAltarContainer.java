@@ -1,12 +1,14 @@
 package com.dpeter99.ArcaneRituals.altars.necromantic;
 
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarContainer;
+import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.tileentity.ArcaneTileEntities;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -37,10 +39,22 @@ public class NecromanticAltarContainer extends AbstractAltarContainer<Necromanti
             addSlot(new SlotItemHandler(h, 2, 132, 116));
             addSlot(new SlotItemHandler(h, 3, 132, 12));
             addSlot(new SlotItemHandler(h, 4, 80, 13));
+
+            addSlot(new SlotItemHandler(h, 5, 80, 116));
         });
         layoutPlayerInventorySlots(5,8,144);
 
 
+    }
+
+    /**
+     * Determines whether supplied player can use this container
+     *
+     * @param playerIn
+     */
+    @Override
+    public boolean canInteractWith(PlayerEntity playerIn) {
+        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(),tileEntity.getPos()),playerIn, ArcaneBlocks.necromantic_altar);
     }
 
 

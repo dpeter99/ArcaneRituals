@@ -17,6 +17,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -27,12 +31,12 @@ import javax.annotation.Nullable;
 public abstract class AbstractAltarTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
     protected boolean needRefreshRecipe = true;
+    protected boolean newFluidItem = false;
 
-    public final ItemStackHandler inventory = new ItemStackHandler(5) {
+    public final ItemStackHandler inventory = new ItemStackHandler(6) {
 
         @Override
-        protected int getStackLimit(int slot, ItemStack stack)
-        {
+        protected int getStackLimit(int slot, ItemStack stack) {
             return 1;
         }
 
@@ -40,16 +44,18 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             markDirty();
+            if (slot == 5) {
+                newFluidItem = true;
+            }
             //needRefreshRecipe = true;
         }
 
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            if(!isWorking()) {
+            if (!isWorking()) {
                 return super.insertItem(slot, stack, simulate);
-            }
-            else{
+            } else {
                 return super.insertItem(slot, stack, simulate);
                 //return stack;
             }
@@ -57,17 +63,26 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if(!isWorking()) {
-                return super.isItemValid(slot, stack);
+            if (slot == 5) {
+                return fluidContainer(stack);
             }
-            else{
+            if (isWorking()) {
                 return false;
+            } else {
+                return super.isItemValid(slot, stack);
             }
 
         }
+
+        public boolean fluidContainer(@Nonnull ItemStack stack) {
+            return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
+        }
     };
 
+    public final FluidTank fluid = new FluidTank(10);
+
     private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
+    private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> fluid);
 
     public static final int PROGRESS = 0;
     public static final int PROGRESS_FROM = 1;
@@ -102,16 +117,19 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
     protected int progress = 0;
     protected int progress_from = 0;
+
     private boolean isWorking() {
         return this.progress > 0;
     }
 
     private String current_recipe;
-    private AltarRecipe getCurrent_recipe(){
+
+    private AltarRecipe getCurrent_recipe() {
         return (AltarRecipe) world.getRecipeManager().getRecipe(ResourceLocation.tryCreate(current_recipe)).orElse(null);
     }
 
     protected abstract int getArcaneFuelAmount();
+
     protected abstract void removeArcaneFuel(int amount);
 
     protected abstract String getAltarType();
@@ -127,6 +145,15 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         if (world.isRemote)
             return;
 
+        if(newFluidItem){
+           LazyOptional<IFluidHandlerItem> capability = inventory.getStackInSlot(5).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+           if(capability.isPresent()){
+               int amount = fluid.fill(capability.orElse(null).getFluidInTank(0), IFluidHandler.FluidAction.EXECUTE);
+               fluid.drain(50000, IFluidHandler.FluidAction.EXECUTE);
+           }
+           newFluidItem = false;
+        }
+
         if (needRefreshRecipe) {
 
             checkRecipe();
@@ -139,43 +166,43 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
         if (progress > 0) {
             progress--;
-            if(progress <= 0 && current_recipe != null){
+            if (progress <= 0 && current_recipe != null) {
                 System.out.println("Recipe finished: " + current_recipe);
-                inventory.setStackInSlot(4,getCurrent_recipe().getRecipeOutput().copy());
+                inventory.setStackInSlot(4, getCurrent_recipe().getRecipeOutput().copy());
                 current_recipe = null;
                 progress_from = 0;
                 flag = true;
             }
         }
 
-        if(flag){
+        if (flag) {
             this.markDirty();
         }
 
     }
 
 
-    public void startCrafting(){
+    public void startCrafting() {
         needRefreshRecipe = true;
     }
 
     private void checkRecipe() {
-        if(isWorking()) {
+        if (isWorking()) {
             System.out.printf("How did we get here");
             return;
         }
 
-        AltarRecipe recipe = AltarRecipe.getRecipe(world, new AltarContext(inventory,getArcaneFuelAmount(),getAltarType())).orElse(null);
+        AltarRecipe recipe = AltarRecipe.getRecipe(world, new AltarContext(inventory, getArcaneFuelAmount(), getAltarType())).orElse(null);
         if (recipe != null) {
             current_recipe = recipe.getId().toString();
             System.out.println("Recipe found: " + recipe.getId().toString());
             progress = 100;
             progress_from = 100;
             inventory.setStackInSlot(0, ItemStack.EMPTY);
-            inventory.setStackInSlot(1,ItemStack.EMPTY);
-            inventory.setStackInSlot(2,ItemStack.EMPTY);
-            inventory.setStackInSlot(3,ItemStack.EMPTY);
-            inventory.setStackInSlot(4,ItemStack.EMPTY);
+            inventory.setStackInSlot(1, ItemStack.EMPTY);
+            inventory.setStackInSlot(2, ItemStack.EMPTY);
+            inventory.setStackInSlot(3, ItemStack.EMPTY);
+            inventory.setStackInSlot(4, ItemStack.EMPTY);
             removeArcaneFuel(recipe.fuel_amount);
         }
     }
@@ -218,6 +245,8 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return inventory_provider.cast();
+        } else if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return fluid_provider.cast();
         }
         return super.getCapability(cap, side);
     }
