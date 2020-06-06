@@ -141,7 +141,7 @@ public class Arcanerituals  {
             IForgeRegistry<TileEntityType<?>> reg = itemRegistryEvent.getRegistry();
 
             reg.register(TileEntityType.Builder.create(WitchAltarTileEntity::new, ArcaneBlocks.witch_altar).build(null).setRegistryName("witch_altar"));
-            reg.register(TileEntityType.Builder.create(NecromanticAltarTileEntity::new, ArcaneBlocks.witch_altar).build(null).setRegistryName("necromantic_altar"));
+            reg.register(TileEntityType.Builder.create(NecromanticAltarTileEntity::new, ArcaneBlocks.necromantic_altar).build(null).setRegistryName("necromantic_altar"));
         }
 
         @SubscribeEvent

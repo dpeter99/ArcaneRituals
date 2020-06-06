@@ -79,13 +79,14 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         }
     };
 
-    public final FluidTank fluid = new FluidTank(10);
+    public final FluidTank fluid = new FluidTank(1000);
 
     private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
     private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> fluid);
 
     public static final int PROGRESS = 0;
     public static final int PROGRESS_FROM = 1;
+    public static final int FLUID_AMOUNT = 2;
     protected final IIntArray altarData = new IIntArray() {
         public int get(int index) {
             switch (index) {
@@ -93,6 +94,8 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
                     return progress;
                 case PROGRESS_FROM:
                     return progress_from;
+                case FLUID_AMOUNT:
+                    return fluid.getFluidAmount();
                 default:
                     return 0;
             }
@@ -104,6 +107,8 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
                     progress = value;
                 case PROGRESS_FROM:
                     progress_from = value;
+                case FLUID_AMOUNT:
+                    //Can't be set
                 default:
             }
 
@@ -146,11 +151,16 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
             return;
 
         if(newFluidItem){
-           LazyOptional<IFluidHandlerItem> capability = inventory.getStackInSlot(5).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
-           if(capability.isPresent()){
-               int amount = fluid.fill(capability.orElse(null).getFluidInTank(0), IFluidHandler.FluidAction.EXECUTE);
-               fluid.drain(50000, IFluidHandler.FluidAction.EXECUTE);
-           }
+
+            LazyOptional<IFluidHandlerItem> capability = inventory.getStackInSlot(5).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+
+            capability.ifPresent(
+                    fluidInv ->
+                    {
+                        int amount = fluid.fill(fluidInv.getFluidInTank(0), IFluidHandler.FluidAction.EXECUTE);
+                        fluidInv.drain (amount, IFluidHandler.FluidAction.EXECUTE);
+                    }
+            );
            newFluidItem = false;
         }
 
@@ -213,6 +223,9 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         CompoundNBT invTag = nbt.getCompound("inventory");
         inventory.deserializeNBT(invTag);
 
+        CompoundNBT fluidTag = nbt.getCompound("fluid");
+        fluid.readFromNBT(fluidTag);
+
         progress = nbt.getInt("progress");
         progress_from = nbt.getInt("progress_from");
 
@@ -224,8 +237,11 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
     @Override
     public CompoundNBT write(CompoundNBT nbt) {
         CompoundNBT inv_tag = inventory.serializeNBT();
-
         nbt.put("inventory", inv_tag);
+
+        CompoundNBT fluidTag = new CompoundNBT();
+        fluidTag = fluid.writeToNBT(fluidTag);
+        nbt.put("fluid", fluidTag);
 
         nbt.putInt("progress", progress);
         nbt.putInt("progress_from", progress_from);

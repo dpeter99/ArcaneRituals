@@ -51,6 +51,7 @@ public abstract class AbstractAltarContainer<T extends AbstractAltarTileEntity> 
         return seed;
     }
 
+    public int getFluidAmount() { return altarData.get(AbstractAltarTileEntity.FLUID_AMOUNT);}
 
     /**
      * Determines whether supplied player can use this container
