@@ -150,7 +150,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         if (world.isRemote)
             return;
 
-        if(newFluidItem){
+        if (newFluidItem) {
 
             LazyOptional<IFluidHandlerItem> capability = inventory.getStackInSlot(5).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
 
@@ -158,10 +158,14 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
                     fluidInv ->
                     {
                         int amount = fluid.fill(fluidInv.getFluidInTank(0), IFluidHandler.FluidAction.EXECUTE);
-                        fluidInv.drain (amount, IFluidHandler.FluidAction.EXECUTE);
+                        if (amount > 0) {
+                            fluidInv.drain(amount, IFluidHandler.FluidAction.EXECUTE);
+                        }
+
                     }
             );
-           newFluidItem = false;
+            flag = true;
+            newFluidItem = false;
         }
 
         if (needRefreshRecipe) {
