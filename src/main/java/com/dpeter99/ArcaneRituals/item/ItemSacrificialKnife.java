@@ -32,6 +32,8 @@ public class ItemSacrificialKnife extends Item {
                         }
                 });
 
+
+
                 playerIn.addItemStackToInventory(new ItemStack(ArcaneItems.blood_bottle));
             }
         }

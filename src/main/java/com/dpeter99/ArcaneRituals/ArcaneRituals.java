@@ -6,6 +6,7 @@ import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
 import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
+import com.dpeter99.ArcaneRituals.fluid.Blood;
 import com.dpeter99.ArcaneRituals.item.ArcaneBook;
 import com.dpeter99.ArcaneRituals.item.BasicWand;
 import com.dpeter99.ArcaneRituals.item.ItemBloodBottle;
@@ -17,12 +18,12 @@ import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.GlassBottleItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -46,7 +47,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.stream.Collectors;
 
 @Mod("arcanerituals")
-public class Arcanerituals  {
+public class ArcaneRituals {
 
     public static final String MODID = "arcanerituals";
 
@@ -55,7 +56,7 @@ public class Arcanerituals  {
 
     public static final IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
-    public Arcanerituals() {
+    public ArcaneRituals() {
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the enqueueIMC method for modloading
@@ -134,6 +135,7 @@ public class Arcanerituals  {
              reg.register(new ArcaneBook());
              reg.register(new ItemSacrificialKnife());
              reg.register(new ItemBloodBottle());
+             //reg.register(new BucketItem());
         }
 
         @SubscribeEvent
@@ -167,6 +169,13 @@ public class Arcanerituals  {
             IForgeRegistry<IRecipeSerializer<?>> reg = itemRegistryEvent.getRegistry();
 
             reg.register(new AltarRecipe.Serializer().setRegistryName(AltarRecipe.RECIPE_TYPE_NAME));
+        }
+
+        @SubscribeEvent
+        public static void onFluidRegistry(RegistryEvent.Register<Fluid> itemRegistryEvent){
+            IForgeRegistry<Fluid> reg = itemRegistryEvent.getRegistry();
+
+            reg.register(new Blood());
         }
     }
 

@@ -10,4 +10,6 @@ public class ArcaneItems {
 
     public static final Item basic_wand = null;
 
+    public static final Item vial = null;
+
 }

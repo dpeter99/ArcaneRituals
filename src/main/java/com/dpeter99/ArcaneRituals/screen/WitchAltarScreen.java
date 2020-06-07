@@ -1,6 +1,6 @@
 package com.dpeter99.ArcaneRituals.screen;
 
-import com.dpeter99.ArcaneRituals.Arcanerituals;
+import com.dpeter99.ArcaneRituals.ArcaneRituals;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
 import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -18,7 +18,7 @@ public class WitchAltarScreen extends ContainerScreen<WitchAltarContainer> {
     private static final int WIDTH = 176;
     private static final int HEIGHT = 225;
 
-    private ResourceLocation GUI = new ResourceLocation(Arcanerituals.MODID, "textures/gui/witch_altar.png");
+    private ResourceLocation GUI = new ResourceLocation(ArcaneRituals.MODID, "textures/gui/witch_altar.png");
 
     List<TextureRegion> glyps_normal = new ArrayList<>();
     List<TextureRegion> glyps_active = new ArrayList<>();

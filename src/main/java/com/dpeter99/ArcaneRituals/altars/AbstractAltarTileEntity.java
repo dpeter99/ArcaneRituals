@@ -79,7 +79,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         }
     };
 
-    public final FluidTank fluid = new FluidTank(1000);
+    public final FluidTank fluid = new FluidTank(5000);
 
     private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
     private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> fluid);
@@ -157,15 +157,12 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
             capability.ifPresent(
                     fluidInv ->
                     {
-                        int amount = fluid.fill(fluidInv.getFluidInTank(0), IFluidHandler.FluidAction.EXECUTE);
-                        if (amount > 0) {
-                            fluidInv.drain(amount, IFluidHandler.FluidAction.EXECUTE);
-                        }
-
+                        if(fluid.fill(fluidInv.drain(fluid.getCapacity() - fluid.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE) > 0)
+                            inventory.setStackInSlot(5, fluidInv.getContainer());
+                        newFluidItem = false;
                     }
             );
             flag = true;
-            newFluidItem = false;
         }
 
         if (needRefreshRecipe) {

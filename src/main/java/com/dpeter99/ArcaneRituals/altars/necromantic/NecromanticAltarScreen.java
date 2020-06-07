@@ -1,6 +1,6 @@
 package com.dpeter99.ArcaneRituals.altars.necromantic;
 
-import com.dpeter99.ArcaneRituals.Arcanerituals;
+import com.dpeter99.ArcaneRituals.ArcaneRituals;
 import com.dpeter99.ArcaneRituals.screen.GlyphDrawer;
 import com.dpeter99.ArcaneRituals.util.ui.SimpleScreen;
 import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContainer> {
 
-    private ResourceLocation GUI = new ResourceLocation(Arcanerituals.MODID, "textures/gui/necromantic_altar.png");
+    private ResourceLocation GUI = new ResourceLocation(ArcaneRituals.MODID, "textures/gui/necromantic_altar.png");
 
     private static final int WIDTH = 176;
     private static final int HEIGHT = 225;
@@ -113,13 +113,14 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
 
     private void drawFluid(int level) {
         TextureRegion source = null;
-        if (level > 0 && level <= 25) {
+        float step = 5000.0f/4;
+        if        (step * 0 < level && level <= step * 1) {
             source = fluidStates.get(0);
-        } else if (level > 25 && level <= 50) {
+        } else if (step * 1 < level && level <= step * 2) {
             source = fluidStates.get(1);
-        } else if (level > 50 && level <= 75) {
+        } else if (step * 2 < level && level <= step * 3) {
             source = fluidStates.get(2);
-        } else if (level > 75 && level <= 100) {
+        } else if (step * 3 < level) {
             source = fluidStates.get(3);
         }
         if (source != null) {

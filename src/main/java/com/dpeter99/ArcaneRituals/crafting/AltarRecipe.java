@@ -1,22 +1,17 @@
 package com.dpeter99.ArcaneRituals.crafting;
 
-import com.dpeter99.ArcaneRituals.Arcanerituals;
+import com.dpeter99.ArcaneRituals.ArcaneRituals;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.datafix.fixes.WolfCollarColor;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
@@ -29,10 +24,10 @@ public class AltarRecipe implements IRecipe<AltarContext> {
 
     public static final String RECIPE_TYPE_NAME = "altar";
 
-    @ObjectHolder(Arcanerituals.MODID+":"+RECIPE_TYPE_NAME)
+    @ObjectHolder(ArcaneRituals.MODID+":"+RECIPE_TYPE_NAME)
     public static IRecipeSerializer<?> SERIALIZER = null;
 
-    public static final ResourceLocation RECIPE_TYPE_ID = Arcanerituals.location(RECIPE_TYPE_NAME);
+    public static final ResourceLocation RECIPE_TYPE_ID = ArcaneRituals.location(RECIPE_TYPE_NAME);
     public static IRecipeType<AltarRecipe> ALTAR = Registry.register(Registry.RECIPE_TYPE, RECIPE_TYPE_ID, new IRecipeType<AltarRecipe>()
     {
         @Override
