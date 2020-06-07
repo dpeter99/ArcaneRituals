@@ -7,10 +7,7 @@ import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
 import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
 import com.dpeter99.ArcaneRituals.fluid.Blood;
-import com.dpeter99.ArcaneRituals.item.ArcaneBook;
-import com.dpeter99.ArcaneRituals.item.BasicWand;
-import com.dpeter99.ArcaneRituals.item.ItemBloodBottle;
-import com.dpeter99.ArcaneRituals.item.ItemSacrificialKnife;
+import com.dpeter99.ArcaneRituals.item.*;
 import com.dpeter99.ArcaneRituals.setup.ClientProxy;
 import com.dpeter99.ArcaneRituals.setup.IProxy;
 import com.dpeter99.ArcaneRituals.setup.ServerProxy;
@@ -135,7 +132,7 @@ public class ArcaneRituals {
              reg.register(new ArcaneBook());
              reg.register(new ItemSacrificialKnife());
              reg.register(new ItemBloodBottle());
-             //reg.register(new BucketItem());
+             reg.register(new ItemVial());
         }
 
         @SubscribeEvent

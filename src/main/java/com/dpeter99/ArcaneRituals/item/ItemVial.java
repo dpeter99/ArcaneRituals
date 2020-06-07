@@ -20,8 +20,8 @@ import javax.annotation.Nullable;
 
 public class ItemVial extends Item {
 
-    public ItemVial(Properties properties) {
-        super(properties);
+    public ItemVial() {
+        super(new Properties());
 
         setRegistryName("vial");
     }
