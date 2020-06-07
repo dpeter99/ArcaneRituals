@@ -6,6 +6,7 @@ import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
 import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
+import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import com.dpeter99.ArcaneRituals.fluid.Blood;
 import com.dpeter99.ArcaneRituals.item.*;
 import com.dpeter99.ArcaneRituals.setup.ClientProxy;
@@ -16,6 +17,7 @@ import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.GlassBottleItem;
@@ -132,7 +134,9 @@ public class ArcaneRituals {
              reg.register(new ArcaneBook());
              reg.register(new ItemSacrificialKnife());
              reg.register(new ItemBloodBottle());
-             reg.register(new ItemVial());
+
+             reg.register(new ItemVial(Fluids.EMPTY).setRegistryName("vial"));
+             reg.register(new ItemVial(ArcaneFluids.blood).setRegistryName("blood_vial"));
         }
 
         @SubscribeEvent

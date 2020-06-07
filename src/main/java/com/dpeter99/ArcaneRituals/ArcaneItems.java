@@ -12,4 +12,6 @@ public class ArcaneItems {
 
     public static final Item vial = null;
 
+    public static final Item blood_vial = null;
+
 }

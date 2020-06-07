@@ -37,7 +37,8 @@ public class ItemSacrificialKnife extends Item {
                             return;
                         }
                 });
-                ItemStack new_vial = new ItemStack(ArcaneItems.vial);
+
+                ItemStack new_vial = new ItemStack(ArcaneItems.blood_vial);
                 new_vial.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(
                         fluidInv ->
                         {

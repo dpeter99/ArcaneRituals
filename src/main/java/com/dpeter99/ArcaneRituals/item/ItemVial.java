@@ -1,13 +1,18 @@
 package com.dpeter99.ArcaneRituals.item;
 
 import com.dpeter99.ArcaneRituals.ArcaneItems;
+import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -20,11 +25,14 @@ import javax.annotation.Nullable;
 
 public class ItemVial extends Item {
 
-    public ItemVial() {
+    public Fluid containedFluid;
+
+    public ItemVial(Fluid fluid) {
         super(new Properties());
 
-        setRegistryName("vial");
+        containedFluid = fluid;
     }
+
 
     /**
      * Called from ItemStack.setItem, will hold extra data for the life of this
@@ -43,8 +51,15 @@ public class ItemVial extends Item {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        FluidHandlerItemStackSimple fluid = new FluidHandlerItemStackSimple.SwapEmpty(stack, new ItemStack(ArcaneItems.vial),500);
-        
+        FluidHandlerItemStackSimple fluid = new FluidHandlerItemStackSimple.SwapEmpty(stack, new ItemStack(ArcaneItems.vial), 500) {
+            @Override
+            public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
+                if (stack.getFluid().isEquivalentTo(containedFluid))
+                    return true;
+                return false;
+            }
+        };
+
         return fluid;
     }
 }
