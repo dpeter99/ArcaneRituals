@@ -4,6 +4,7 @@ import com.dpeter99.ArcaneRituals.ArcaneItems;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -26,6 +27,8 @@ import javax.annotation.Nullable;
 public class ItemVial extends Item {
 
     public Fluid containedFluid;
+
+    private static ItemStack emptyStack;
 
     public ItemVial(Fluid fluid) {
         super(new Properties());
@@ -51,7 +54,9 @@ public class ItemVial extends Item {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        FluidHandlerItemStackSimple fluid = new FluidHandlerItemStackSimple.SwapEmpty(stack, new ItemStack(ArcaneItems.vial), 500) {
+        FluidHandlerItemStackSimple fluid;
+
+        fluid = new FluidHandlerItemStackSimple(stack, 500) {
             @Override
             public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
                 if (stack.getFluid().isEquivalentTo(containedFluid))
@@ -59,6 +64,8 @@ public class ItemVial extends Item {
                 return false;
             }
         };
+
+
 
         return fluid;
     }

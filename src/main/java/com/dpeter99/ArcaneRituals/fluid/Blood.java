@@ -28,9 +28,13 @@ public class Blood extends EmptyFluid {
     @Nonnull
     @Override
     protected FluidAttributes createAttributes() {
-        return FluidAttributes.builder(texture, texture)
+        return BloodAttributes.builder(texture, texture)
                 //.translationKey(TranslationHelper.getFluidKey("liquid_crystal"))
+
                 .build(this);
     }
+
+
+
 
 }
