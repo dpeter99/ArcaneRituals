@@ -136,7 +136,7 @@ public class ArcaneRituals {
              reg.register(new ItemBloodBottle());
 
              reg.register(new ItemVial(Fluids.EMPTY).setRegistryName("vial"));
-             reg.register(new ItemVial(ArcaneFluids.blood).setRegistryName("blood_vial"));
+             reg.register(new ItemBloodVial().setRegistryName("blood_vial"));
         }
 
         @SubscribeEvent

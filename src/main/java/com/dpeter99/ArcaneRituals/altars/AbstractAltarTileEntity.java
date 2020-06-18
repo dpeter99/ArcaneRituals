@@ -18,9 +18,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -79,14 +76,14 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         }
     };
 
-    public final FluidTank fluid = new FluidTank(5000);
+    //public final FluidTank fluid = new FluidTank(5000);
 
     private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
-    private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> fluid);
+    //private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> fluid);
 
     public static final int PROGRESS = 0;
     public static final int PROGRESS_FROM = 1;
-    public static final int FLUID_AMOUNT = 2;
+    public static final int FOCUSE_AMOUNT = 2;
     protected final IIntArray altarData = new IIntArray() {
         public int get(int index) {
             switch (index) {
@@ -94,8 +91,8 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
                     return progress;
                 case PROGRESS_FROM:
                     return progress_from;
-                case FLUID_AMOUNT:
-                    return fluid.getFluidAmount();
+                case FOCUSE_AMOUNT:
+                    return getArcaneFuelAmount();
                 default:
                     return 0;
             }
@@ -107,7 +104,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
                     progress = value;
                 case PROGRESS_FROM:
                     progress_from = value;
-                case FLUID_AMOUNT:
+                case FOCUSE_AMOUNT:
                     //Can't be set
                 default:
             }
@@ -137,7 +134,10 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
     protected abstract void removeArcaneFuel(int amount);
 
+
     protected abstract String getAltarType();
+
+
 
     public AbstractAltarTileEntity(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
@@ -150,6 +150,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         if (world.isRemote)
             return;
 
+        /*
         if (newFluidItem) {
 
             LazyOptional<IFluidHandlerItem> capability = inventory.getStackInSlot(5).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
@@ -164,6 +165,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
             );
             flag = true;
         }
+        */
 
         if (needRefreshRecipe) {
 
@@ -224,8 +226,8 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         CompoundNBT invTag = nbt.getCompound("inventory");
         inventory.deserializeNBT(invTag);
 
-        CompoundNBT fluidTag = nbt.getCompound("fluid");
-        fluid.readFromNBT(fluidTag);
+        //CompoundNBT fluidTag = nbt.getCompound("fluid");
+        //fluid.readFromNBT(fluidTag);
 
         progress = nbt.getInt("progress");
         progress_from = nbt.getInt("progress_from");
@@ -240,9 +242,9 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         CompoundNBT inv_tag = inventory.serializeNBT();
         nbt.put("inventory", inv_tag);
 
-        CompoundNBT fluidTag = new CompoundNBT();
-        fluidTag = fluid.writeToNBT(fluidTag);
-        nbt.put("fluid", fluidTag);
+        //CompoundNBT fluidTag = new CompoundNBT();
+        //fluidTag = fluid.writeToNBT(fluidTag);
+        //nbt.put("fluid", fluidTag);
 
         nbt.putInt("progress", progress);
         nbt.putInt("progress_from", progress_from);
@@ -262,9 +264,12 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return inventory_provider.cast();
-        } else if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+        }
+        /*
+        else if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             return fluid_provider.cast();
         }
+        */
         return super.getCapability(cap, side);
     }
 }

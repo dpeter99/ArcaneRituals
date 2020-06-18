@@ -1,13 +1,11 @@
 package com.dpeter99.ArcaneRituals.altars.necromantic;
 
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEntity;
+import com.dpeter99.ArcaneRituals.arcane_fluid.Blood;
 import com.dpeter99.ArcaneRituals.tileentity.ArcaneTileEntities;
-import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -15,32 +13,7 @@ import javax.annotation.Nullable;
 
 public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
 
-    public static final int FUEL_AMOUNT = 0;
-    protected final IIntArray data = new IIntArray() {
-        public int get(int index) {
-            switch (index) {
-                case FUEL_AMOUNT:
-                    return fuel;
-                default:
-                    return 0;
-            }
-        }
-
-        public void set(int index, int value) {
-            switch (index) {
-                case FUEL_AMOUNT:
-                    progress = fuel;
-                default:
-            }
-
-        }
-
-        public int size() {
-            return 3;
-        }
-    };
-
-    public int fuel = 0;
+    public Blood fuel = new Blood(0,"");
 
     public NecromanticAltarTileEntity() {
         super(ArcaneTileEntities.necromantic_altar);
@@ -48,12 +21,12 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
 
     @Override
     protected int getArcaneFuelAmount() {
-        return fuel;
+        return fuel.amount;
     }
 
     @Override
     protected void removeArcaneFuel(int amount) {
-        fuel -= amount;
+        fuel.amount -= amount;
     }
 
     @Override
@@ -69,6 +42,6 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
     @Nullable
     @Override
     public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-        return new NecromanticAltarContainer(i, world, pos, playerInventory, altarData, data);
+        return new NecromanticAltarContainer(i, world, pos, playerInventory, altarData);
     }
 }

@@ -24,10 +24,10 @@ public class NecromanticAltarContainer extends AbstractAltarContainer<Necromanti
     IIntArray necromanticData;
 
     public NecromanticAltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory) {
-        this(id, world, pos, playerInventory, new IntArray(4), new IntArray(1));
+        this(id, world, pos, playerInventory, new IntArray(4));
     }
 
-    public NecromanticAltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory, IIntArray altarData, IIntArray necromanticData) {
+    public NecromanticAltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory, IIntArray altarData) {
         super(ArcaneTileEntities.necromantic_altar_container, id,world,pos,playerInventory,altarData);
 
         this.necromanticData = necromanticData;

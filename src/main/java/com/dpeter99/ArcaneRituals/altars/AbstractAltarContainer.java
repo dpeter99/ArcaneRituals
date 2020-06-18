@@ -1,22 +1,13 @@
 package com.dpeter99.ArcaneRituals.altars;
 
-import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
-import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
 import com.dpeter99.ArcaneRituals.util.container.SimpleContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
@@ -51,7 +42,7 @@ public abstract class AbstractAltarContainer<T extends AbstractAltarTileEntity> 
         return seed;
     }
 
-    public int getFluidAmount() { return altarData.get(AbstractAltarTileEntity.FLUID_AMOUNT);}
+    public int getFluidAmount() { return altarData.get(AbstractAltarTileEntity.FOCUSE_AMOUNT);}
 
     /**
      * Determines whether supplied player can use this container
