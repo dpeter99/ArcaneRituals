@@ -1,7 +1,10 @@
 package com.dpeter99.ArcaneRituals.item;
 
 import com.dpeter99.ArcaneRituals.ArcaneItems;
+import com.dpeter99.ArcaneRituals.fluid.AdvancedFluid;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
+import com.dpeter99.ArcaneRituals.fluid.Blood;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -9,6 +12,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -23,17 +29,54 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemVial extends Item {
 
-    public Fluid containedFluid;
-
     private static ItemStack emptyStack;
 
-    public ItemVial(Fluid fluid) {
+    public ItemVial() {
         super(new Properties());
+    }
 
-        containedFluid = fluid;
+    public static void setFluid(ItemStack stack, FluidStack f){
+        stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(
+                fluidinv -> {
+                    fluidinv.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
+                    fluidinv.fill(f, IFluidHandler.FluidAction.EXECUTE);
+                }
+        );
+    }
+
+    public static FluidStack getFluid(ItemStack stack){
+        LazyOptional<IFluidHandlerItem> capability = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+        if(capability.isPresent()){
+            return capability.orElse(null).getFluidInTank(0);
+        }
+        return null;
+    }
+
+    public static boolean isEmpty(ItemStack stack){
+        LazyOptional<IFluidHandlerItem> capability = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+        if(capability.isPresent()){
+            return capability.orElse(null).getFluidInTank(0).isEmpty();
+        }
+        return false;
+    }
+
+    @Override
+    public String getHighlightTip(ItemStack item, String displayName) {
+        return getFluid(item).getDisplayName().getFormattedText() + displayName;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        //super.addInformation(stack, worldIn, tooltip, flagIn);
+        FluidStack fluidStack = getFluid(stack);
+        Fluid fluid = fluidStack.getFluid();
+        if(fluid instanceof AdvancedFluid){
+            tooltip.add(((AdvancedFluid) fluid).getInfoText(fluidStack));
+        }
     }
 
 
@@ -56,12 +99,10 @@ public class ItemVial extends Item {
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         FluidHandlerItemStackSimple fluid;
 
-        fluid = new FluidHandlerItemStackSimple(stack, 500) {
+        fluid = new FluidHandlerItemStackSimple(stack, 250) {
             @Override
-            public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-                if (stack.getFluid().isEquivalentTo(containedFluid))
-                    return true;
-                return false;
+            public void setFluid(FluidStack fluid){
+                super.setFluid(fluid);
             }
         };
 

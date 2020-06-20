@@ -38,7 +38,7 @@ public class ItemBloodVial extends Item {
         }
         return "Nobody";
     }
-
+/*
     public static Blood GetBlood(ItemStack stack){
         CompoundNBT nbt = stack.getTag();
         String name = "";
@@ -58,6 +58,8 @@ public class ItemBloodVial extends Item {
         return new Blood(300,name);
     }
 
+
+ */
     public static void SetOwner(ItemStack stack, UUID player){
         CompoundNBT nbt = stack.getOrCreateTag();
         CompoundNBT owner_nbt = new CompoundNBT();
@@ -72,20 +74,6 @@ public class ItemBloodVial extends Item {
         nbt.put("Owner",owner_nbt);
     }
 
-    /**
-     * allows items to add custom lines of information to the mouseover description
-     *
-     * @param stack
-     * @param worldIn
-     * @param tooltip
-     * @param flagIn
-     */
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        //super.addInformation(stack, worldIn, tooltip, flagIn);
-        String owner = "From: " + getOwnerName(stack.getTag());
-        tooltip.add(new StringTextComponent(owner).applyTextStyle(TextFormatting.DARK_RED));
 
 
-    }
 }

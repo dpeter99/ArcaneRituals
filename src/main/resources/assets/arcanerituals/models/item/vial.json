@@ -1,6 +1,10 @@
 {
-  "parent": "item/handheld",
+  "parent": "arcanerituals:fluid_holder",
   "textures": {
     "layer0": "arcanerituals:item/vial"
+  },
+  "fluid_variants": {
+    "empty": "arcanerituals:item/vial",
+    "blood": "arcanerituals:item/blood_vial"
   }
 }

@@ -5,6 +5,7 @@ import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
+import com.dpeter99.ArcaneRituals.client.renderer.FluidHolderRenderer;
 import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import com.dpeter99.ArcaneRituals.fluid.Blood;
@@ -14,6 +15,7 @@ import com.dpeter99.ArcaneRituals.setup.IProxy;
 import com.dpeter99.ArcaneRituals.setup.ServerProxy;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
+import com.dpeter99.ArcaneRituals.util.ArcaneRitualsResourceLocation;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
@@ -26,6 +28,8 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
@@ -65,6 +69,8 @@ public class ArcaneRituals {
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModelRegistry);
+
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -95,6 +101,12 @@ public class ArcaneRituals {
         LOGGER.info("Got IMC {}", event.getIMCStream().
                 map(m->m.getMessageSupplier().get()).
                 collect(Collectors.toList()));
+    }
+
+
+    public void onModelRegistry(ModelRegistryEvent itemRegistryEvent){
+        ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
+                FluidHolderRenderer.Loader.INSTANCE);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -133,10 +145,10 @@ public class ArcaneRituals {
              reg.register(new BasicWand());
              reg.register(new ArcaneBook());
              reg.register(new ItemSacrificialKnife());
-             reg.register(new ItemBloodBottle());
+             //reg.register(new ItemBloodBottle());
 
-             reg.register(new ItemVial(Fluids.EMPTY).setRegistryName("vial"));
-             reg.register(new ItemBloodVial().setRegistryName("blood_vial"));
+             reg.register(new ItemVial().setRegistryName("vial"));
+             //reg.register(new ItemBloodVial().setRegistryName("blood_vial"));
         }
 
         @SubscribeEvent

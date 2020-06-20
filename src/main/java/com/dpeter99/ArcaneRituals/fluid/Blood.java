@@ -5,15 +5,20 @@ import com.dpeter99.ArcaneRituals.util.ArcaneRitualsResourceLocation;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Blood extends FluidWithData {
+public class Blood extends AdvancedFluid {
 
     public static final String UNKNOWN_BLOOD = ArcaneRituals.MODID + ":blood_source:unknown";
     public static final String PLAYER_BLOOD = ArcaneRituals.MODID + ":blood_source:player";
@@ -22,6 +27,7 @@ public class Blood extends FluidWithData {
 
     public Blood() {
         super(()-> Items.AIR, FluidAttributes.builder(texture,texture));
+        setRegistryName("blood");
     }
 
     @Override
@@ -63,24 +69,68 @@ public class Blood extends FluidWithData {
     }
 
 
+    @Override
+    public ITextComponent getInfoText(FluidStack stack) {
+        String owner = "From: " + getFluidData(stack, new BloodData()).getOwnerName();
+        return new StringTextComponent(owner).applyTextStyle(TextFormatting.DARK_RED);
 
-    class BloodData extends FluidData {
+    }
+
+
+
+    public static class BloodData extends FluidData {
 
         public String owner;
         public UUID player;
+
+        public BloodData() {
+            owner = UNKNOWN_BLOOD;
+        }
 
         public BloodData(String owner) {
             this.owner = owner;
         }
 
+        public BloodData(String owner, UUID player) {
+            this.owner = owner;
+            if(owner.equals(PLAYER_BLOOD)){
+                this.player = player;
+            }
+        }
+
         @Override
         public CompoundNBT writeToNBT() {
-            return null;
+            CompoundNBT nbt = new CompoundNBT();
+            nbt.putString("owner", owner);
+            if(player != null){
+                nbt.putUniqueId("UUID",player);
+            }
+            return nbt;
         }
 
         @Override
         public void readFromNBT(CompoundNBT nbt) {
+            owner = nbt.getString("owner");
+            if(nbt.contains("UUIDMost")){
+                player = nbt.getUniqueId("UUID");
+            }
+        }
 
+        public String getOwnerName(){
+            if(owner.equals(UNKNOWN_BLOOD)){
+                return "Mistery";
+            }
+            else if(owner.equals(PLAYER_BLOOD)){
+                if(player != null) {
+                    String name = UsernameCache.getLastKnownUsername(player);
+                    return name;
+                }
+                return "Player unknown";
+            }
+            else{
+                String name = ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryCreate(owner)).getName().getString();
+                return name;
+            }
         }
 
         @Override

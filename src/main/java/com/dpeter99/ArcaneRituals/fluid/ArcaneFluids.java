@@ -7,6 +7,6 @@ import net.minecraftforge.registries.ObjectHolder;
 @ObjectHolder("arcanerituals")
 public class ArcaneFluids {
 
-    public static final Fluid blood = null;
+    public static final Blood blood = null;
 
 }
