@@ -9,6 +9,18 @@ public class FluidContainer {
 
     FluidStack fluid = new FluidStack();
 
+    public int getCapacity(){
+        return capacity;
+    }
+
+    public int getFreeCapacity(){
+        return capacity - fluid.amount;
+    }
+
+    public boolean multiFluidContainer(){
+        return false;
+    }
+
     /**
      * Fills fluid into internal tanks from the given FluidStack, distribution is left entirely to the IFluidHandler.
      *
