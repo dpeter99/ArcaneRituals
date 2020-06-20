@@ -1,7 +1,6 @@
 package com.dpeter99.ArcaneRituals.altars.necromantic;
 
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEntity;
-import com.dpeter99.ArcaneRituals.arcane_fluid.Blood;
 import com.dpeter99.ArcaneRituals.tileentity.ArcaneTileEntities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

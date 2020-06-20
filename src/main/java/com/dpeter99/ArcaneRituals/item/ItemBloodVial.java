@@ -1,6 +1,5 @@
 package com.dpeter99.ArcaneRituals.item;
 
-import com.dpeter99.ArcaneRituals.arcane_fluid.Blood;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
