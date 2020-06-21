@@ -12,9 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -65,15 +63,6 @@ public class ItemVial extends Item {
     }
 
     @Override
-    public String getHighlightTip(ItemStack item, String displayName) {
-        FluidStack fluid =getFluid(item);
-        if(!fluid.getFluid().isEquivalentTo(Fluids.EMPTY))
-        return fluid.getDisplayName().getFormattedText() + " " + displayName;
-
-        return displayName;
-    }
-
-    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         //super.addInformation(stack, worldIn, tooltip, flagIn);
         FluidStack fluidStack = getFluid(stack);
@@ -84,13 +73,15 @@ public class ItemVial extends Item {
     }
 
     @Override
-    public String getTranslationKey(ItemStack stack) {
+    public ITextComponent getDisplayName(ItemStack stack) {
         FluidStack fluid = getFluid(stack);
-        if(!fluid.getFluid().isEquivalentTo(Fluids.EMPTY))
-            return super.getTranslationKey(stack) + "_" + fluid.getFluid().getRegistryName();
-        else
-            return super.getTranslationKey(stack);
-
+        ITextComponent this_name =new TranslationTextComponent(this.getTranslationKey(stack));
+        if(!fluid.getFluid().isEquivalentTo(Fluids.EMPTY)) {
+            ITextComponent fluid_name = new TranslationTextComponent(fluid.getTranslationKey());
+            fluid_name.appendText(" ");
+            return fluid_name.appendSibling(this_name);
+        }
+        return super.getDisplayName(stack);
     }
 
     /**

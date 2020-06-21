@@ -151,20 +151,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
             return;
 
         /*
-        if (newFluidItem) {
 
-            LazyOptional<IFluidHandlerItem> capability = inventory.getStackInSlot(5).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
-
-            capability.ifPresent(
-                    fluidInv ->
-                    {
-                        if(fluid.fill(fluidInv.drain(fluid.getCapacity() - fluid.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE) > 0)
-                            inventory.setStackInSlot(5, fluidInv.getContainer());
-                        newFluidItem = false;
-                    }
-            );
-            flag = true;
-        }
         */
 
         if (needRefreshRecipe) {

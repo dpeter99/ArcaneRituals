@@ -5,20 +5,14 @@ import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import com.dpeter99.ArcaneRituals.fluid.Blood;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.GlassBottleItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ItemSacrificialKnife extends Item {
 
@@ -29,16 +23,16 @@ public class ItemSacrificialKnife extends Item {
 
     public void makeFullVial(PlayerEntity playerIn, Blood.BloodData bloodData){
         if(playerIn.inventory.hasItemStack(new ItemStack(ArcaneItems.vial))){
-
+            AtomicBoolean done= new AtomicBoolean(false);
             playerIn.inventory.mainInventory.forEach((item)->{
-                if(item.getItem() == ArcaneItems.vial && ItemVial.isEmpty(item)) {
+                if(!done.get() && item.getItem() == ArcaneItems.vial && ItemVial.isEmpty(item)) {
                     item.shrink(1);
 
                     ItemStack new_vial = new ItemStack(ArcaneItems.vial);
                     ItemVial.setFluid(new_vial, ArcaneFluids.blood.makeFluidStack(1000,bloodData));
                     playerIn.addItemStackToInventory(new_vial);
 
-                    return;
+                    done.set(true);
                 }
             });
 

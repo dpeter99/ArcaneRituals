@@ -79,26 +79,17 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
                 PerspectiveMapWrapper.getTransforms(new ModelTransformComposition(transformsFromModel, modelTransform)) :
                 PerspectiveMapWrapper.getTransforms(modelTransform);
 
-
-
-
         TransformationMatrix transform = modelTransform.getRotation();
 
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
         String texturePath = fluids.get(active_fuid);
-        TextureAtlasSprite fluidSprite = spriteGetter.apply(owner.resolveTexture(texturePath));
-
-        //Material fluidMaterial = new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE,ResourceLocation.tryCreate(texturePath));
-        //TextureAtlasSprite fluidSprite = fluidMaterial.getSprite();
         ResourceLocation texture_loc = ResourceLocation.tryCreate(texturePath);
-        fluidSprite = Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(texture_loc);
+        Material fluidMaterial = ModelLoaderRegistry.blockMaterial(texture_loc);
+        TextureAtlasSprite fluidSprite = spriteGetter.apply(fluidMaterial);
 
         if (fluidSprite != null)
         {
-            // build base (insidest)
-            //Func<> itemRenderer = Minecraft.getInstance().getAtlasSpriteGetter(ResourceLocation.tryCreate(texturePath)).;
-
             builder.addAll(ItemLayerModel.getQuadsForSprite(0,fluidSprite,transform));
         }
 
@@ -112,8 +103,12 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
 
         //owner.resolveTexture()
 
-        String texturePath = fluids.get(active_fuid);
-        texs.add(new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE,ResourceLocation.tryCreate(texturePath)));
+        fluids.forEach((key,val)->{
+            texs.add(new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE,ResourceLocation.tryCreate(val)));
+        });
+
+        //String texturePath = fluids.get(active_fuid);
+        //texs.add(new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE,ResourceLocation.tryCreate(texturePath)));
 
         return texs;
     }

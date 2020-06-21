@@ -146,10 +146,8 @@ public class ArcaneRituals {
              reg.register(new BasicWand());
              reg.register(new ArcaneBook());
              reg.register(new ItemSacrificialKnife());
-             //reg.register(new ItemBloodBottle());
 
              reg.register(new ItemVial().setRegistryName("vial"));
-             //reg.register(new ItemBloodVial().setRegistryName("blood_vial"));
         }
 
         @SubscribeEvent

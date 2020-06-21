@@ -17,6 +17,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -60,6 +61,36 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
 
     public NecromanticAltarTileEntity() {
         super(ArcaneTileEntities.necromantic_altar);
+    }
+
+    @Override
+    public void tick() {
+        if (world.isRemote)
+            return;
+
+        boolean flag=false;
+        if (newFluidItem) {
+
+            LazyOptional<IFluidHandlerItem> capability = inventory.getStackInSlot(5).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+
+            capability.ifPresent(
+                    fluidInv ->
+                    {
+                        FluidStack drained = fluidInv.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.SIMULATE);
+                        if(tank.fill(drained, IFluidHandler.FluidAction.SIMULATE)>0) {
+                            tank.fill(fluidInv.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                            //inventory.setStackInSlot(5, fluidInv.getContainer());
+                        }
+                        newFluidItem = false;
+                    }
+            );
+            flag = true;
+        }
+        if(flag){
+            this.markDirty();
+        }
+
+        super.tick();
     }
 
     @Override

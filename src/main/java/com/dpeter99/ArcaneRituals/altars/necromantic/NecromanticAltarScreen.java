@@ -103,6 +103,7 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
         drawBackground();
         drawFluid(container.getFluidAmount());
         drawGlyps();
+        drawTooltip(mouseX,mouseY);
     }
 
     private void drawBackground() {
@@ -136,5 +137,18 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
         float step = 1.0f / 17;
 
         glyphs.drawGlyps(5);
+    }
+
+    public void drawTooltip(int mouseX, int mouseY){
+        int bloodCenterX = getGuiLeft() + 88;
+        int bloodCenterY = getGuiTop() + 72;
+        float d = (float)Math.sqrt(Math.pow(bloodCenterX - mouseX,2) + Math.pow(bloodCenterY - mouseY,2));
+
+        if(d <= 40) {
+            List<String> text = new ArrayList<>();
+            text.add("Blood");
+            text.add(container.getBloodLevel() + "/100" );
+            this.renderTooltip(text,mouseX,mouseY);
+        }
     }
 }
