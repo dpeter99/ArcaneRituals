@@ -2,15 +2,19 @@ package com.dpeter99.ArcaneRituals.client.renderer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.types.Func;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.TransformationMatrix;
 import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.MissingTextureSprite;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -20,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.*;
+import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -60,29 +65,55 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
     @Override
     public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
 
+        Material particleLocation = owner.resolveTexture("particle");
+        if (MissingTextureSprite.getLocation().equals(particleLocation.getTextureLocation()))
+        {
+            particleLocation = null;
+        }
+        TextureAtlasSprite particleSprite = particleLocation != null ? spriteGetter.apply(particleLocation) : null;
+
+
+        IModelTransform transformsFromModel = owner.getCombinedTransform();
+
+        ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> transformMap = transformsFromModel != null ?
+                PerspectiveMapWrapper.getTransforms(new ModelTransformComposition(transformsFromModel, modelTransform)) :
+                PerspectiveMapWrapper.getTransforms(modelTransform);
+
+
+
 
         TransformationMatrix transform = modelTransform.getRotation();
 
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
-        TextureAtlasSprite fluidSprite = active_fuid != Fluids.EMPTY ? spriteGetter.apply(ForgeHooksClient.getBlockMaterial(active_fuid.getAttributes().getStillTexture())) : null;
-
         String texturePath = fluids.get(active_fuid);
-        //spriteGetter.apply(new Material())
+        TextureAtlasSprite fluidSprite = spriteGetter.apply(owner.resolveTexture(texturePath));
 
+        //Material fluidMaterial = new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE,ResourceLocation.tryCreate(texturePath));
+        //TextureAtlasSprite fluidSprite = fluidMaterial.getSprite();
+        ResourceLocation texture_loc = ResourceLocation.tryCreate(texturePath);
+        fluidSprite = Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(texture_loc);
 
         if (fluidSprite != null)
         {
             // build base (insidest)
+            //Func<> itemRenderer = Minecraft.getInstance().getAtlasSpriteGetter(ResourceLocation.tryCreate(texturePath)).;
+
             builder.addAll(ItemLayerModel.getQuadsForSprite(0,fluidSprite,transform));
         }
 
-        return null;
+        return new BakedModel(bakery, owner, this, builder.build(), particleSprite, Maps.immutableEnumMap(transformMap), Maps.newHashMap(), transform.isIdentity(), modelTransform, owner.isSideLit());
+
     }
 
     @Override
     public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
         Set<Material> texs = Sets.newHashSet();
+
+        //owner.resolveTexture()
+
+        String texturePath = fluids.get(active_fuid);
+        texs.add(new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE,ResourceLocation.tryCreate(texturePath)));
 
         return texs;
     }
@@ -118,11 +149,11 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
             JsonObject fluid_variants = modelContents.get("fluid_variants").getAsJsonObject();
 
             Set<Map.Entry<String, JsonElement>> a = fluid_variants.entrySet();
-            Map<String,Fluid> fluids = new HashMap<>();
+            Map<Fluid,String> fluids = new HashMap<>();
             for (Map.Entry<String, JsonElement> item : a) {
-                ResourceLocation fluidName = new ResourceLocation(item.getValue().getAsString());
+                ResourceLocation fluidName = new ResourceLocation(item.getKey());
                 Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName);
-                fluids.put(item.getKey(),fluid);
+                fluids.put(fluid,item.getValue().getAsString());
             }
 
 
@@ -189,7 +220,8 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
         private final boolean isSideLit;
 
         BakedModel(ModelBakery bakery,
-                   IModelConfiguration owner, DynamicBucketModel parent,
+                   IModelConfiguration owner,
+                   FluidHolderRenderer parent,
                    ImmutableList<BakedQuad> quads,
                    TextureAtlasSprite particle,
                    ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> transforms,

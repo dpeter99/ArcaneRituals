@@ -66,7 +66,11 @@ public class ItemVial extends Item {
 
     @Override
     public String getHighlightTip(ItemStack item, String displayName) {
-        return getFluid(item).getDisplayName().getFormattedText() + displayName;
+        FluidStack fluid =getFluid(item);
+        if(!fluid.getFluid().isEquivalentTo(Fluids.EMPTY))
+        return fluid.getDisplayName().getFormattedText() + " " + displayName;
+
+        return displayName;
     }
 
     @Override
@@ -79,6 +83,15 @@ public class ItemVial extends Item {
         }
     }
 
+    @Override
+    public String getTranslationKey(ItemStack stack) {
+        FluidStack fluid = getFluid(stack);
+        if(!fluid.getFluid().isEquivalentTo(Fluids.EMPTY))
+            return super.getTranslationKey(stack) + "_" + fluid.getFluid().getRegistryName();
+        else
+            return super.getTranslationKey(stack);
+
+    }
 
     /**
      * Called from ItemStack.setItem, will hold extra data for the life of this

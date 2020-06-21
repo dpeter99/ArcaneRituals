@@ -1,5 +1,6 @@
 {
   "loader": "arcanerituals:fluid_holder",
+  "parent": "item/handheld",
   "textures": {
     "layer0": "arcanerituals:item/vial"
   },
