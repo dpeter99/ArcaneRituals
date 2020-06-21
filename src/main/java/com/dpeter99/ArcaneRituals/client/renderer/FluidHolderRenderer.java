@@ -2,19 +2,23 @@ package com.dpeter99.ArcaneRituals.client.renderer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.TransformationMatrix;
 import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.fluids.FluidUtil;
@@ -30,10 +34,18 @@ import java.util.function.Predicate;
 
 public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> {
 
-    Map<String, String> fluids;
+    Map<Fluid,String> fluids;
 
-    public FluidHolderRenderer(Map<String, String> fluids) {
+    Fluid active_fuid;
+
+    public FluidHolderRenderer(Map<Fluid,String> fluids) {
         this.fluids = fluids;
+        this.active_fuid = Fluids.EMPTY;
+    }
+
+    public FluidHolderRenderer(Map<Fluid,String> fluids, Fluid active) {
+        this.fluids = fluids;
+        this.active_fuid = active;
     }
 
     /**
@@ -42,17 +54,37 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
      */
     public FluidHolderRenderer withFluid(Fluid newFluid)
     {
-        return new FluidHolderRenderer(newFluid);
+        return new FluidHolderRenderer(fluids, newFluid);
     }
 
     @Override
     public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+
+
+        TransformationMatrix transform = modelTransform.getRotation();
+
+        ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
+
+        TextureAtlasSprite fluidSprite = active_fuid != Fluids.EMPTY ? spriteGetter.apply(ForgeHooksClient.getBlockMaterial(active_fuid.getAttributes().getStillTexture())) : null;
+
+        String texturePath = fluids.get(active_fuid);
+        //spriteGetter.apply(new Material())
+
+
+        if (fluidSprite != null)
+        {
+            // build base (insidest)
+            builder.addAll(ItemLayerModel.getQuadsForSprite(0,fluidSprite,transform));
+        }
+
         return null;
     }
 
     @Override
     public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-        return null;
+        Set<Material> texs = Sets.newHashSet();
+
+        return texs;
     }
 
     public enum Loader implements IModelLoader<FluidHolderRenderer>
@@ -86,9 +118,11 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
             JsonObject fluid_variants = modelContents.get("fluid_variants").getAsJsonObject();
 
             Set<Map.Entry<String, JsonElement>> a = fluid_variants.entrySet();
-            Map<String,String> fluids = new HashMap<>();
+            Map<String,Fluid> fluids = new HashMap<>();
             for (Map.Entry<String, JsonElement> item : a) {
-                fluids.put(item.getKey(),item.getValue().getAsString());
+                ResourceLocation fluidName = new ResourceLocation(item.getValue().getAsString());
+                Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName);
+                fluids.put(item.getKey(),fluid);
             }
 
 

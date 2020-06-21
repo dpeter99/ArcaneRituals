@@ -5,6 +5,6 @@
   },
   "fluid_variants": {
     "empty": "arcanerituals:item/vial",
-    "blood": "arcanerituals:item/blood_vial"
+    "arcanerituals:blood": "arcanerituals:item/blood_vial"
   }
 }
