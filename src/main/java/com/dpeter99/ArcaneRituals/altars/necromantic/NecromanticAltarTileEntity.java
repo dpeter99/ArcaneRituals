@@ -86,7 +86,6 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
         if (world.isRemote)
             return;
 
-        boolean flag=false;
         if (newFluidItem) {
 
             LazyOptional<IFluidHandlerItem> capability = inventory.getStackInSlot(5).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
@@ -102,10 +101,9 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
                         newFluidItem = false;
                     }
             );
-            flag = true;
-        }
-        if(flag){
+            //flag = true;
             this.markDirty();
+
         }
 
         super.tick();
@@ -135,7 +133,7 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
+        return new SUpdateTileEntityPacket(this.pos, -1, this.getUpdateTag());
     }
 
     /**
@@ -153,10 +151,9 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
         this.read(pkt.getNbtCompound());
     }
 
-
     /**
      * Get an NBT compound to sync to the client with SPacketChunkData, used for initial loading of the chunk or when
-     * many blocks change at once. This compound comes back to you clientside in {@link handleUpdateTag}
+     * many blocks change at once. This compound comes back to you clientside in {@link #handleUpdateTag}
      */
     @Override
     public CompoundNBT getUpdateTag() {
@@ -166,14 +163,17 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
     /**
      * Called when the chunk's TE update tag, gotten from {@link #getUpdateTag()}, is received on the client.
      * <p>
-     * Used to handle this tag in a special way. By default this simply calls {@link #readFromNBT(NBTTagCompound)}.
+     * Used to handle this tag in a special way. By default this simply calls {@link #read}.
      *
-     * @param tag The {@link NBTTagCompound} sent from {@link #getUpdateTag()}
+     * @param tag The {@link #CompoundNBT} sent from {@link #getUpdateTag()}
      */
     @Override
     public void handleUpdateTag(CompoundNBT tag) {
         read(tag);
     }
+
+
+
 
     @Override
     public ITextComponent getDisplayName() {
