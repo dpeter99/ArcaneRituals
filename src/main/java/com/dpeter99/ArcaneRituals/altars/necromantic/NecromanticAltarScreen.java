@@ -1,13 +1,17 @@
 package com.dpeter99.ArcaneRituals.altars.necromantic;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
+import com.dpeter99.ArcaneRituals.fluid.AdvancedFluid;
 import com.dpeter99.ArcaneRituals.screen.GlyphDrawer;
 import com.dpeter99.ArcaneRituals.util.ui.SimpleScreen;
 import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,9 +150,26 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
 
         if(d <= 40) {
             List<String> text = new ArrayList<>();
-            text.add("Blood");
-            text.add(container.getBloodLevel() + "/100" );
+            //text.add("Blood");
+
+            FluidStack fluidStack = container.getTileEntity().tank.getFluid();
+            Fluid fluid = fluidStack.getFluid();
+            if(fluid.isEquivalentTo(Fluids.EMPTY)) {
+                text.add("Empty");
+            }
+            else{
+                text.add(container.getTileEntity().tank.getFluid().getDisplayName().getString());
+                text.add(fluidStack.getAmount() + "mB" );
+
+                if(fluid instanceof AdvancedFluid){
+                    text.add(((AdvancedFluid) fluid).getInfoText(fluidStack).getFormattedText());
+                }
+            }
+
+
+
             this.renderTooltip(text,mouseX,mouseY);
+
         }
     }
 }

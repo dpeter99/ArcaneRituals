@@ -241,6 +241,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
     }
 
 
+
     public abstract ITextComponent getDisplayName();
 
     @Nullable

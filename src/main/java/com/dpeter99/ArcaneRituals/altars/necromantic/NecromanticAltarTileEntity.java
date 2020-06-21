@@ -7,6 +7,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
@@ -64,6 +66,22 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
     }
 
     @Override
+    protected int getArcaneFuelAmount() {
+        return tank.getFluidAmount();
+    }
+
+    @Override
+    protected void removeArcaneFuel(int amount) {
+        tank.drain(amount, IFluidHandler.FluidAction.EXECUTE);
+    }
+
+    @Override
+    protected String getAltarType() {
+        return "necromantic_altar";
+    }
+
+
+    @Override
     public void tick() {
         if (world.isRemote)
             return;
@@ -109,19 +127,52 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEntity {
         return super.write(nbt);
     }
 
+
+    /**
+     * Retrieves packet to send to the client whenever this Tile Entity is resynced via World.notifyBlockUpdate. For
+     * modded TE's, this packet comes back to you clientside in {@link #onDataPacket}
+     */
+    @Nullable
     @Override
-    protected int getArcaneFuelAmount() {
-        return tank.getFluidAmount();
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.pos, 3, this.getUpdateTag());
     }
 
+    /**
+     * Called when you receive a TileEntityData packet for the location this
+     * TileEntity is currently in. On the client, the NetworkManager will always
+     * be the remote server. On the server, it will be whomever is responsible for
+     * sending the packet.
+     *
+     * @param net The NetworkManager the packet originated from
+     * @param pkt The data packet
+     */
     @Override
-    protected void removeArcaneFuel(int amount) {
-        tank.drain(amount, IFluidHandler.FluidAction.EXECUTE);
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        super.onDataPacket(net,pkt);
+        this.read(pkt.getNbtCompound());
     }
 
+
+    /**
+     * Get an NBT compound to sync to the client with SPacketChunkData, used for initial loading of the chunk or when
+     * many blocks change at once. This compound comes back to you clientside in {@link handleUpdateTag}
+     */
     @Override
-    protected String getAltarType() {
-        return "necromantic_altar";
+    public CompoundNBT getUpdateTag() {
+        return this.write(new CompoundNBT());
+    }
+
+    /**
+     * Called when the chunk's TE update tag, gotten from {@link #getUpdateTag()}, is received on the client.
+     * <p>
+     * Used to handle this tag in a special way. By default this simply calls {@link #readFromNBT(NBTTagCompound)}.
+     *
+     * @param tag The {@link NBTTagCompound} sent from {@link #getUpdateTag()}
+     */
+    @Override
+    public void handleUpdateTag(CompoundNBT tag) {
+        read(tag);
     }
 
     @Override
