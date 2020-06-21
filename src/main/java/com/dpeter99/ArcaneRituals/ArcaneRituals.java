@@ -87,6 +87,9 @@ public class ArcaneRituals {
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
+
+        ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
+                FluidHolderRenderer.Loader.INSTANCE);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)
@@ -103,10 +106,8 @@ public class ArcaneRituals {
                 collect(Collectors.toList()));
     }
 
-
     public void onModelRegistry(ModelRegistryEvent itemRegistryEvent){
-        ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
-                FluidHolderRenderer.Loader.INSTANCE);
+
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

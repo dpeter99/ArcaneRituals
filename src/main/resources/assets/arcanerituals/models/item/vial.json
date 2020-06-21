@@ -1,5 +1,5 @@
 {
-  "parent": "arcanerituals:fluid_holder",
+  "loader": "arcanerituals:fluid_holder",
   "textures": {
     "layer0": "arcanerituals:item/vial"
   },

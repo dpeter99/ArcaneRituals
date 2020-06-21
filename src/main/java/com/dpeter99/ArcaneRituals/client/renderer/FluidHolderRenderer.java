@@ -1,27 +1,50 @@
 package com.dpeter99.ArcaneRituals.client.renderer;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.renderer.TransformationMatrix;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.DynamicBucketModel;
-import net.minecraftforge.client.model.IModelConfiguration;
-import net.minecraftforge.client.model.IModelLoader;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.VanillaResourceType;
 
-import java.util.Collection;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> {
+
+    Map<String, String> fluids;
+
+    public FluidHolderRenderer(Map<String, String> fluids) {
+        this.fluids = fluids;
+    }
+
+    /**
+     * Returns a new ModelDynBucket representing the given fluid, but with the same
+     * other properties (flipGas, tint, coverIsMask).
+     */
+    public FluidHolderRenderer withFluid(Fluid newFluid)
+    {
+        return new FluidHolderRenderer(newFluid);
+    }
+
     @Override
     public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
         return null;
@@ -57,12 +80,18 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
         @Override
         public FluidHolderRenderer read(JsonDeserializationContext deserializationContext, JsonObject modelContents)
         {
-            if (!modelContents.has("fluid"))
+            if (!modelContents.has("fluid_variants"))
                 throw new RuntimeException("Bucket model requires 'fluid' value.");
 
-            ResourceLocation fluidName = new ResourceLocation(modelContents.get("fluid").getAsString());
+            JsonObject fluid_variants = modelContents.get("fluid_variants").getAsJsonObject();
 
-            Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName);
+            Set<Map.Entry<String, JsonElement>> a = fluid_variants.entrySet();
+            Map<String,String> fluids = new HashMap<>();
+            for (Map.Entry<String, JsonElement> item : a) {
+                fluids.put(item.getKey(),item.getValue().getAsString());
+            }
+
+
 
             boolean flip = false;
             if (modelContents.has("flipGas"))
@@ -76,14 +105,70 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
                 tint = modelContents.get("applyTint").getAsBoolean();
             }
 
-            boolean coverIsMask = true;
-            if (modelContents.has("coverIsMask"))
-            {
-                coverIsMask = modelContents.get("coverIsMask").getAsBoolean();
-            }
-
             // create new model with correct liquid
-            return new FluidHolderRenderer();
+            return new FluidHolderRenderer(fluids);
+        }
+    }
+
+
+    private static final class ContainedFluidOverrideHandler extends ItemOverrideList
+    {
+        private final ModelBakery bakery;
+
+        private ContainedFluidOverrideHandler(ModelBakery bakery)
+        {
+            this.bakery = bakery;
+        }
+
+        @Override
+        public IBakedModel getModelWithOverrides(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity)
+        {
+            return FluidUtil.getFluidContained(stack)
+                    .map(fluidStack -> {
+                        BakedModel model = (BakedModel)originalModel;
+
+                        Fluid fluid = fluidStack.getFluid();
+                        String name = fluid.getRegistryName().toString();
+
+                        if (!model.cache.containsKey(name))
+                        {
+                            FluidHolderRenderer parent = model.parent.withFluid(fluid);
+                            IBakedModel bakedModel = parent.bake(model.owner, bakery, ModelLoader.defaultTextureGetter(), model.originalTransform, model.getOverrides(), new ResourceLocation("forge:bucket_override"));
+                            model.cache.put(name, bakedModel);
+                            return bakedModel;
+                        }
+
+                        return model.cache.get(name);
+                    })
+                    // not a fluid item apparently
+                    .orElse(originalModel); // empty bucket
+        }
+    }
+
+    // the dynamic bucket is based on the empty bucket
+    private static final class BakedModel extends BakedItemModel
+    {
+        private final IModelConfiguration owner;
+        private final FluidHolderRenderer parent;
+        private final Map<String, IBakedModel> cache; // contains all the baked models since they'll never change
+        private final IModelTransform originalTransform;
+        private final boolean isSideLit;
+
+        BakedModel(ModelBakery bakery,
+                   IModelConfiguration owner, DynamicBucketModel parent,
+                   ImmutableList<BakedQuad> quads,
+                   TextureAtlasSprite particle,
+                   ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> transforms,
+                   Map<String, IBakedModel> cache,
+                   boolean untransformed,
+                   IModelTransform originalTransform, boolean isSideLit)
+        {
+            super(quads, particle, transforms, new ContainedFluidOverrideHandler(bakery), untransformed, isSideLit);
+            this.owner = owner;
+            this.parent = parent;
+            this.cache = cache;
+            this.originalTransform = originalTransform;
+            this.isSideLit = isSideLit;
         }
     }
 
