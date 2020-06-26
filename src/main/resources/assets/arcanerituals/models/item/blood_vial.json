@@ -1,6 +1,0 @@
-{
-  "parent": "arcanerituals:fluid_holder",
-  "textures": {
-    "layer0": "arcanerituals:item/blood_vial"
-  }
-}

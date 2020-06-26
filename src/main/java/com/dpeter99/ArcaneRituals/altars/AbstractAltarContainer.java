@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 public abstract class AbstractAltarContainer<T extends AbstractAltarTileEntity> extends SimpleContainer {
 
+
     protected T tileEntity;
     private final IIntArray altarData;
 

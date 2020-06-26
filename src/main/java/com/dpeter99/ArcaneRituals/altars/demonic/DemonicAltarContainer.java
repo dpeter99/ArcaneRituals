@@ -1,10 +1,12 @@
-package com.dpeter99.ArcaneRituals.altars.necromantic;
+package com.dpeter99.ArcaneRituals.altars.demonic;
 
-import com.dpeter99.ArcaneRituals.altars.AbstractAltarContainer;
-import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
+import com.dpeter99.ArcaneRituals.altars.AbstractAltarContainer;
+import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
+import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
@@ -13,19 +15,21 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class NecromanticAltarContainer extends AbstractAltarContainer<NecromanticAltarTileEntity> {
+import javax.annotation.Nullable;
 
-    IIntArray necromanticData;
+public class DemonicAltarContainer extends AbstractAltarContainer<DemonicAltarTileEntity> {
 
-    public NecromanticAltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory) {
+    IIntArray demonicData;
+
+    public DemonicAltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory) {
         this(id, world, pos, playerInventory, new IntArray(4), new IntArray(1));
     }
 
-    public NecromanticAltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory, IIntArray altarData, IIntArray necromanticData) {
-        super(ArcaneTileEntities.necromantic_altar_container, id,world,pos,playerInventory,altarData);
+    protected DemonicAltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory, IIntArray altarData, IIntArray demonicDta) {
+        super(ArcaneTileEntities.demonic_altar_container, id,world,pos,playerInventory,altarData);
 
-        this.necromanticData = necromanticData;
-        trackIntArray(necromanticData);
+        this.demonicData = demonicDta;
+        trackIntArray(demonicData);
 
         tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
             addSlot(new SlotItemHandler(h, 0, 28, 12));
@@ -37,8 +41,6 @@ public class NecromanticAltarContainer extends AbstractAltarContainer<Necromanti
             addSlot(new SlotItemHandler(h, 5, 80, 116));
         });
         layoutPlayerInventorySlots(5,8,144);
-
-
     }
 
     /**
@@ -48,9 +50,6 @@ public class NecromanticAltarContainer extends AbstractAltarContainer<Necromanti
      */
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(),tileEntity.getPos()),playerIn, ArcaneBlocks.necromantic_altar);
+        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(),tileEntity.getPos()),playerIn, ArcaneBlocks.demonic_altar);
     }
-
-
-
 }

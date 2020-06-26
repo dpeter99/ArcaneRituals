@@ -1,5 +1,8 @@
 package com.dpeter99.ArcaneRituals;
 
+import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarBlock;
+import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarContainer;
+import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarTileEntity;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarBlock;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
@@ -30,6 +33,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
@@ -79,7 +83,8 @@ public class ArcaneRituals {
     {
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
-        LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+        //LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+
 
         proxy.init();
     }
@@ -135,6 +140,7 @@ public class ArcaneRituals {
 
             reg.register(new WitchAltarBlock());
             reg.register(new NecromanticAltarBlock());
+            reg.register(new DemonicAltarBlock());
         }
 
         @SubscribeEvent
@@ -156,6 +162,7 @@ public class ArcaneRituals {
 
             reg.register(TileEntityType.Builder.create(WitchAltarTileEntity::new, ArcaneBlocks.witch_altar).build(null).setRegistryName("witch_altar"));
             reg.register(TileEntityType.Builder.create(NecromanticAltarTileEntity::new, ArcaneBlocks.necromantic_altar).build(null).setRegistryName("necromantic_altar"));
+            reg.register(TileEntityType.Builder.create(DemonicAltarTileEntity::new, ArcaneBlocks.demonic_altar).build(null).setRegistryName("demonic_altar"));
         }
 
         @SubscribeEvent
@@ -171,6 +178,11 @@ public class ArcaneRituals {
                 BlockPos pos = data.readBlockPos();
                 return new NecromanticAltarContainer(windowId, proxy.getClientWorld(), pos, inv);
             }).setRegistryName("necromantic_altar_container"));
+
+            reg.register(IForgeContainerType.create((windowId, inv, data) -> {
+                BlockPos pos = data.readBlockPos();
+                return new DemonicAltarContainer(windowId, proxy.getClientWorld(), pos, inv);
+            }).setRegistryName("demonic_altar_container"));
 
 
             //reg.register(IForgeContainerType.create(ContainerType::new).setRegistryName("witch_altar_continer"));
