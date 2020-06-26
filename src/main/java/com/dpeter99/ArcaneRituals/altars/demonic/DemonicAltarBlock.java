@@ -14,6 +14,8 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -22,6 +24,8 @@ import javax.annotation.Nullable;
 
 public class DemonicAltarBlock extends Block {
 
+    protected static final VoxelShape BASE_SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 13.0D, 16.0D);
+
     public DemonicAltarBlock() {
         super(Properties.create(Material.IRON)
                 .notSolid());
@@ -29,11 +33,14 @@ public class DemonicAltarBlock extends Block {
         setRegistryName("demonic_altar");
     }
 
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return BASE_SHAPE;
+    }
+
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
     }
-
 
     @Nullable
     @Override

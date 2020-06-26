@@ -1,4 +1,5 @@
 {
 	"loader": "forge:obj",
+	"custom": { "flip-v": true },
 	"model": "arcanerituals:models/block/obj/demonic_altar_v2.obj"
 }
