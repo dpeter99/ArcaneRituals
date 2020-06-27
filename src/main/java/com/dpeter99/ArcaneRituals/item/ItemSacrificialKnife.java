@@ -1,6 +1,5 @@
 package com.dpeter99.ArcaneRituals.item;
 
-import com.dpeter99.ArcaneRituals.ArcaneItems;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import com.dpeter99.ArcaneRituals.fluid.Blood;
 import net.minecraft.entity.LivingEntity;

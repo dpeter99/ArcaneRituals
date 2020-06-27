@@ -1,7 +1,6 @@
 package com.dpeter99.ArcaneRituals.fluid;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
-import com.dpeter99.ArcaneRituals.util.ArcaneRitualsResourceLocation;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -23,7 +22,7 @@ public class Blood extends AdvancedFluid {
     public static final String UNKNOWN_BLOOD = ArcaneRituals.MODID + ":blood_source:unknown";
     public static final String PLAYER_BLOOD = ArcaneRituals.MODID + ":blood_source:player";
 
-    private static final ResourceLocation texture = new ArcaneRitualsResourceLocation("fluid/blood");
+    private static final ResourceLocation texture = ArcaneRituals.location("fluid/blood");
 
     public Blood() {
         super(()-> Items.AIR, FluidAttributes.builder(texture,texture));

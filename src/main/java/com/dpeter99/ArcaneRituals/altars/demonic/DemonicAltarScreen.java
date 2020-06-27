@@ -1,6 +1,7 @@
-package com.dpeter99.ArcaneRituals.altars.necromantic;
+package com.dpeter99.ArcaneRituals.altars.demonic;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
+import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
 import com.dpeter99.ArcaneRituals.fluid.AdvancedFluid;
 import com.dpeter99.ArcaneRituals.screen.GlyphDrawer;
 import com.dpeter99.ArcaneRituals.util.ui.SimpleScreen;
@@ -16,9 +17,9 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContainer> {
+public class DemonicAltarScreen extends SimpleScreen<DemonicAltarContainer> {
 
-    private ResourceLocation GUI = new ResourceLocation(ArcaneRituals.MODID, "textures/gui/necromantic_altar.png");
+    private ResourceLocation GUI = new ResourceLocation(ArcaneRituals.MODID, "textures/gui/demonic_altar.png");
 
     private static final int WIDTH = 176;
     private static final int HEIGHT = 225;
@@ -27,7 +28,7 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
 
     List<TextureRegion> fluidStates = new ArrayList<TextureRegion>();
 
-    public NecromanticAltarScreen(NecromanticAltarContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public DemonicAltarScreen(DemonicAltarContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
 
         this.ySize = HEIGHT;
@@ -37,7 +38,7 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
         FluidIndicatorSetup();
     }
 
-    private void InitGlyphs(NecromanticAltarContainer screenContainer) {
+    private void InitGlyphs(DemonicAltarContainer screenContainer) {
         glyphs = new GlyphDrawer(this, screenContainer.getGlypSeed());
 
         for (int i = 0; i < 8; i++) {
@@ -172,4 +173,5 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
 
         }
     }
+
 }
