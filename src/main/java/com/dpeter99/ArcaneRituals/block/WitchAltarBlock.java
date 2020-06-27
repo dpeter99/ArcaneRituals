@@ -1,9 +1,8 @@
 package com.dpeter99.ArcaneRituals.block;
 
-import com.dpeter99.ArcaneRituals.ArcaneItems;
+import com.dpeter99.ArcaneRituals.item.ArcaneItems;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -76,7 +75,7 @@ public class WitchAltarBlock extends Block {
             ItemStack current_item = player.inventory.getCurrentItem();
             WitchAltarTileEntity tileEntity = (WitchAltarTileEntity) worldIn.getTileEntity(pos);
 
-            if(current_item.getItem() == ArcaneItems.blood_bottle) {
+            if(current_item.getItem() == ArcaneItems.vial) {
                 if(tileEntity.hasSpaceForBlood()) {
                     current_item.shrink(1);
                     tileEntity.addBlood(10);
