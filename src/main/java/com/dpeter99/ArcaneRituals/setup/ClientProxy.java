@@ -1,9 +1,11 @@
 package com.dpeter99.ArcaneRituals.setup;
 
+import com.dpeter99.ArcaneRituals.ArcaneRituals;
 import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarRenderer;
 import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarScreen;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarScreen;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
+import com.dpeter99.ArcaneRituals.client.renderer.FluidHolderRenderer;
 import com.dpeter99.ArcaneRituals.screen.WitchAltarScreen;
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import net.minecraft.client.Minecraft;
@@ -11,6 +13,7 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 public class ClientProxy implements IProxy {
 
@@ -21,6 +24,9 @@ public class ClientProxy implements IProxy {
 
         DemonicAltarRenderer.register();
         RenderTypeLookup.setRenderLayer(ArcaneBlocks.demonic_altar, (RenderType) -> true);
+
+        ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
+                FluidHolderRenderer.Loader.INSTANCE);
     }
 
     @Override

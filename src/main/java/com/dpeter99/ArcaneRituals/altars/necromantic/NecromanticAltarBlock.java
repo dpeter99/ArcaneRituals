@@ -1,7 +1,6 @@
 package com.dpeter99.ArcaneRituals.altars.necromantic;
 
-import com.dpeter99.ArcaneRituals.ArcaneItems;
-import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
+import com.dpeter99.ArcaneRituals.item.ArcaneItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -14,8 +13,6 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;

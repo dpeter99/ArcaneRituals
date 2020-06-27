@@ -1,7 +1,6 @@
 package com.dpeter99.ArcaneRituals.altars.demonic;
 
-import com.dpeter99.ArcaneRituals.ArcaneItems;
-import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
+import com.dpeter99.ArcaneRituals.item.ArcaneItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;

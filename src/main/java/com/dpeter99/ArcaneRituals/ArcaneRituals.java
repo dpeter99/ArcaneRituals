@@ -1,57 +1,19 @@
 package com.dpeter99.ArcaneRituals;
 
-import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarBlock;
-import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarContainer;
-import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarTileEntity;
-import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarBlock;
-import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
-import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
-import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
-import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
-import com.dpeter99.ArcaneRituals.client.renderer.FluidHolderRenderer;
-import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
-import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
-import com.dpeter99.ArcaneRituals.fluid.Blood;
-import com.dpeter99.ArcaneRituals.item.*;
 import com.dpeter99.ArcaneRituals.setup.ClientProxy;
 import com.dpeter99.ArcaneRituals.setup.IProxy;
 import com.dpeter99.ArcaneRituals.setup.ServerProxy;
-import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
-import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
-import com.dpeter99.ArcaneRituals.util.ArcaneRitualsResourceLocation;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.GlassBottleItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.stream.Collectors;
 
 @Mod("arcanerituals")
 public class ArcaneRituals {
@@ -59,21 +21,18 @@ public class ArcaneRituals {
     public static final String MODID = "arcanerituals";
 
     // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public static final IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
     public ArcaneRituals() {
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        // Register the enqueueIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModelRegistry);
+        Registries.init();
+
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -83,8 +42,6 @@ public class ArcaneRituals {
     {
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
-        //LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
-
 
         proxy.init();
     }
@@ -92,26 +49,6 @@ public class ArcaneRituals {
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
-
-        ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
-                FluidHolderRenderer.Loader.INSTANCE);
-    }
-
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
-        // some example code to dispatch IMC to another mod
-        InterModComms.sendTo("examplemod", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
-    }
-
-    private void processIMC(final InterModProcessEvent event)
-    {
-        // some example code to receive and process InterModComms from other mods
-        LOGGER.info("Got IMC {}", event.getIMCStream().
-                map(m->m.getMessageSupplier().get()).
-                collect(Collectors.toList()));
-    }
-
-    public void onModelRegistry(ModelRegistryEvent itemRegistryEvent){
 
     }
 
@@ -125,82 +62,6 @@ public class ArcaneRituals {
     public static ResourceLocation location(String path)
     {
         return new ResourceLocation(MODID, path);
-    }
-
-    // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
-    // Event bus for receiving Registry Events)
-    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents {
-        @SubscribeEvent
-        public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
-            // register a new block here
-            LOGGER.info("HELLO from Register Block");
-
-            IForgeRegistry<Block> reg = blockRegistryEvent.getRegistry();
-
-            reg.register(new WitchAltarBlock());
-            reg.register(new NecromanticAltarBlock());
-            reg.register(new DemonicAltarBlock());
-        }
-
-        @SubscribeEvent
-        public static void onItemRegistry(final RegistryEvent.Register<Item> itemRegistryEvent){
-             IForgeRegistry<Item> reg = itemRegistryEvent.getRegistry();
-
-             reg.register(new Item(new Item.Properties()).setRegistryName("bat_wing"));
-
-             reg.register(new BasicWand());
-             reg.register(new ArcaneBook());
-             reg.register(new ItemSacrificialKnife());
-
-             reg.register(new ItemVial().setRegistryName("vial"));
-        }
-
-        @SubscribeEvent
-        public static void onTileRegistry(final RegistryEvent.Register<TileEntityType<?>> itemRegistryEvent){
-            IForgeRegistry<TileEntityType<?>> reg = itemRegistryEvent.getRegistry();
-
-            reg.register(TileEntityType.Builder.create(WitchAltarTileEntity::new, ArcaneBlocks.witch_altar).build(null).setRegistryName("witch_altar"));
-            reg.register(TileEntityType.Builder.create(NecromanticAltarTileEntity::new, ArcaneBlocks.necromantic_altar).build(null).setRegistryName("necromantic_altar"));
-            reg.register(TileEntityType.Builder.create(DemonicAltarTileEntity::new, ArcaneBlocks.demonic_altar).build(null).setRegistryName("demonic_altar"));
-        }
-
-        @SubscribeEvent
-        public static void onContainerRegistry(final RegistryEvent.Register<ContainerType<?>> itemRegistryEvent){
-            IForgeRegistry<ContainerType<?>> reg = itemRegistryEvent.getRegistry();
-
-            reg.register(IForgeContainerType.create((windowId, inv, data) -> {
-                BlockPos pos = data.readBlockPos();
-                return new WitchAltarContainer(windowId, proxy.getClientWorld(), pos, inv);
-            }).setRegistryName("witch_altar_continer"));
-
-            reg.register(IForgeContainerType.create((windowId, inv, data) -> {
-                BlockPos pos = data.readBlockPos();
-                return new NecromanticAltarContainer(windowId, proxy.getClientWorld(), pos, inv);
-            }).setRegistryName("necromantic_altar_container"));
-
-            reg.register(IForgeContainerType.create((windowId, inv, data) -> {
-                BlockPos pos = data.readBlockPos();
-                return new DemonicAltarContainer(windowId, proxy.getClientWorld(), pos, inv);
-            }).setRegistryName("demonic_altar_container"));
-
-
-            //reg.register(IForgeContainerType.create(ContainerType::new).setRegistryName("witch_altar_continer"));
-        }
-
-        @SubscribeEvent
-        public static void onRecipeSerializerRegistry(RegistryEvent.Register<IRecipeSerializer<?>> itemRegistryEvent){
-            IForgeRegistry<IRecipeSerializer<?>> reg = itemRegistryEvent.getRegistry();
-
-            reg.register(new AltarRecipe.Serializer().setRegistryName(AltarRecipe.RECIPE_TYPE_NAME));
-        }
-
-        @SubscribeEvent
-        public static void onFluidRegistry(RegistryEvent.Register<Fluid> itemRegistryEvent){
-            IForgeRegistry<Fluid> reg = itemRegistryEvent.getRegistry();
-
-            reg.register(new Blood());
-        }
     }
 
 }
