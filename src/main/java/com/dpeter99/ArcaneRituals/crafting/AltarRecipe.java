@@ -48,24 +48,21 @@ public class AltarRecipe implements IRecipe<AltarContext> {
 
     public String altar_type;
     public List<Ingredient> ingredients;
+    public Ingredient center;
     public ItemStack result;
     public int fuel_amount;
 
-    public AltarRecipe(ResourceLocation id, String group, List<Ingredient> ingredients, ItemStack result, int fuel_amount, String altar_type) {
+    public AltarRecipe(ResourceLocation id, String group, List<Ingredient> ingredients, Ingredient center, ItemStack result, int fuel_amount, String altar_type) {
         this.id = id;
         this.group = group;
         this.ingredients = ingredients;
+        this.center = center;
         this.result = result;
         this.fuel_amount = fuel_amount;
         this.altar_type = altar_type;
     }
 
-    /**
-     * Used to check if a recipe matches current crafting inventory
-     *
-     * @param inv
-     * @param worldIn
-     */
+
     @Override
     public boolean matches(AltarContext inv, World worldIn) {
         if(inv.altar_type.equals(this.altar_type)){
@@ -87,6 +84,16 @@ public class AltarRecipe implements IRecipe<AltarContext> {
  */
 
                 RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
+
+                boolean matches = true;
+                matches = matches && ingredients.get(0).test(inv.getStackInSlot(0));
+                matches = matches && ingredients.get(1).test(inv.getStackInSlot(1));
+                matches = matches && ingredients.get(2).test(inv.getStackInSlot(2));
+                matches = matches && ingredients.get(3).test(inv.getStackInSlot(3));
+
+                matches = matches && center.test(inv.getStackInSlot(4));
+
+                /*
                 java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
                 int i = 0;
 
@@ -99,7 +106,9 @@ public class AltarRecipe implements IRecipe<AltarContext> {
                 }
 
                 return i == this.ingredients.size() && net.minecraftforge.common.util.RecipeMatcher.findMatches(inputs,  this.ingredients) != null;
+                 */
 
+                return matches;
 
             }
         }
@@ -107,23 +116,12 @@ public class AltarRecipe implements IRecipe<AltarContext> {
 
     }
 
-    /**
-     * Returns an Item that is the result of this recipe
-     *
-     * @param inv
-     */
     @Override
     public ItemStack getCraftingResult(AltarContext inv) {
         return result;
     }
 
 
-    /**
-     * Used to determine if this recipe can fit in a grid of the given width/height
-     *
-     * @param width
-     * @param height
-     */
     @Override
     public boolean canFit(int width, int height) {
         //TODO use this to check for the size of the altar
@@ -168,20 +166,24 @@ public class AltarRecipe implements IRecipe<AltarContext> {
         public AltarRecipe read(ResourceLocation recipeId, JsonObject json)
         {
             String group = JSONUtils.getString(json, "group", "");
+
             int fuel = JSONUtils.getInt(json,"fuel_amount",0);
             String altar_type = JSONUtils.getString(json,"altar_type","");
 
-            JsonArray ingredientsArray = JSONUtils.getJsonArray(json, "ingredient");
+            JsonObject ingredientsArray = JSONUtils.getJsonObject(json, "ingredients");
             List<Ingredient> ingredient = new ArrayList<>();
-            for (JsonElement e : ingredientsArray) {
-                ingredient.add(Ingredient.deserialize(e));
-            }
+            ingredient.add(Ingredient.deserialize(ingredientsArray.getAsJsonObject("0")));
+            ingredient.add(Ingredient.deserialize(ingredientsArray.getAsJsonObject("1")));
+            ingredient.add(Ingredient.deserialize(ingredientsArray.getAsJsonObject("2")));
+            ingredient.add(Ingredient.deserialize(ingredientsArray.getAsJsonObject("3")));
+
+            Ingredient center = Ingredient.deserialize(ingredientsArray.getAsJsonObject("center"));
 
             String s1 = JSONUtils.getString(json, "result");
             ResourceLocation resourcelocation = new ResourceLocation(s1);
             ItemStack itemstack = new ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(resourcelocation)).orElseThrow(() -> new IllegalStateException("Item: " + s1 + " does not exist")));
 
-            return new AltarRecipe(recipeId, group, ingredient, itemstack, fuel, altar_type);
+            return new AltarRecipe(recipeId, group, ingredient,center, itemstack, fuel, altar_type);
         }
 
         @Override
@@ -199,8 +201,9 @@ public class AltarRecipe implements IRecipe<AltarContext> {
             for(int j = 0; j < ingredients.size(); ++j) {
                 ingredients.set(j, Ingredient.read(buffer));
             }
+            Ingredient center = Ingredient.read(buffer);
 
-            return new AltarRecipe(recipeId, group, ingredients, itemstack, fuel_amount, altar_type);
+            return new AltarRecipe(recipeId, group, ingredients,center, itemstack, fuel_amount, altar_type);
         }
 
         @Override
@@ -215,6 +218,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
             for(Ingredient ingredient : recipe.ingredients) {
                 ingredient.write(buffer);
             }
+            recipe.center.write(buffer);
 
             buffer.writeItemStack(recipe.result);
         }

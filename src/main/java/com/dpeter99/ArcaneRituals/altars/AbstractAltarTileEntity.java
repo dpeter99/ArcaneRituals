@@ -76,10 +76,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         }
     };
 
-    //public final FluidTank fluid = new FluidTank(5000);
-
     private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
-    //private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> fluid);
 
     public static final int PROGRESS = 0;
     public static final int PROGRESS_FROM = 1;
@@ -137,6 +134,8 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
     protected abstract String getAltarType();
 
+    protected abstract void duringCrafting();
+
 
 
     public AbstractAltarTileEntity(TileEntityType<?> tileEntityTypeIn) {
@@ -149,10 +148,6 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
         if (world.isRemote)
             return;
-
-        /*
-
-        */
 
         if (needRefreshRecipe) {
 
@@ -177,9 +172,12 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
         if (flag) {
             this.markDirty();
+            //TODO: Add the ability for subclasses to update without sending multiple
+            world.notifyBlockUpdate(pos,getBlockState(),getBlockState(),2);
         }
 
     }
+
 
 
     public void startCrafting() {
@@ -213,9 +211,6 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         CompoundNBT invTag = nbt.getCompound("inventory");
         inventory.deserializeNBT(invTag);
 
-        //CompoundNBT fluidTag = nbt.getCompound("fluid");
-        //fluid.readFromNBT(fluidTag);
-
         progress = nbt.getInt("progress");
         progress_from = nbt.getInt("progress_from");
 
@@ -228,10 +223,6 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
     public CompoundNBT write(CompoundNBT nbt) {
         CompoundNBT inv_tag = inventory.serializeNBT();
         nbt.put("inventory", inv_tag);
-
-        //CompoundNBT fluidTag = new CompoundNBT();
-        //fluidTag = fluid.writeToNBT(fluidTag);
-        //nbt.put("fluid", fluidTag);
 
         nbt.putInt("progress", progress);
         nbt.putInt("progress_from", progress_from);
@@ -253,11 +244,6 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return inventory_provider.cast();
         }
-        /*
-        else if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return fluid_provider.cast();
-        }
-        */
         return super.getCapability(cap, side);
     }
 }

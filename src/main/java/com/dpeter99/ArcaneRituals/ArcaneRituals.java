@@ -1,9 +1,13 @@
 package com.dpeter99.ArcaneRituals;
 
+import com.dpeter99.ArcaneRituals.particles.AltarParticle;
+import com.dpeter99.ArcaneRituals.particles.ArcaneParticles;
 import com.dpeter99.ArcaneRituals.setup.ClientProxy;
 import com.dpeter99.ArcaneRituals.setup.IProxy;
 import com.dpeter99.ArcaneRituals.setup.ServerProxy;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -12,6 +16,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,6 +62,11 @@ public class ArcaneRituals {
     public void onServerStarting(FMLServerStartingEvent event) {
         // do something when the server starts
         LOGGER.info("HELLO from server starting");
+    }
+
+    @SubscribeEvent
+    public void asd(ParticleFactoryRegisterEvent event){
+        Minecraft.getInstance().particles.registerFactory(ArcaneParticles.altar_demonic, AltarParticle.Factory::new);
     }
 
     public static ResourceLocation location(String path)

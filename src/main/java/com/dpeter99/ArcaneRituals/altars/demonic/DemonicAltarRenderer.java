@@ -62,13 +62,17 @@ public class DemonicAltarRenderer extends TileEntityRenderer<DemonicAltarTileEnt
         TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(BLOOD_TEXTURE);
         IVertexBuilder builder = bufferIn.getBuffer(RenderType.getTranslucent());
 
-        float fill = tileEntityIn.tank.getFluidAmount() / (float)tileEntityIn.tank.getCapacity();
-        float level = 0.9f * fill;
-        add(builder, matrixStackIn, 0f, level, 1f, sprite.getMinU(), sprite.getMaxV());
-        add(builder, matrixStackIn, 1f, level, 1f, sprite.getMaxU(), sprite.getMaxV());
-        add(builder, matrixStackIn, 1f, level, 0f, sprite.getMaxU(), sprite.getMinV());
-        add(builder, matrixStackIn, 0f, level, 0f, sprite.getMinU(), sprite.getMinV());
 
+        float fill = tileEntityIn.tank.getFluidAmount() / (float)tileEntityIn.tank.getCapacity();
+        float step = 1 / 16.0f; //0.758f
+        float level = ((1 - (step * 4.3f) - (step)) * fill) + (step * 1.5f);
+
+        if(fill != 0) {
+            add(builder, matrixStackIn, 0f, level, 1f, sprite.getMinU(), sprite.getMaxV());
+            add(builder, matrixStackIn, 1f, level, 1f, sprite.getMaxU(), sprite.getMaxV());
+            add(builder, matrixStackIn, 1f, level, 0f, sprite.getMaxU(), sprite.getMinV());
+            add(builder, matrixStackIn, 0f, level, 0f, sprite.getMinU(), sprite.getMinV());
+        }
         float floatScale = 0.35f;
 
         matrixStackIn.push();
