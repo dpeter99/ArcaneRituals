@@ -6,13 +6,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class AltarParticle extends SpriteTexturedParticle {
+import java.awt.*;
+
+public abstract class AltarParticle extends SpriteTexturedParticle {
 
     private final double portalPosX;
     private final double portalPosY;
     private final double portalPosZ;
 
-    private AltarParticle(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
+    public AltarParticle(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn);
         this.motionX = xSpeedIn;
         this.motionY = ySpeedIn;
@@ -25,11 +27,14 @@ public class AltarParticle extends SpriteTexturedParticle {
         this.portalPosZ = this.posZ;
         this.particleScale = 0.1F * (this.rand.nextFloat() * 0.2F + 0.5F);
         float f = this.rand.nextFloat() * 0.6F + 0.4F;
-        this.particleRed = f * 0.9F;
-        this.particleGreen = f * 0.3F;
-        this.particleBlue = f;
+        Color col = getColor();
+        this.particleRed = f * (col.getRed()/255.0f);
+        this.particleGreen = f * (col.getGreen()/255.0f);
+        this.particleBlue = f * (col.getBlue()/255.0f);
         this.maxAge = (int)(Math.random() * 10.0D) + 40;
     }
+
+    protected abstract Color getColor();
 
     public IParticleRenderType getRenderType() {
         return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
@@ -79,18 +84,5 @@ public class AltarParticle extends SpriteTexturedParticle {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static class Factory implements IParticleFactory<BasicParticleType> {
-        private final IAnimatedSprite spriteSet;
 
-        public Factory(IAnimatedSprite p_i50607_1_) {
-            this.spriteSet = p_i50607_1_;
-        }
-
-        public Particle makeParticle(BasicParticleType typeIn, World worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            AltarParticle portalparticle = new AltarParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
-            portalparticle.selectSpriteRandomly(this.spriteSet);
-            return portalparticle;
-        }
-    }
 }

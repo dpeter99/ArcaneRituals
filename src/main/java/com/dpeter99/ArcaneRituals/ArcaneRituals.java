@@ -1,5 +1,6 @@
 package com.dpeter99.ArcaneRituals;
 
+import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarParicle;
 import com.dpeter99.ArcaneRituals.particles.AltarParticle;
 import com.dpeter99.ArcaneRituals.particles.ArcaneParticles;
 import com.dpeter99.ArcaneRituals.setup.ClientProxy;
@@ -11,14 +12,18 @@ import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.theillusivec4.curios.api.CuriosAPI;
+import top.theillusivec4.curios.api.imc.CurioIMCMessage;
 
 @Mod("arcanerituals")
 public class ArcaneRituals {
@@ -33,8 +38,12 @@ public class ArcaneRituals {
     public ArcaneRituals() {
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        // Register the enqueueIMC method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::asd);
 
         Registries.init();
 
@@ -57,6 +66,13 @@ public class ArcaneRituals {
 
     }
 
+    private void enqueueIMC(final InterModEnqueueEvent event)
+    {
+        // some example code to dispatch IMC to another mod
+        //InterModComms.sendTo("examplemod", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
+        InterModComms.sendTo("curios", CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage("ring"));
+    }
+
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
@@ -66,7 +82,7 @@ public class ArcaneRituals {
 
     @SubscribeEvent
     public void asd(ParticleFactoryRegisterEvent event){
-        Minecraft.getInstance().particles.registerFactory(ArcaneParticles.altar_demonic, AltarParticle.Factory::new);
+        Minecraft.getInstance().particles.registerFactory(ArcaneParticles.altar_demonic, DemonicAltarParicle.Factory::new);
     }
 
     public static ResourceLocation location(String path)

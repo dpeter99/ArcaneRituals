@@ -117,13 +117,13 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
     protected int progress = 0;
     protected int progress_from = 0;
 
-    private boolean isWorking() {
+    public boolean isWorking() {
         return this.progress > 0;
     }
 
     private String current_recipe;
 
-    private AltarRecipe getCurrent_recipe() {
+    public AltarRecipe getCurrentRecipe() {
         return (AltarRecipe) world.getRecipeManager().getRecipe(ResourceLocation.tryCreate(current_recipe)).orElse(null);
     }
 
@@ -163,7 +163,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
             progress--;
             if (progress <= 0 && current_recipe != null) {
                 System.out.println("Recipe finished: " + current_recipe);
-                inventory.setStackInSlot(4, getCurrent_recipe().getRecipeOutput().copy());
+                inventory.setStackInSlot(4, getCurrentRecipe().getRecipeOutput().copy());
                 current_recipe = null;
                 progress_from = 0;
                 flag = true;

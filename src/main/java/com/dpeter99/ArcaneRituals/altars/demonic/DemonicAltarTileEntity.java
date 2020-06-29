@@ -48,7 +48,6 @@ public class DemonicAltarTileEntity extends AbstractFluidAltarTileEnity {
     };
 
 
-
     public DemonicAltarTileEntity() {
         super(ArcaneTileEntities.demonic_altar);
     }

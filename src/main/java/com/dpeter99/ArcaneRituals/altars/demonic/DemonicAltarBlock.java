@@ -60,26 +60,29 @@ public class DemonicAltarBlock extends Block {
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         //super.animateTick(stateIn, worldIn, pos, rand);
 
-        double posX = (double) pos.getX() + 0.5;
-        double posY = (double) pos.getY() + 0.5;
-        double posZ = (double) pos.getZ() + 0.5;
+        DemonicAltarTileEntity tile = (DemonicAltarTileEntity)worldIn.getTileEntity(pos);
+        if(tile.isWorking()) {
+
+            double posX = (double) pos.getX() + 0.5;
+            double posY = (double) pos.getY() + 0.5;
+            double posZ = (double) pos.getZ() + 0.5;
 
 
-        for (int i = 0; i < 30; i++) {
+            for (int i = 0; i < 30; i++) {
 
-            double radian = Math.PI * 2 * rand.nextDouble();
-            double r_posX = posX + (Math.cos(radian) * 2);
-            double r_posY = posY;
-            double r_posZ = posZ + (Math.sin(radian) * 1);
+                double radian = Math.PI * 2 * rand.nextDouble();
+                double r_posX = posX + (Math.cos(radian) * 1);
+                double r_posY = posY;
+                double r_posZ = posZ + (Math.sin(radian) * 1);
 
-            double speed_X = r_posX - posX;
-            double speed_Y = r_posY - posY;
-            double speed_Z = r_posZ - posZ;
+                double speed_X = r_posX - posX;
+                double speed_Y = r_posY - posY;
+                double speed_Z = r_posZ - posZ;
 
-            worldIn.addParticle(ArcaneParticles.altar_demonic, posX, posY, posZ, speed_X, speed_Y, speed_Z);
-            //worldIn.spawn
+                worldIn.addParticle(ArcaneParticles.altar_demonic, posX, posY, posZ, speed_X, speed_Y, speed_Z);
+                //worldIn.spawn
+            }
         }
-
 
     }
 
@@ -96,6 +99,7 @@ public class DemonicAltarBlock extends Block {
             } else if (current_item.getItem() == ArcaneItems.basic_wand) {
                 tileEntity.startCrafting();
             } else if (tileEntity instanceof INamedContainerProvider) {
+                if(!tileEntity.isWorking())
                 NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");

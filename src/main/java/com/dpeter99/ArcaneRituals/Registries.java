@@ -74,7 +74,7 @@ public class Registries {
 
          reg.register(new ItemVial().setRegistryName("vial"));
 
-         reg.register(new Item(new Item.Properties().group(Registries.group)).setRegistryName("iron_ring"));
+         reg.register(new Item(new Item.Properties().group(Registries.group).maxStackSize(1)).setRegistryName("iron_ring"));
 
          reg.register(new ItemRingOfProtection(1).setRegistryName("ring_of_protection"));
     }
