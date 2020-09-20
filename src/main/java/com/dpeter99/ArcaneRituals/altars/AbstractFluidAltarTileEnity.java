@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -14,6 +15,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -59,11 +61,7 @@ public abstract class AbstractFluidAltarTileEnity extends AbstractAltarTileEntit
             capability.ifPresent(
                     fluidInv ->
                     {
-                        FluidStack drained = fluidInv.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.SIMULATE);
-                        if(tank.fill(drained, IFluidHandler.FluidAction.SIMULATE)>0) {
-                            tank.fill(fluidInv.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
-                            //inventory.setStackInSlot(5, fluidInv.getContainer());
-                        }
+                        fillFrom(fluidInv);
                         newFluidItem = false;
                     }
             );
@@ -76,6 +74,37 @@ public abstract class AbstractFluidAltarTileEnity extends AbstractAltarTileEntit
         super.tick();
     }
 
+    public void fillFrom(IFluidHandlerItem fluidInv) {
+        FluidStack drained = fluidInv.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.SIMULATE);
+        if(tank.fill(drained, IFluidHandler.FluidAction.SIMULATE)>0) {
+            tank.fill(fluidInv.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+            //inventory.setStackInSlot(5, fluidInv.getContainer());
+        }
+
+        world.notifyBlockUpdate(pos,getBlockState(),getBlockState(),2);
+    }
+
+    public void fillFromItem(ItemStack item) {
+
+        ItemStack single_item = item.copy();
+        single_item.setCount(1);
+
+        FluidUtil.getFluidHandler(single_item).ifPresent(
+                fluidHandl -> {
+                    if(fluidHandl.getFluidInTank(0).getFluid().isEquivalentTo(ArcaneFluids.blood)) {
+                        FluidStack drained = fluidHandl.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.SIMULATE);
+                        if(tank.fill(drained, IFluidHandler.FluidAction.SIMULATE)>0) {
+                            tank.fill(fluidHandl.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                            //inventory.setStackInSlot(5, fluidInv.getContainer());
+                            item.shrink(1);
+                            world.notifyBlockUpdate(pos,getBlockState(),getBlockState(),2);
+                        }
+                    }
+                }
+        );
+
+
+    }
 
 
     @Override

@@ -21,6 +21,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.particles.ParticleType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -71,6 +73,10 @@ public class Registries {
          reg.register(new ItemSacrificialKnife());
 
          reg.register(new ItemVial().setRegistryName("vial"));
+
+         reg.register(new Item(new Item.Properties().group(Registries.group).maxStackSize(1)).setRegistryName("iron_ring"));
+
+         reg.register(new ItemRingOfProtection(1).setRegistryName("ring_of_protection"));
     }
 
     @SubscribeEvent
@@ -114,6 +120,15 @@ public class Registries {
         IForgeRegistry<Fluid> reg = itemRegistryEvent.getRegistry();
 
         reg.register(new Blood());
+
+
+    }
+
+    @SubscribeEvent
+    public static void onParticleRegistry(RegistryEvent.Register<ParticleType<?>> itemRegistryEvent){
+        IForgeRegistry<ParticleType<?>> reg = itemRegistryEvent.getRegistry();
+
+        reg.register(new BasicParticleType(true).setRegistryName("altar_demonic"));
 
 
     }

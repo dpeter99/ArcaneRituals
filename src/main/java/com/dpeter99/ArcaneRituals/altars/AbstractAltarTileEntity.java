@@ -76,10 +76,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         }
     };
 
-    //public final FluidTank fluid = new FluidTank(5000);
-
     private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
-    //private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> fluid);
 
     public static final int PROGRESS = 0;
     public static final int PROGRESS_FROM = 1;
@@ -120,13 +117,13 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
     protected int progress = 0;
     protected int progress_from = 0;
 
-    private boolean isWorking() {
+    public boolean isWorking() {
         return this.progress > 0;
     }
 
     private String current_recipe;
 
-    private AltarRecipe getCurrent_recipe() {
+    public AltarRecipe getCurrentRecipe() {
         return (AltarRecipe) world.getRecipeManager().getRecipe(ResourceLocation.tryCreate(current_recipe)).orElse(null);
     }
 
@@ -136,6 +133,8 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
 
     protected abstract String getAltarType();
+
+    protected abstract void duringCrafting();
 
 
 
@@ -149,10 +148,6 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
         if (world.isRemote)
             return;
-
-        /*
-
-        */
 
         if (needRefreshRecipe) {
 
@@ -168,7 +163,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
             progress--;
             if (progress <= 0 && current_recipe != null) {
                 System.out.println("Recipe finished: " + current_recipe);
-                inventory.setStackInSlot(4, getCurrent_recipe().getRecipeOutput().copy());
+                inventory.setStackInSlot(4, getCurrentRecipe().getRecipeOutput().copy());
                 current_recipe = null;
                 progress_from = 0;
                 flag = true;
@@ -177,9 +172,12 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
         if (flag) {
             this.markDirty();
+            //TODO: Add the ability for subclasses to update without sending multiple
+            world.notifyBlockUpdate(pos,getBlockState(),getBlockState(),2);
         }
 
     }
+
 
 
     public void startCrafting() {
@@ -213,9 +211,6 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         CompoundNBT invTag = nbt.getCompound("inventory");
         inventory.deserializeNBT(invTag);
 
-        //CompoundNBT fluidTag = nbt.getCompound("fluid");
-        //fluid.readFromNBT(fluidTag);
-
         progress = nbt.getInt("progress");
         progress_from = nbt.getInt("progress_from");
 
@@ -228,10 +223,6 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
     public CompoundNBT write(CompoundNBT nbt) {
         CompoundNBT inv_tag = inventory.serializeNBT();
         nbt.put("inventory", inv_tag);
-
-        //CompoundNBT fluidTag = new CompoundNBT();
-        //fluidTag = fluid.writeToNBT(fluidTag);
-        //nbt.put("fluid", fluidTag);
 
         nbt.putInt("progress", progress);
         nbt.putInt("progress_from", progress_from);
@@ -253,11 +244,6 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return inventory_provider.cast();
         }
-        /*
-        else if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return fluid_provider.cast();
-        }
-        */
         return super.getCapability(cap, side);
     }
 }

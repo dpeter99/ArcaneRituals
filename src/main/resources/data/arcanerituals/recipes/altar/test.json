@@ -2,8 +2,12 @@
   "type": "arcanerituals:altar",
   "fuel_amount": 10,
   "altar_type": "witch_altar",
-  "ingredient": [
-    {"tag": "minecraft:acacia_logs"}
-  ],
+  "ingredients": {
+    "0" : {"tag": "minecraft:acacia_logs"},
+    "1" : {"tag": "minecraft:acacia_logs"},
+    "2" : {"tag": "minecraft:acacia_logs"},
+    "3" : {"tag": "minecraft:acacia_logs"},
+    "center" : {"tag": "minecraft:acacia_logs"}
+  },
   "result": "minecraft:acacia_planks"
 }

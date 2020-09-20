@@ -88,6 +88,11 @@ public class WitchAltarTileEntity extends AbstractAltarTileEntity {
         return "witch_altar";
     }
 
+    @Override
+    protected void duringCrafting() {
+
+    }
+
 
     @Override
     public void read(CompoundNBT nbt) {

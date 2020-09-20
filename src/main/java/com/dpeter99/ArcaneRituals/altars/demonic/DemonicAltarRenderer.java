@@ -62,20 +62,29 @@ public class DemonicAltarRenderer extends TileEntityRenderer<DemonicAltarTileEnt
         TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(BLOOD_TEXTURE);
         IVertexBuilder builder = bufferIn.getBuffer(RenderType.getTranslucent());
 
-        float fill = tileEntityIn.tank.getFluidAmount() / (float)tileEntityIn.tank.getCapacity();
-        float level = 0.9f * fill;
-        add(builder, matrixStackIn, 0f, level, 1f, sprite.getMinU(), sprite.getMaxV());
-        add(builder, matrixStackIn, 1f, level, 1f, sprite.getMaxU(), sprite.getMaxV());
-        add(builder, matrixStackIn, 1f, level, 0f, sprite.getMaxU(), sprite.getMinV());
-        add(builder, matrixStackIn, 0f, level, 0f, sprite.getMinU(), sprite.getMinV());
 
+        float fill = tileEntityIn.tank.getFluidAmount() / (float)tileEntityIn.tank.getCapacity();
+        float step = 1 / 16.0f; //0.758f
+        float level = ((1 - (step * 4.3f) - (step)) * fill) + (step * 1.5f);
+
+        if(fill != 0) {
+            add(builder, matrixStackIn, 0f, level, 1f, sprite.getMinU(), sprite.getMaxV());
+            add(builder, matrixStackIn, 1f, level, 1f, sprite.getMaxU(), sprite.getMaxV());
+            add(builder, matrixStackIn, 1f, level, 0f, sprite.getMaxU(), sprite.getMinV());
+            add(builder, matrixStackIn, 0f, level, 0f, sprite.getMinU(), sprite.getMinV());
+        }
         float floatScale = 0.35f;
 
         matrixStackIn.push();
         matrixStackIn.translate(0.5, level, 0.5);
         matrixStackIn.scale(floatScale,floatScale,floatScale);
         matrixStackIn.rotate(new Quaternion(Vector3f.XP,90.0f, true));
-        RenderItem(4, tileEntityIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+        if(!tileEntityIn.isWorking()) {
+            RenderItem(4, tileEntityIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+        }
+        else{
+            RenderItemStack(tileEntityIn.getCurrentRecipe().getRecipeOutput(), tileEntityIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+        }
         matrixStackIn.pop();
 
     }
@@ -92,6 +101,13 @@ public class DemonicAltarRenderer extends TileEntityRenderer<DemonicAltarTileEnt
     private void RenderItem(int slot_id, DemonicAltarTileEntity tileEntityIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         ItemStack stack = tileEntityIn.inventory.getStackInSlot(slot_id);
+        IBakedModel ibakedmodel = itemRenderer.getItemModelWithOverrides(stack, tileEntityIn.getWorld(), null);
+        itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, true, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, ibakedmodel);
+    }
+
+    private void RenderItemStack(ItemStack stack, DemonicAltarTileEntity tileEntityIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+
         IBakedModel ibakedmodel = itemRenderer.getItemModelWithOverrides(stack, tileEntityIn.getWorld(), null);
         itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, true, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, ibakedmodel);
     }

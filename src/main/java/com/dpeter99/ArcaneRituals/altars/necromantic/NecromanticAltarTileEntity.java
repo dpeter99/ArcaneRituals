@@ -54,6 +54,11 @@ public class NecromanticAltarTileEntity extends AbstractFluidAltarTileEnity {
     }
 
     @Override
+    protected void duringCrafting() {
+
+    }
+
+    @Override
     protected Fluid getFluidType() {
         return ArcaneFluids.blood;
     }
