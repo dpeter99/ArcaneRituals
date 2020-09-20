@@ -1,20 +1,6 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = "https://maven.tehnut.info" }
-
-        maven { // CURIOS
-            url = "https://maven.theillusivec4.top/"
-        }
-
-        maven { // JEI
-            name = "Progwml6 maven"
-            url = "https://dvs1.progwml6.com/files/maven/"
-        }
-        maven { // TOP
-            name = 'tterrag maven'
-            url = "https://maven.tterrag.com/"
-        }
 
         jcenter()
         mavenCentral()
@@ -31,13 +17,23 @@ apply plugin: 'maven-publish'
 
 repositories {
     maven { // JEI
-        url "https://dvs1.progwml6.com/files/maven"
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven { // TOP
-        name 'tterrag maven'
-        url "http://maven.tterrag.com/"
+        name = 'tterrag maven'
+        url = "https://maven.tterrag.com/"
     }
-    maven { url = "https://maven.theillusivec4.top/" }
+
+    maven { // CURIOS
+        url = "https://maven.theillusivec4.top/"
+    }
+
+    maven { url = "https://maven.tehnut.info" }
+
+    maven {
+        url = "https://maven.latmod.com/"
+    }
 }
 
 version = '1.0'
@@ -136,14 +132,14 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
+    //compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
+    //runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
 
-
+/*
     compile fg.deobf(project.dependencies.create("mcjty.theoneprobe:TheOneProbe-${top_version}") {
         transitive = false
     })
-
+*/
 
     //runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${HWYLA_version}")
 
