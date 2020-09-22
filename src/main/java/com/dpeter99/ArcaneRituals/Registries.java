@@ -8,6 +8,7 @@ import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
+import com.dpeter99.ArcaneRituals.client.renderer.FluidHolderRenderer;
 import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import com.dpeter99.ArcaneRituals.fluid.Blood;
@@ -26,6 +27,8 @@ import net.minecraft.particles.ParticleType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -67,6 +70,9 @@ public class Registries {
          IForgeRegistry<Item> reg = itemRegistryEvent.getRegistry();
 
          reg.register(new Item(new Item.Properties()).setRegistryName("bat_wing"));
+
+        reg.register(new Item(new Item.Properties().group(group).maxStackSize(1)).setRegistryName("hammer"));
+        reg.register(new Item(new Item.Properties().group(group).maxStackSize(1)).setRegistryName("blood_hammer"));
 
          reg.register(new BasicWand());
          reg.register(new ArcaneBook());
@@ -131,6 +137,12 @@ public class Registries {
         reg.register(new BasicParticleType(true).setRegistryName("altar_demonic"));
 
 
+    }
+
+    @SubscribeEvent
+    public static void onModelRegistryEvent(ModelRegistryEvent event){
+        ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
+                FluidHolderRenderer.Loader.INSTANCE);
     }
 
     private static class ArcaneItemGroup extends ItemGroup {

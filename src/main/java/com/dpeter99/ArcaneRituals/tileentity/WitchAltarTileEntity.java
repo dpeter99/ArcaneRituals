@@ -2,6 +2,7 @@ package com.dpeter99.ArcaneRituals.tileentity;
 
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -95,10 +96,10 @@ public class WitchAltarTileEntity extends AbstractAltarTileEntity {
 
 
     @Override
-    public void read(CompoundNBT nbt) {
+    public void read(BlockState state, CompoundNBT nbt) {
         bloodLevel = nbt.getInt("bloodLevel");
 
-        super.read(nbt);
+        super.read(state, nbt);
     }
 
     @Override

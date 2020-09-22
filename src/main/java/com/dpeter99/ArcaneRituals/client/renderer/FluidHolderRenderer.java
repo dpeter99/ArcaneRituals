@@ -9,23 +9,28 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.types.Func;
 import com.mojang.datafixers.util.Pair;
+//import net.minecraft.block.material.Material;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.TransformationMatrix;
+//import net.minecraft.client.renderer.TransformationMatrix;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.*;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.TransformationMatrix;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.client.model.obj.MaterialLibrary;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.resource.IResourceType;
@@ -63,9 +68,9 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
     }
 
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
 
-        Material particleLocation = owner.resolveTexture("particle");
+        RenderMaterial particleLocation = owner.resolveTexture("particle");
         if (MissingTextureSprite.getLocation().equals(particleLocation.getTextureLocation()))
         {
             particleLocation = null;
@@ -85,7 +90,7 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
 
         String texturePath = fluids.get(active_fuid);
         ResourceLocation texture_loc = ResourceLocation.tryCreate(texturePath);
-        Material fluidMaterial = ModelLoaderRegistry.blockMaterial(texture_loc);
+        RenderMaterial fluidMaterial = ModelLoaderRegistry.blockMaterial(texture_loc);
         TextureAtlasSprite fluidSprite = spriteGetter.apply(fluidMaterial);
 
         if (fluidSprite != null)
@@ -98,13 +103,13 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
     }
 
     @Override
-    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-        Set<Material> texs = Sets.newHashSet();
+    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        Set<RenderMaterial> texs = Sets.newHashSet();
 
         //owner.resolveTexture()
 
         fluids.forEach((key,val)->{
-            texs.add(new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE,ResourceLocation.tryCreate(val)));
+            texs.add(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE,ResourceLocation.tryCreate(val)));
         });
 
         //String texturePath = fluids.get(active_fuid);
@@ -181,7 +186,7 @@ public class FluidHolderRenderer implements IModelGeometry<FluidHolderRenderer> 
         }
 
         @Override
-        public IBakedModel getModelWithOverrides(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity)
+        public IBakedModel getOverrideModel(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity livingEntity)
         {
             return FluidUtil.getFluidContained(stack)
                     .map(fluidStack -> {

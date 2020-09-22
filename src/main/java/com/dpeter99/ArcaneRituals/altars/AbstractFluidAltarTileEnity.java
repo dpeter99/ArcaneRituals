@@ -1,6 +1,7 @@
 package com.dpeter99.ArcaneRituals.altars;
 
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
@@ -108,8 +109,8 @@ public abstract class AbstractFluidAltarTileEnity extends AbstractAltarTileEntit
 
 
     @Override
-    public void read(CompoundNBT nbt) {
-        super.read(nbt);
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
         CompoundNBT tank_nbt = nbt.getCompound("tank");
         tank.readFromNBT(tank_nbt);
     }
@@ -148,7 +149,7 @@ public abstract class AbstractFluidAltarTileEnity extends AbstractAltarTileEntit
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net,pkt);
-        this.read(pkt.getNbtCompound());
+        this.read( world.getBlockState(pkt.getPos()) ,pkt.getNbtCompound());
     }
 
     /**
@@ -167,10 +168,12 @@ public abstract class AbstractFluidAltarTileEnity extends AbstractAltarTileEntit
      *
      * @param tag The {@link #CompoundNBT} sent from {@link #getUpdateTag()}
      */
+    /*
     @Override
     public void handleUpdateTag(CompoundNBT tag) {
         read(tag);
     }
+    */
 
 
 

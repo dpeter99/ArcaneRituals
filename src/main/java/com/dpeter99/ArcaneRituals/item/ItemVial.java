@@ -65,13 +65,16 @@ public class ItemVial extends Item {
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
+
         FluidStack fluid = getFluid(stack);
         ITextComponent this_name =new TranslationTextComponent(this.getTranslationKey(stack));
-        if(!fluid.getFluid().isEquivalentTo(Fluids.EMPTY)) {
-            ITextComponent fluid_name = new TranslationTextComponent(fluid.getTranslationKey());
-            fluid_name.appendText(" ");
-            return fluid_name.appendSibling(this_name);
+        if (!fluid.getFluid().isEquivalentTo(Fluids.EMPTY)) {
+            return new TranslationTextComponent("%s %s",
+                    new TranslationTextComponent(fluid.getTranslationKey()),
+                    new TranslationTextComponent(this.getTranslationKey(stack))
+            );
         }
+
         return super.getDisplayName(stack);
     }
 

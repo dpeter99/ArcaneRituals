@@ -25,8 +25,7 @@ public class ClientProxy implements IProxy {
         DemonicAltarRenderer.register();
         RenderTypeLookup.setRenderLayer(ArcaneBlocks.demonic_altar, (RenderType) -> true);
 
-        ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
-                FluidHolderRenderer.Loader.INSTANCE);
+
     }
 
     @Override

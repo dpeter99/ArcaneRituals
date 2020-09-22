@@ -1,6 +1,7 @@
 package com.dpeter99.ArcaneRituals.particles;
 
 import net.minecraft.client.particle.*;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,7 +15,7 @@ public abstract class AltarParticle extends SpriteTexturedParticle {
     private final double portalPosY;
     private final double portalPosZ;
 
-    public AltarParticle(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
+    public AltarParticle(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn);
         this.motionX = xSpeedIn;
         this.motionY = ySpeedIn;

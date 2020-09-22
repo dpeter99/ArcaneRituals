@@ -2,8 +2,9 @@ package com.dpeter99.ArcaneRituals.screen;
 
 import com.dpeter99.ArcaneRituals.util.ui.SimpleScreen;
 import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.vector.Vector2f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class GlyphDrawer {
 
     SimpleScreen screen;
 
-    public List<Vec2f> gliph_pos = new ArrayList<>();
+    public List<Vector2f> gliph_pos = new ArrayList<>();
     public List<TextureRegion> glyps_normal = new ArrayList<>();
     public List<TextureRegion> glyps_active = new ArrayList<>();
     Random r;
@@ -37,7 +38,7 @@ public class GlyphDrawer {
     }
 
     public void addGlyphPos(int x, int y) {
-        gliph_pos.add(new Vec2f(x, y));
+        gliph_pos.add(new Vector2f(x, y));
     }
 
     public void addGlyph(TextureRegion textureRegion, boolean active) {
@@ -48,13 +49,13 @@ public class GlyphDrawer {
         }
     }
 
-    public void drawGlyps(int activatedCount) {
+    public void drawGlyps(MatrixStack matrixStack,int activatedCount) {
         for (int i = 0; i < gliph_pos.size(); i++) {
-            drawGlyp(i, (int) gliph_pos.get(i).x, (int) gliph_pos.get(i).y, i < activatedCount);
+            drawGlyp(matrixStack,i, (int) gliph_pos.get(i).x, (int) gliph_pos.get(i).y, i < activatedCount);
         }
     }
 
-    private void drawGlyp(int i, int xPos, int yPos, boolean active) {
+    private void drawGlyp(MatrixStack matrixStack, int i, int xPos, int yPos, boolean active) {
         xPos += screen.getGuiLeft();
         yPos += screen.getGuiTop();
 
@@ -62,7 +63,7 @@ public class GlyphDrawer {
         if (active) glyp = glyps_active.get(glyph_ids[i]);
         else glyp = glyps_normal.get(glyph_ids[i]);
 
-        screen.blit_help(xPos, yPos, glyp);
+        screen.blit_help(matrixStack,xPos, yPos, glyp);
     }
 
 

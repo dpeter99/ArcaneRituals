@@ -6,13 +6,17 @@ import com.dpeter99.ArcaneRituals.fluid.AdvancedFluid;
 import com.dpeter99.ArcaneRituals.screen.GlyphDrawer;
 import com.dpeter99.ArcaneRituals.util.ui.SimpleScreen;
 import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,14 +86,14 @@ public class DemonicAltarScreen extends SimpleScreen<DemonicAltarContainer> {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground();
-        super.render(mouseX, mouseY, partialTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrixStack);
+        super.render(matrixStack,mouseX, mouseY, partialTicks);
+        //this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack,int mouseX, int mouseY) {
         //drawString(Minecraft.getInstance().fontRenderer, "Energy: ", 10, 10, 0xffffff);
     }
 
@@ -101,23 +105,23 @@ public class DemonicAltarScreen extends SimpleScreen<DemonicAltarContainer> {
      * @param mouseY
      */
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GUI);
 
-        drawBackground();
-        drawFluid(container.getFluidAmount());
-        drawGlyps();
-        drawTooltip(mouseX,mouseY);
+        drawBackground(matrixStack);
+        drawFluid(matrixStack,container.getFluidAmount());
+        drawGlyps(matrixStack);
+        drawTooltip(matrixStack,mouseX,mouseY);
     }
 
-    private void drawBackground() {
+    private void drawBackground(MatrixStack matrixStack) {
         int relX = (this.width - WIDTH) / 2;
         int relY = (this.height - HEIGHT) / 2;
-        this.blit(relX, relY, 0, 0, WIDTH, HEIGHT);
+        this.blit(matrixStack, relX, relY, 0, 0, WIDTH, HEIGHT);
     }
 
-    private void drawFluid(int level) {
+    private void drawFluid(MatrixStack matrixStack,int level) {
         TextureRegion source = null;
         float step = 5000.0f/4;
         if        (step * 0 < level && level <= step * 1) {
@@ -133,43 +137,46 @@ public class DemonicAltarScreen extends SimpleScreen<DemonicAltarContainer> {
             int toX = getGuiLeft() + 88 - (source.getSizeX() / 2);
             int toY = getGuiTop() + 72 - (source.getSizeY() / 2);
 
-            this.blit_help(toX, toY, source);
+            this.blit_help(matrixStack,toX, toY, source);
         }
     }
 
-    private void drawGlyps() {
+    private void drawGlyps(MatrixStack matrixStack) {
         float p = 1 - ((float) container.getProgress() / container.getProgressFrom());
         float step = 1.0f / 17;
 
-        glyphs.drawGlyps(5);
+        glyphs.drawGlyps(matrixStack,5);
     }
 
-    public void drawTooltip(int mouseX, int mouseY){
+    public void drawTooltip(MatrixStack matrixStack,int mouseX, int mouseY){
         int bloodCenterX = getGuiLeft() + 88;
         int bloodCenterY = getGuiTop() + 72;
         float d = (float)Math.sqrt(Math.pow(bloodCenterX - mouseX,2) + Math.pow(bloodCenterY - mouseY,2));
 
         if(d <= 40) {
-            List<String> text = new ArrayList<>();
+            List<ITextComponent> text = new ArrayList<>();
             //text.add("Blood");
+            //ITextComponent test = new net.minecraft.util.text.("asd");
+
 
             FluidStack fluidStack = container.getTileEntity().tank.getFluid();
             Fluid fluid = fluidStack.getFluid();
             if(fluid.isEquivalentTo(Fluids.EMPTY)) {
-                text.add("Empty");
+                text.add(new StringTextComponent("Empty"));
             }
             else{
-                text.add(container.getTileEntity().tank.getFluid().getDisplayName().getString());
-                text.add(fluidStack.getAmount() + "mB" );
+                text.add(container.getTileEntity().tank.getFluid().getDisplayName());
+                text.add(new StringTextComponent(fluidStack.getAmount() + "mB" ));
 
                 if(fluid instanceof AdvancedFluid){
-                    text.add(((AdvancedFluid) fluid).getInfoText(fluidStack).getFormattedText());
+                    text.add(((AdvancedFluid) fluid).getInfoText(fluidStack));
                 }
             }
 
 
 
-            this.renderTooltip(text,mouseX,mouseY);
+            //this.renderTooltip(matrixStack,text,mouseX,mouseY);
+            GuiUtils.drawHoveringText(matrixStack,text,mouseX,mouseY, width, height, -1, this.font);
 
         }
     }

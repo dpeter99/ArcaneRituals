@@ -3,11 +3,14 @@ package com.dpeter99.ArcaneRituals.screen;
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
 import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,66 +59,66 @@ public class WitchAltarScreen extends ContainerScreen<WitchAltarContainer> {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground();
-        super.render(mouseX, mouseY, partialTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrixStack);
+        super.render(matrixStack,mouseX, mouseY, partialTicks);
+        //this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
         //drawString(Minecraft.getInstance().fontRenderer, "Energy: ", 10, 10, 0xffffff);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GUI);
 
-        drawBackground();
+        drawBackground(matrixStack);
         int level = container.getBloodLevel();
 
-        drawBlood(level);
+        drawBlood(matrixStack,level);
 
-        drawGlyps();
+        drawGlyps(matrixStack);
 
 
-        bloodTooltip(mouseX,mouseY);
+        bloodTooltip(matrixStack,mouseX,mouseY);
     }
 
-    private void drawGlyps() {
+    private void drawGlyps(MatrixStack matrixStack) {
 
         float p = 1-((float)container.getProgress()/container.getProgressFrom());
         float step = 1.0f/17;
 
-        drawGlyp(0, 67 + getGuiLeft(), 15 + getGuiTop(), p > step * 1);
-        drawGlyp(1, 53 + getGuiLeft(), 22 + getGuiTop(), p > step * 2);
-        drawGlyp(2, 42 + getGuiLeft(), 33 + getGuiTop(), p > step * 3);
-        drawGlyp(3, 35 + getGuiLeft(), 47 + getGuiTop(), p > step * 4);
+        drawGlyp(matrixStack,0, 67 + getGuiLeft(), 15 + getGuiTop(), p > step * 1);
+        drawGlyp(matrixStack,1, 53 + getGuiLeft(), 22 + getGuiTop(), p > step * 2);
+        drawGlyp(matrixStack,2, 42 + getGuiLeft(), 33 + getGuiTop(), p > step * 3);
+        drawGlyp(matrixStack,3, 35 + getGuiLeft(), 47 + getGuiTop(), p > step * 4);
 
-        drawGlyp(4, 35 + getGuiLeft(), 84 + getGuiTop(), p > step * 5);
-        drawGlyp(5, 42 + getGuiLeft(), 98 + getGuiTop(), p > step * 6);
-        drawGlyp(6, 53 + getGuiLeft(), 109 + getGuiTop(), p > step * 7);
-        drawGlyp(7, 67 + getGuiLeft(), 116 + getGuiTop(), p > step * 8);
+        drawGlyp(matrixStack,4, 35 + getGuiLeft(), 84 + getGuiTop(), p > step * 5);
+        drawGlyp(matrixStack,5, 42 + getGuiLeft(), 98 + getGuiTop(), p > step * 6);
+        drawGlyp(matrixStack,6, 53 + getGuiLeft(), 109 + getGuiTop(), p > step * 7);
+        drawGlyp(matrixStack,7, 67 + getGuiLeft(), 116 + getGuiTop(), p > step * 8);
 
-        drawGlyp(8, 97 + getGuiLeft(), 116 + getGuiTop(), p > step * 9);
-        drawGlyp(9, 111 + getGuiLeft(), 109 + getGuiTop(), p > step * 10);
-        drawGlyp(10, 122 + getGuiLeft(), 98 + getGuiTop(), p > step * 11);
-        drawGlyp(11, 129 + getGuiLeft(), 84 + getGuiTop(), p > step * 12);
+        drawGlyp(matrixStack,8, 97 + getGuiLeft(), 116 + getGuiTop(), p > step * 9);
+        drawGlyp(matrixStack,9, 111 + getGuiLeft(), 109 + getGuiTop(), p > step * 10);
+        drawGlyp(matrixStack,10, 122 + getGuiLeft(), 98 + getGuiTop(), p > step * 11);
+        drawGlyp(matrixStack,11, 129 + getGuiLeft(), 84 + getGuiTop(), p > step * 12);
 
-        drawGlyp(12, 129 + getGuiLeft(), 47 + getGuiTop(), p > step * 13);
-        drawGlyp(13, 122 + getGuiLeft(), 33 + getGuiTop(), p > step * 14);
-        drawGlyp(14, 111 + getGuiLeft(), 22 + getGuiTop(), p > step * 15);
-        drawGlyp(15, 97 + getGuiLeft(), 15 + getGuiTop(), p > step * 16);
+        drawGlyp(matrixStack,12, 129 + getGuiLeft(), 47 + getGuiTop(), p > step * 13);
+        drawGlyp(matrixStack,13, 122 + getGuiLeft(), 33 + getGuiTop(), p > step * 14);
+        drawGlyp(matrixStack,14, 111 + getGuiLeft(), 22 + getGuiTop(), p > step * 15);
+        drawGlyp(matrixStack,15, 97 + getGuiLeft(), 15 + getGuiTop(), p > step * 16);
     }
 
-    private void drawBackground() {
+    private void drawBackground(MatrixStack matrixStack) {
         int relX = (this.width - WIDTH) / 2;
         int relY = (this.height - HEIGHT) / 2;
-        this.blit(relX, relY, 0, 0, WIDTH, HEIGHT);
+        this.blit(matrixStack, relX, relY, 0, 0, WIDTH, HEIGHT);
     }
 
-    private void drawBlood(int level) {
+    private void drawBlood(MatrixStack matrixStack, int level) {
         int startX = 0;
         int startY = 0;
         int sizeX = 0;
@@ -148,31 +151,32 @@ public class WitchAltarScreen extends ContainerScreen<WitchAltarContainer> {
             //this.blit(relX + 66, relY + 49, 206, 0, 44, 44);
         }
 
-        this.blit(toX - (sizeX / 2), toY - (sizeY / 2), startX, startY, sizeX, sizeY);
+        this.blit(matrixStack,toX - (sizeX / 2), toY - (sizeY / 2), startX, startY, sizeX, sizeY);
     }
 
-    private void drawGlyp(int i, int xPos, int yPos, boolean active) {
+    private void drawGlyp(MatrixStack matrixStack, int i, int xPos, int yPos, boolean active) {
         TextureRegion glyp;
         if (active) glyp = glyps_active.get(glyph_ids[i]);
         else glyp = glyps_normal.get(glyph_ids[i]);
 
-        blit_help(xPos, yPos, glyp);
+        blit_help(matrixStack, xPos, yPos, glyp);
     }
 
-    public void blit_help(int destX, int destY, TextureRegion source) {
-        this.blit(destX, destY, this.getBlitOffset(), source.getStartX(), source.getStartY(), source.getSizeX(), source.getSizeY(), 256, 256);
+    public void blit_help(MatrixStack matrixStack, int destX, int destY, TextureRegion source) {
+        this.blit(matrixStack, destX, destY, this.getBlitOffset(), source.getStartX(), source.getStartY(), source.getSizeX(), source.getSizeY(), 256, 256);
     }
 
-    public void bloodTooltip(int mouseX, int mouseY){
+    public void bloodTooltip(MatrixStack matrixStack, int mouseX, int mouseY){
         int bloodCenterX = getGuiLeft() + 88;
         int bloodCenterY = getGuiTop() + 72;
         float d = (float)Math.sqrt(Math.pow(bloodCenterX - mouseX,2) + Math.pow(bloodCenterY - mouseY,2));
 
         if(d <= 40) {
-            List<String> text = new ArrayList<>();
-            text.add("Blood");
-            text.add(container.getBloodLevel() + "/100" );
-            this.renderTooltip(text,mouseX,mouseY);
+            List<ITextComponent> text = new ArrayList<>();
+            text.add(new StringTextComponent("Blood"));
+            text.add(new StringTextComponent(container.getBloodLevel() + "/100" ));
+            //this.renderTooltip(matrixStack,text,mouseX,mouseY);
+            GuiUtils.drawHoveringText(matrixStack,text,mouseX,mouseY, width, height, -1, this.font);
         }
     }
 

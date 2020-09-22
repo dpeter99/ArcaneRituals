@@ -2,6 +2,7 @@ package com.dpeter99.ArcaneRituals.altars;
 
 import com.dpeter99.ArcaneRituals.crafting.AltarContext;
 import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -27,8 +28,17 @@ import javax.annotation.Nullable;
 
 public abstract class AbstractAltarTileEntity extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 
+    //Weather we need to refresh the recipe
     protected boolean needRefreshRecipe = true;
+
+    //We got a new
     protected boolean newFluidItem = false;
+
+    protected int progress = 0;
+    protected int progress_from = 0;
+
+    private String current_recipe;
+
 
     public final ItemStackHandler inventory = new ItemStackHandler(6) {
 
@@ -114,14 +124,11 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
     };
 
 
-    protected int progress = 0;
-    protected int progress_from = 0;
-
     public boolean isWorking() {
         return this.progress > 0;
     }
 
-    private String current_recipe;
+
 
     public AltarRecipe getCurrentRecipe() {
         return (AltarRecipe) world.getRecipeManager().getRecipe(ResourceLocation.tryCreate(current_recipe)).orElse(null);
@@ -194,20 +201,22 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
         if (recipe != null) {
             current_recipe = recipe.getId().toString();
             System.out.println("Recipe found: " + recipe.getId().toString());
-            progress = 100;
+            progress = recipe.work_amount;
             progress_from = 100;
+
             inventory.setStackInSlot(0, ItemStack.EMPTY);
             inventory.setStackInSlot(1, ItemStack.EMPTY);
             inventory.setStackInSlot(2, ItemStack.EMPTY);
             inventory.setStackInSlot(3, ItemStack.EMPTY);
             inventory.setStackInSlot(4, ItemStack.EMPTY);
+
             removeArcaneFuel(recipe.fuel_amount);
         }
     }
 
 
     @Override
-    public void read(CompoundNBT nbt) {
+    public void read(BlockState state, CompoundNBT nbt) {
         CompoundNBT invTag = nbt.getCompound("inventory");
         inventory.deserializeNBT(invTag);
 
@@ -216,7 +225,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
         current_recipe = nbt.getString("current_recipe");
 
-        super.read(nbt);
+        super.read(state, nbt);
     }
 
     @Override

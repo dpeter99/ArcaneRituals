@@ -5,8 +5,9 @@ import com.dpeter99.ArcaneRituals.util.CapCurioItem;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,8 +17,8 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import top.theillusivec4.curios.api.CuriosAPI;
-import top.theillusivec4.curios.api.capability.ICurio;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICurio;
 
 
 import javax.annotation.Nonnull;
@@ -41,11 +42,12 @@ public class ItemRingOfProtection extends Item {
                 livingEntity.world.playSound((PlayerEntity)null, livingEntity.getPosition(), SoundEvents.ITEM_ARMOR_EQUIP_GOLD, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             }
 
-            public Multimap<String, AttributeModifier> getAttributeModifiers(String identifier) {
-                Multimap<String, AttributeModifier> atts = HashMultimap.create();
-                if (CuriosAPI.getCurioTags(stack.getItem()).contains(identifier)) {
+            public Multimap<Attribute, AttributeModifier> getAttributeModifiers(String identifier) {
+                Multimap<Attribute, AttributeModifier> atts = HashMultimap.create();
+                if( CuriosApi.getCuriosHelper().getCurioTags(stack.getItem()).contains(identifier) )
+                {
                     atts.put(
-                            SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(),
+                            Attributes.ARMOR_TOUGHNESS,
                             new AttributeModifier(PROTECTION_MODIFIER, "Extra Health", level, AttributeModifier.Operation.ADDITION)
                     );
                 }

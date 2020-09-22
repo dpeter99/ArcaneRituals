@@ -1,6 +1,7 @@
 package com.dpeter99.ArcaneRituals.util.ui;
 
 import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -15,8 +16,8 @@ public abstract class SimpleScreen<T extends Container> extends ContainerScreen<
         super(screenContainer, inv, titleIn);
     }
 
-    public void blit_help(int destX, int destY, TextureRegion source) {
-        this.blit(destX, destY, this.getBlitOffset(), source.getStartX(), source.getStartY(), source.getSizeX(), source.getSizeY(), sourceHeight, sourceWidth);
+    public void blit_help(MatrixStack matrixStack, int destX, int destY, TextureRegion source) {
+        this.blit(matrixStack, destX, destY, this.getBlitOffset(), source.getStartX(), source.getStartY(), source.getSizeX(), source.getSizeY(), sourceHeight, sourceWidth);
     }
 
 }

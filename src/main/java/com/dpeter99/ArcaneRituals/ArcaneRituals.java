@@ -1,6 +1,7 @@
 package com.dpeter99.ArcaneRituals;
 
 import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarParicle;
+import com.dpeter99.ArcaneRituals.client.renderer.FluidHolderRenderer;
 import com.dpeter99.ArcaneRituals.particles.AltarParticle;
 import com.dpeter99.ArcaneRituals.particles.ArcaneParticles;
 import com.dpeter99.ArcaneRituals.setup.ClientProxy;
@@ -8,7 +9,9 @@ import com.dpeter99.ArcaneRituals.setup.IProxy;
 import com.dpeter99.ArcaneRituals.setup.ServerProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -22,8 +25,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.theillusivec4.curios.api.CuriosAPI;
-import top.theillusivec4.curios.api.imc.CurioIMCMessage;
+import top.theillusivec4.curios.api.SlotTypeMessage;
+//import top.theillusivec4.curios.api.CuriosAPI;
+//import top.theillusivec4.curios.api.imc.CurioIMCMessage;
 
 @Mod("arcanerituals")
 public class ArcaneRituals {
@@ -60,7 +64,8 @@ public class ArcaneRituals {
         proxy.init();
     }
 
-    private void doClientStuff(final FMLClientSetupEvent event) {
+    private void doClientStuff(final FMLClientSetupEvent event)
+    {
         // do something that can only be done on the client
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
 
@@ -70,8 +75,10 @@ public class ArcaneRituals {
     {
         // some example code to dispatch IMC to another mod
         //InterModComms.sendTo("examplemod", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
-        InterModComms.sendTo("curios", CuriosAPI.IMC.REGISTER_TYPE, () -> new CurioIMCMessage("ring"));
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("ring").build());
     }
+
+
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent

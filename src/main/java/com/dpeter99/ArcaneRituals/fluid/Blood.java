@@ -71,7 +71,7 @@ public class Blood extends AdvancedFluid {
     @Override
     public ITextComponent getInfoText(FluidStack stack) {
         String owner = "From: " + getFluidData(stack, new BloodData()).getOwnerName();
-        return new StringTextComponent(owner).applyTextStyle(TextFormatting.DARK_RED);
+        return new StringTextComponent(owner).mergeStyle(TextFormatting.DARK_RED);
 
     }
 
