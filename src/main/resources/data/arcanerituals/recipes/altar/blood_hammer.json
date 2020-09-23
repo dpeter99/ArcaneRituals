@@ -1,7 +1,9 @@
 {
   "type": "arcanerituals:altar",
-  "fuel_amount": 1750,
-  "fuel_type": {
+  "fuel":
+  {
+    "type": "arcanerituals:blood",
+    "amount": 1750,
     "owner": "minecraft:iron_golem"
   },
   "altar_type": "demonic_altar",
