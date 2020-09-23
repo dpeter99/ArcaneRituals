@@ -91,18 +91,23 @@ public class DemonicAltarBlock extends Block {
         if (!worldIn.isRemote) {
             ItemStack current_item = player.inventory.getCurrentItem();
             DemonicAltarTileEntity tileEntity = (DemonicAltarTileEntity) worldIn.getTileEntity(pos);
+            if(tileEntity != null){
 
-            if (current_item.getItem().equals(ArcaneItems.vial)) {
+                if (current_item.getItem().equals(ArcaneItems.vial)) {
 
-                tileEntity.fillFromItem(current_item);
+                    tileEntity.fillFromItem(current_item);
 
-            } else if (current_item.getItem() == ArcaneItems.basic_wand) {
-                tileEntity.startCrafting();
-            } else if (tileEntity instanceof INamedContainerProvider) {
-                if(!tileEntity.isWorking())
-                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
-            } else {
-                throw new IllegalStateException("Our named container provider is missing!");
+                } else if (current_item.getItem() == ArcaneItems.basic_wand) {
+
+                    tileEntity.startCrafting();
+
+                } else if(!tileEntity.isWorking()) {
+                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+                }
+
+            }
+            else {
+                throw new IllegalStateException("Our Tile Entity!");
             }
             return ActionResultType.CONSUME;
         }
