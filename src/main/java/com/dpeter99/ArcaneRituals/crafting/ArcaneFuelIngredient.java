@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ArcaneFuelIngredient {
 
 
-
     public static ArcaneFuelIngredient deserialize(JsonObject jsonObject){
         //Get the "type" from the JsonObject
         String type = jsonObject.get("type").getAsString();
@@ -29,11 +28,12 @@ public class ArcaneFuelIngredient {
         this.matching = matching;
     }
 
-    public boolean test(IArcaneFuel context){
+    public boolean test(AltarContext context){
         //Check if the supplied fuel is equivalent to the one we are holding
 
-        return matching.match(context);
 
+
+        return false;
     }
 
 }

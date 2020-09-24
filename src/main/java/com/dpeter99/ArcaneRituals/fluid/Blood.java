@@ -1,6 +1,8 @@
 package com.dpeter99.ArcaneRituals.fluid;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
+import com.dpeter99.ArcaneRituals.crafting.ArcaneFuelFluid;
+import com.dpeter99.ArcaneRituals.crafting.IArcaneFuel;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Blood extends AdvancedFluid {
+public class Blood extends AdvancedFluid, ArcaneFuelFluid {
 
     public static final String UNKNOWN_BLOOD = ArcaneRituals.MODID + ":blood_source:unknown";
     public static final String PLAYER_BLOOD = ArcaneRituals.MODID + ":blood_source:player";
@@ -75,6 +77,16 @@ public class Blood extends AdvancedFluid {
 
     }
 
+    @Override
+    public boolean match(FluidStack a, FluidStack b) {
+
+        if(a.getFluid().equals(this) && b.getFluid().equals(this)){
+
+            BloodData a_data = getFluidData(a, new BloodData());
+            BloodData b_data = getFluidData(b, new BloodData());
+        }
+        return false;
+    }
 
 
     public static class BloodData extends FluidData {

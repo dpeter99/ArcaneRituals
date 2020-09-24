@@ -2,6 +2,7 @@ package com.dpeter99.ArcaneRituals.tileentity;
 
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEntity;
+import com.dpeter99.ArcaneRituals.crafting.AltarContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -92,6 +93,11 @@ public class WitchAltarTileEntity extends AbstractAltarTileEntity {
     @Override
     protected void duringCrafting() {
 
+    }
+
+    @Override
+    protected AltarContext getContext() {
+        return null;
     }
 
 

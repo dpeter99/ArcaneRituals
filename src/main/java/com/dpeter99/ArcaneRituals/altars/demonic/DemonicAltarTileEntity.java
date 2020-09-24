@@ -4,6 +4,8 @@ import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEntity;
 import com.dpeter99.ArcaneRituals.altars.AbstractFluidAltarTileEnity;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
+import com.dpeter99.ArcaneRituals.crafting.AltarContext;
+import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import net.minecraft.client.particle.PortalParticle;
 import net.minecraft.entity.player.PlayerEntity;
@@ -65,6 +67,11 @@ public class DemonicAltarTileEntity extends AbstractFluidAltarTileEnity {
     @Override
     protected void duringCrafting() {
 
+    }
+
+    @Override
+    protected AltarContext getContext() {
+        return new AltarContextFluid(inventory,tank.getFluidInTank(0),getAltarType());
     }
 
     @Override

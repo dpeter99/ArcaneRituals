@@ -143,7 +143,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
 
     protected abstract void duringCrafting();
 
-
+    protected abstract AltarContext getContext();
 
     public AbstractAltarTileEntity(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
@@ -197,7 +197,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
             return;
         }
 
-        AltarRecipe recipe = AltarRecipe.getRecipe(world, new AltarContext(inventory, getArcaneFuelAmount(), getAltarType())).orElse(null);
+        AltarRecipe recipe = AltarRecipe.getRecipe(world, getContext()).orElse(null);
         if (recipe != null) {
             current_recipe = recipe.getId().toString();
             System.out.println("Recipe found: " + recipe.getId().toString());
