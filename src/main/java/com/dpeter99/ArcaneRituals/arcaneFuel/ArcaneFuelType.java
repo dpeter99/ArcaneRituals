@@ -1,4 +1,4 @@
-package com.dpeter99.ArcaneRituals.crafting;
+package com.dpeter99.ArcaneRituals.arcaneFuel;
 
 import com.google.gson.JsonObject;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -13,7 +13,7 @@ public class ArcaneFuelType extends ForgeRegistryEntry<ArcaneFuelType> {
         this.fuel = fuelSupplier;
     }
 
-    public IArcaneFuel parse(JsonObject jsonObject){
-        return fuel.get().parse(jsonObject);
+    public ArcaneFuelIngredient parseIngredient(JsonObject jsonObject){
+        return fuel.get().parseIngredient(jsonObject);
     }
 }

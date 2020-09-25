@@ -1,11 +1,12 @@
 package com.dpeter99.ArcaneRituals.crafting;
 
-import net.minecraft.fluid.Fluid;
+import com.dpeter99.ArcaneRituals.arcaneFuel.ArcaneFuelIngredient;
+import com.dpeter99.ArcaneRituals.arcaneFuel.ArcaneFuelIngredientFluid;
+import com.dpeter99.ArcaneRituals.arcaneFuel.IArcaneFuelFluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class AltarContextFluid extends AltarContext {
+public class AltarContextFluid extends AltarContext<FluidStack> {
 
     FluidStack tank;
 
@@ -15,15 +16,7 @@ public class AltarContextFluid extends AltarContext {
     }
 
     @Override
-    public boolean match(ArcaneFuelIngredient fuel) {
-
-        if(!(fuel instanceof ArcaneFuelFluid))
-        {
-            //We only have liquid fuel in the context :(
-            return false;
-        }
-        else {
-            return  ((ArcaneFuelFluid) fuel).match(tank);
-        }
+    public FluidStack getFuel() {
+        return tank;
     }
 }

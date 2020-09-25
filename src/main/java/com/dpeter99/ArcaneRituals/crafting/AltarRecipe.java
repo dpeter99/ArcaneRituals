@@ -1,6 +1,7 @@
 package com.dpeter99.ArcaneRituals.crafting;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
+import com.dpeter99.ArcaneRituals.arcaneFuel.ArcaneFuelIngredient;
 import com.google.gson.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
@@ -48,28 +49,26 @@ public class AltarRecipe implements IRecipe<AltarContext> {
     public List<Ingredient> ingredients;
     public Ingredient center;
     public ItemStack result;
-    public int fuel_amount;
-    public JsonObject fuel_data;
+
+    public ArcaneFuelIngredient fuel;
 
     public int work_amount;
 
-    public AltarRecipe(ResourceLocation id, String group, List<Ingredient> ingredients, Ingredient center, ItemStack result, int fuel_amount, String altar_type, int work, JsonObject fuel_data) {
+    public AltarRecipe(ResourceLocation id, String group, List<Ingredient> ingredients, Ingredient center, ArcaneFuelIngredient fuel, ItemStack result, String altar_type, int work) {
         this.id = id;
         this.group = group;
         this.ingredients = ingredients;
         this.center = center;
         this.result = result;
-        this.fuel_amount = fuel_amount;
+        this.fuel = fuel;
         this.altar_type = altar_type;
         this.work_amount = work;
-        this.fuel_data = fuel_data;
     }
 
 
     @Override
     public boolean matches(AltarContext inv, World worldIn) {
         if(inv.altar_type.equals(this.altar_type)){
-            if(inv.fuel_amount >= this.fuel_amount){
 
                 //List for all the items that we need to match
                 List<ItemStack> items = new ArrayList<>();
@@ -91,9 +90,11 @@ public class AltarRecipe implements IRecipe<AltarContext> {
 
                 matches = matches && center.test(inv.getStackInSlot(4));
 
+                fuel.test(inv);
+
                 return matches;
             }
-        }
+
         return false;
 
     }
@@ -149,8 +150,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
         {
             String group = JSONUtils.getString(json, "group", "");
 
-            int fuel = JSONUtils.getInt(json,"fuel_amount",0);
-            JsonObject data = JSONUtils.getJsonObject(json, "fuel_type");
+            ArcaneFuelIngredient<?> fuel = ArcaneFuelIngredient.deserialize(json.getAsJsonObject("fuel"));
 
             String altar_type = JSONUtils.getString(json,"altar_type","");
 
@@ -169,7 +169,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
             ResourceLocation resourcelocation = new ResourceLocation(s1);
             ItemStack itemstack = new ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(resourcelocation)).orElseThrow(() -> new IllegalStateException("Item: " + s1 + " does not exist")));
 
-            return new AltarRecipe(recipeId, group, ingredient,center, itemstack, fuel, altar_type, work, data);
+            return new AltarRecipe(recipeId, group, ingredient,center,fuel, itemstack, altar_type, work);
         }
 
         @Override

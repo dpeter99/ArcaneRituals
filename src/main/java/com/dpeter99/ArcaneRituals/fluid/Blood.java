@@ -1,8 +1,10 @@
 package com.dpeter99.ArcaneRituals.fluid;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
-import com.dpeter99.ArcaneRituals.crafting.ArcaneFuelFluid;
-import com.dpeter99.ArcaneRituals.crafting.IArcaneFuel;
+import com.dpeter99.ArcaneRituals.arcaneFuel.ArcaneFuelIngredientFluid;
+import com.dpeter99.ArcaneRituals.arcaneFuel.IArcaneFuelFluid;
+import com.dpeter99.ArcaneRituals.arcaneFuel.ArcaneFuelIngredient;
+import com.google.gson.JsonObject;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Blood extends AdvancedFluid, ArcaneFuelFluid {
+public class Blood extends AdvancedFluid implements IArcaneFuelFluid {
 
     public static final String UNKNOWN_BLOOD = ArcaneRituals.MODID + ":blood_source:unknown";
     public static final String PLAYER_BLOOD = ArcaneRituals.MODID + ":blood_source:player";
@@ -77,6 +79,10 @@ public class Blood extends AdvancedFluid, ArcaneFuelFluid {
 
     }
 
+    //#####################################
+    //   ArcaneFuelFluid
+    //#####################################
+
     @Override
     public boolean match(FluidStack a, FluidStack b) {
 
@@ -86,6 +92,26 @@ public class Blood extends AdvancedFluid, ArcaneFuelFluid {
             BloodData b_data = getFluidData(b, new BloodData());
         }
         return false;
+    }
+
+    @Override
+    public ResourceLocation getResourceName() {
+        return getRegistryName();
+    }
+
+    @Override
+    public ArcaneFuelIngredient parseIngredient(JsonObject jsonObject) {
+        int amount = jsonObject.get("amount").getAsInt();
+
+        BloodData data = new BloodData();
+        data.readFromJson(jsonObject);
+
+        FluidStack stack = new FluidStack(ArcaneFluids.blood,amount);
+        setFluidData(stack,data);
+
+        ArcaneFuelIngredient<FluidStack> ingredient = new ArcaneFuelIngredientFluid(stack);
+
+        return ingredient;
     }
 
 
@@ -106,6 +132,13 @@ public class Blood extends AdvancedFluid, ArcaneFuelFluid {
             this.owner = owner;
             if(owner.equals(PLAYER_BLOOD)){
                 this.player = player;
+            }
+        }
+
+        public void readFromJson(JsonObject jsonObject){
+            owner = jsonObject.get("owner").getAsString();
+            if(jsonObject.has("UUID")){
+                player = UUID.fromString(jsonObject.get("UUID").getAsString());
             }
         }
 

@@ -1,15 +1,13 @@
 package com.dpeter99.ArcaneRituals.crafting;
 
-import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
+import com.dpeter99.ArcaneRituals.arcaneFuel.ArcaneFuelIngredient;
+import com.dpeter99.ArcaneRituals.arcaneFuel.IArcaneFuel;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-import java.util.List;
-
 ///This contains the context for the altar crafting
 ///The subtypes Fluid and Item should be used to specify the arcane fuel available
-public abstract class AltarContext extends RecipeWrapper {
+public abstract class AltarContext<T> extends RecipeWrapper {
 
     String altar_type;
 
@@ -19,5 +17,5 @@ public abstract class AltarContext extends RecipeWrapper {
         this.altar_type = altar_type;
     }
 
-    public abstract boolean match(IArcaneFuel fuel);
+    public abstract T getFuel();
 }
