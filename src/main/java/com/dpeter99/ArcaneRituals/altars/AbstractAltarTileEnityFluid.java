@@ -26,14 +26,14 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class AbstractFluidAltarTileEnity extends AbstractAltarTileEntity {
+public abstract class AbstractAltarTileEnityFluid extends AbstractAltarTileEntity {
 
     public FluidTank tank = new FluidTank(4000, (FluidStack s) -> { return s.getFluid().isEquivalentTo(ArcaneFluids.blood);} );
 
     private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> tank);
 
 
-    public AbstractFluidAltarTileEnity(TileEntityType<?> tileEntityTypeIn) {
+    public AbstractAltarTileEnityFluid(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
     }
 
@@ -75,35 +75,58 @@ public abstract class AbstractFluidAltarTileEnity extends AbstractAltarTileEntit
         super.tick();
     }
 
-    public void fillFrom(IFluidHandlerItem fluidInv) {
-        FluidStack drained = fluidInv.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.SIMULATE);
-        if(tank.fill(drained, IFluidHandler.FluidAction.SIMULATE)>0) {
-            tank.fill(fluidInv.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
-            //inventory.setStackInSlot(5, fluidInv.getContainer());
-        }
+    public void fillFrom(IFluidHandlerItem fluidHandler) {
 
-        world.notifyBlockUpdate(pos,getBlockState(),getBlockState(),2);
+        if(fluidHandler.getFluidInTank(0).isEmpty()){
+
+            int drained = fluidHandler.fill(tank.getFluid(), IFluidHandler.FluidAction.EXECUTE);
+            tank.drain(drained, IFluidHandler.FluidAction.EXECUTE);
+        }
+        else {
+
+            //Check if the fluid is the same as what we have
+            if(fluidHandler.getFluidInTank(0).getFluid().isEquivalentTo(tank.getFluid().getFluid()) || tank.isEmpty()) {
+
+                FluidStack drained = fluidHandler.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.SIMULATE);
+
+                if (tank.fill(drained, IFluidHandler.FluidAction.SIMULATE) > 0) {
+                    tank.fill(fluidHandler.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                    //inventory.setStackInSlot(5, fluidInv.getContainer());
+
+                    world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+                }
+
+
+            }
+        }
     }
 
     public void fillFromItem(ItemStack item) {
-
+/*
         ItemStack single_item = item.copy();
         single_item.setCount(1);
 
         FluidUtil.getFluidHandler(single_item).ifPresent(
-                fluidHandl -> {
-                    if(fluidHandl.getFluidInTank(0).getFluid().isEquivalentTo(ArcaneFluids.blood)) {
-                        FluidStack drained = fluidHandl.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.SIMULATE);
+                fluidHandler -> {
+                    //Check if the fluid is the same as what we have
+                    if(fluidHandler.getFluidInTank(0).getFluid().isEquivalentTo(tank.getFluid().getFluid())) {
+
+                        //See how much we can drain from the item
+                        FluidStack drained = fluidHandler.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.SIMULATE);
                         if(tank.fill(drained, IFluidHandler.FluidAction.SIMULATE)>0) {
-                            tank.fill(fluidHandl.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
-                            //inventory.setStackInSlot(5, fluidInv.getContainer());
+                            tank.fill(fluidHandler.drain(tank.getCapacity() - tank.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+
                             item.shrink(1);
                             world.notifyBlockUpdate(pos,getBlockState(),getBlockState(),2);
                         }
+
                     }
                 }
         );
-
+*/
+        FluidUtil.getFluidHandler(item).ifPresent(
+                this::fillFrom
+        );
 
     }
 

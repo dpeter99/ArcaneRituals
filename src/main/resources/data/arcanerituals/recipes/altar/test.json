@@ -1,6 +1,10 @@
 {
   "type": "arcanerituals:altar",
-  "fuel_amount": 10,
+  "fuel": {
+    "type": "arcanerituals:blood",
+    "amount": 1750,
+    "owner": "minecraft:iron_golem"
+  },
   "altar_type": "witch_altar",
   "ingredients": {
     "0" : {"tag": "minecraft:acacia_logs"},

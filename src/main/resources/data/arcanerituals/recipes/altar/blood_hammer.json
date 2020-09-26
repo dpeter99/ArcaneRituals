@@ -1,14 +1,12 @@
 {
   "type": "arcanerituals:altar",
-  "fuel":
-  {
+  "fuel": {
     "type": "arcanerituals:blood",
     "amount": 1750,
     "owner": "minecraft:iron_golem"
   },
   "altar_type": "demonic_altar",
   "work_amount": 100,
-
   "ingredients": {
     "0" : {"item": "minecraft:rotten_flesh"},
     "1" : {"item": "minecraft:iron_ingot"},

@@ -89,7 +89,7 @@ public class DemonicAltarScreen extends SimpleScreen<DemonicAltarContainer> {
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack,mouseX, mouseY, partialTicks);
-        //this.renderHoveredToolTip(mouseX, mouseY);
+        this.renderHoveredTooltip(matrixStack,mouseX,mouseY);
     }
 
     @Override

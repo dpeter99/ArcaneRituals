@@ -114,6 +114,11 @@ public class Blood extends AdvancedFluid implements IArcaneFuelFluid {
         return ingredient;
     }
 
+    @Override
+    public Class<? extends ArcaneFuelIngredient<?>> getIngredientType() {
+        return ArcaneFuelIngredientFluid.class;
+    }
+
 
     public static class BloodData extends FluidData {
 

@@ -3,6 +3,7 @@ package com.dpeter99.ArcaneRituals.tileentity;
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEntity;
 import com.dpeter99.ArcaneRituals.crafting.AltarContext;
+import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

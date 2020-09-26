@@ -210,7 +210,7 @@ public abstract class AbstractAltarTileEntity extends TileEntity implements ITic
             inventory.setStackInSlot(3, ItemStack.EMPTY);
             inventory.setStackInSlot(4, ItemStack.EMPTY);
 
-            removeArcaneFuel(recipe.fuel_amount);
+            removeArcaneFuel(recipe.fuel.getAmount());
         }
     }
 

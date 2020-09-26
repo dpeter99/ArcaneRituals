@@ -90,7 +90,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
 
                 matches = matches && center.test(inv.getStackInSlot(4));
 
-                fuel.test(inv);
+                matches = matches && fuel.test(inv);
 
                 return matches;
             }
@@ -179,8 +179,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
             String group = buffer.readString(32767);
             int fuel_amount = buffer.readVarInt();
 
-            Gson gson = new GsonBuilder().create();
-            JsonObject fuel_data = gson.toJsonTree(buffer.readString()).getAsJsonObject();
+            ArcaneFuelIngredient<?> fuel = ArcaneFuelIngredient.read(buffer);
 
             String altar_type = buffer.readString();
             int work = buffer.readVarInt();
@@ -194,15 +193,15 @@ public class AltarRecipe implements IRecipe<AltarContext> {
             }
             Ingredient center = Ingredient.read(buffer);
 
-            return new AltarRecipe(recipeId, group, ingredients,center, itemstack, fuel_amount, altar_type, work, fuel_data);
+            return new AltarRecipe(recipeId, group, ingredients,center, fuel, itemstack, altar_type, work);
         }
 
         @Override
         public void write(PacketBuffer buffer, AltarRecipe recipe)
         {
             buffer.writeString(recipe.group);
-            buffer.writeVarInt(recipe.fuel_amount);
-            buffer.writeString(recipe.fuel_data.getAsString());
+
+            recipe.fuel.write(buffer);
 
             buffer.writeString(recipe.altar_type);
             buffer.writeVarInt(recipe.work_amount);

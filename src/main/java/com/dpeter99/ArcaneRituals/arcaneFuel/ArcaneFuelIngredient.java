@@ -37,18 +37,44 @@ public abstract class ArcaneFuelIngredient<T> {
         this.matching = matching;
     }
 
+    public ArcaneFuelIngredient(){}
+
+
+    public abstract int getAmount();
+
+
     public abstract boolean test(AltarContext context);
 
-    public abstract void write(PacketBuffer buffer);
+
+
+
+    public void write(PacketBuffer buffer){
+        buffer.writeString(fuel_type.getRegistryName().toString());
+        writeData(buffer);
+    }
+
+    public abstract void writeData(PacketBuffer buffer);
 
     public static ArcaneFuelIngredient<?> read(PacketBuffer buffer) {
 
         String fuel_type = buffer.readString();
 
         ArcaneFuelType fuelType = GameRegistry.findRegistry(ArcaneFuelType.class).getValue(ResourceLocation.tryCreate(fuel_type));
+        if(fuelType != null) {
 
+            try {
+                ArcaneFuelIngredient<?> ingredientInstance = fuelType.getIngredientType().newInstance();
+                ingredientInstance.readData(buffer);
+                return ingredientInstance;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+        }
 
+        return null;
     }
+
+    public abstract void readData(PacketBuffer buffer);
 
 }

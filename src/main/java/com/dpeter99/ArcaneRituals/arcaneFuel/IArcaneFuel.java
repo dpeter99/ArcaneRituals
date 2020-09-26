@@ -10,4 +10,6 @@ public interface IArcaneFuel {
 
     ArcaneFuelIngredient parseIngredient(JsonObject jsonObject);
 
+    Class<? extends ArcaneFuelIngredient<?>> getIngredientType();
+
 }

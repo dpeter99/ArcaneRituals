@@ -16,4 +16,10 @@ public class ArcaneFuelType extends ForgeRegistryEntry<ArcaneFuelType> {
     public ArcaneFuelIngredient parseIngredient(JsonObject jsonObject){
         return fuel.get().parseIngredient(jsonObject);
     }
+
+    Class<? extends ArcaneFuelIngredient<?>> getIngredientType(){
+        return fuel.get().getIngredientType();
+    }
+
+
 }

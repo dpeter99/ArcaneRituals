@@ -15,21 +15,32 @@ public class ArcaneFuelIngredientFluid extends ArcaneFuelIngredient<FluidStack>{
     }
 
     @Override
+    public int getAmount() {
+        return matching.getAmount();
+    }
+
+    @Override
     public boolean test(AltarContext context) {
 
         if(context instanceof AltarContextFluid){
             FluidStack ctx = ((AltarContextFluid)context).getFuel();
 
-            boolean match = ctx.containsFluid(matching);
+            return ctx.containsFluid(matching);
         }
 
         return false;
     }
 
     @Override
-    public void write(PacketBuffer buffer) {
-        buffer.writeString(fuel_type.getRegistryName().toString());
+    public void writeData(PacketBuffer buffer) {
+
         buffer.writeFluidStack(matching);
+    }
+
+    @Override
+    public void readData(PacketBuffer buffer) {
+
+        matching = buffer.readFluidStack();
     }
 
 }

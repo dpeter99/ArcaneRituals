@@ -1,28 +1,21 @@
 package com.dpeter99.ArcaneRituals.altars.demonic;
 
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
-import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEntity;
-import com.dpeter99.ArcaneRituals.altars.AbstractFluidAltarTileEnity;
-import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
+import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEnityFluid;
 import com.dpeter99.ArcaneRituals.crafting.AltarContext;
 import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
-import net.minecraft.client.particle.PortalParticle;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import javax.annotation.Nullable;
 
-public class DemonicAltarTileEntity extends AbstractFluidAltarTileEnity {
+public class DemonicAltarTileEntity extends AbstractAltarTileEnityFluid {
 
     public static final int FUEL_AMOUNT = 0;
     protected final IIntArray data = new IIntArray() {

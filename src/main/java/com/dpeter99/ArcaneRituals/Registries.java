@@ -6,6 +6,7 @@ import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarTileEntity;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarBlock;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
+import com.dpeter99.ArcaneRituals.arcaneFuel.ArcaneFuelType;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
 import com.dpeter99.ArcaneRituals.client.renderer.FluidHolderRenderer;
@@ -36,7 +37,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryBuilder;
+
+import java.util.function.Supplier;
 
 // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
 // Event bus for receiving Registry Events)
@@ -46,10 +51,23 @@ public class Registries {
 
     public static ItemGroup group;
 
+    //public static DeferredRegister<ArcaneFuelType> myRegister = DeferredRegister.create(ArcaneFuelType.class, ArcaneRituals.MODID);
+    //public static Supplier<IForgeRegistry<ArcaneFuelType>> myRegistry = myRegister.makeRegistry("cool_registry", () -> { return new RegistryBuilder<ArcaneFuelType>(); });
+
+    //public static  myRegistryEntry = myRegister.register("cool_entry", () -> /* create registry entry here */)
+
     public static void init(){
+        group = new ArcaneItemGroup();
 
-         group = new ArcaneItemGroup();
+        DeferredRegister.create(ArcaneFuelType.class,ArcaneRituals.MODID);
+    }
 
+    @SubscribeEvent
+    public static void onNewRegistry(RegistryEvent.NewRegistry registry){
+        RegistryBuilder<ArcaneFuelType> registryBuilder = new RegistryBuilder<ArcaneFuelType>();
+        registryBuilder.setName(ArcaneRituals.location("arcane_fuel"));
+        registryBuilder.setType(ArcaneFuelType.class);
+        registryBuilder.create();
     }
 
 
@@ -71,8 +89,8 @@ public class Registries {
 
          reg.register(new Item(new Item.Properties()).setRegistryName("bat_wing"));
 
-        reg.register(new Item(new Item.Properties().group(group).maxStackSize(1)).setRegistryName("hammer"));
-        reg.register(new Item(new Item.Properties().group(group).maxStackSize(1)).setRegistryName("blood_hammer"));
+         reg.register(new Item(new Item.Properties().group(group).maxStackSize(1)).setRegistryName("hammer"));
+         reg.register(new Item(new Item.Properties().group(group).maxStackSize(1)).setRegistryName("blood_hammer"));
 
          reg.register(new BasicWand());
          reg.register(new ArcaneBook());
@@ -89,7 +107,7 @@ public class Registries {
     public static void onTileRegistry(final RegistryEvent.Register<TileEntityType<?>> itemRegistryEvent){
         IForgeRegistry<TileEntityType<?>> reg = itemRegistryEvent.getRegistry();
 
-        reg.register(TileEntityType.Builder.create(WitchAltarTileEntity::new, ArcaneBlocks.witch_altar).build(null).setRegistryName("witch_altar"));
+        //reg.register(TileEntityType.Builder.create(WitchAltarTileEntity::new, ArcaneBlocks.witch_altar).build(null).setRegistryName("witch_altar"));
         reg.register(TileEntityType.Builder.create(NecromanticAltarTileEntity::new, ArcaneBlocks.necromantic_altar).build(null).setRegistryName("necromantic_altar"));
         reg.register(TileEntityType.Builder.create(DemonicAltarTileEntity::new, ArcaneBlocks.demonic_altar).build(null).setRegistryName("demonic_altar"));
     }
@@ -98,10 +116,12 @@ public class Registries {
     public static void onContainerRegistry(final RegistryEvent.Register<ContainerType<?>> itemRegistryEvent){
         IForgeRegistry<ContainerType<?>> reg = itemRegistryEvent.getRegistry();
 
+        /*
         reg.register(IForgeContainerType.create((windowId, inv, data) -> {
             BlockPos pos = data.readBlockPos();
             return new WitchAltarContainer(windowId, ArcaneRituals.proxy.getClientWorld(), pos, inv);
         }).setRegistryName("witch_altar_continer"));
+        */
 
         reg.register(IForgeContainerType.create((windowId, inv, data) -> {
             BlockPos pos = data.readBlockPos();
@@ -144,6 +164,17 @@ public class Registries {
         ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
                 FluidHolderRenderer.Loader.INSTANCE);
     }
+
+    @SubscribeEvent
+    public static void onArcaneFuelRegistry(final RegistryEvent.Register<ArcaneFuelType> blockRegistryEvent) {
+        // register a new block here
+        ArcaneRituals.LOGGER.info("HELLO from Register Block");
+
+        IForgeRegistry<ArcaneFuelType> reg = blockRegistryEvent.getRegistry();
+
+        reg.register(new ArcaneFuelType(() -> ArcaneFluids.blood).setRegistryName(ArcaneRituals.location("blood")));
+    }
+
 
     private static class ArcaneItemGroup extends ItemGroup {
         public ArcaneItemGroup() {

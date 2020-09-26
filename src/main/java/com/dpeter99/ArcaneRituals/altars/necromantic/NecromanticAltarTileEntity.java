@@ -1,6 +1,8 @@
 package com.dpeter99.ArcaneRituals.altars.necromantic;
 
-import com.dpeter99.ArcaneRituals.altars.AbstractFluidAltarTileEnity;
+import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEnityFluid;
+import com.dpeter99.ArcaneRituals.crafting.AltarContext;
+import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +15,7 @@ import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
 
-public class NecromanticAltarTileEntity extends AbstractFluidAltarTileEnity {
+public class NecromanticAltarTileEntity extends AbstractAltarTileEnityFluid {
 
     public static final int FUEL_AMOUNT = 0;
     protected final IIntArray data = new IIntArray() {
@@ -56,6 +58,11 @@ public class NecromanticAltarTileEntity extends AbstractFluidAltarTileEnity {
     @Override
     protected void duringCrafting() {
 
+    }
+
+    @Override
+    protected AltarContext getContext() {
+        return new AltarContextFluid(inventory,tank.getFluidInTank(0),getAltarType());
     }
 
     @Override
