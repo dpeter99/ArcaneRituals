@@ -101,10 +101,13 @@ public abstract class AbstractAltarTileEnityFluid extends AbstractAltarTileEntit
         }
     }
 
-    public void fillFromItem(ItemStack item) {
-/*
+    public void fillFromRightClick(ItemStack item, PlayerEntity playerEntity) {
+
         ItemStack single_item = item.copy();
         single_item.setCount(1);
+
+/*
+
 
         FluidUtil.getFluidHandler(single_item).ifPresent(
                 fluidHandler -> {
@@ -124,9 +127,13 @@ public abstract class AbstractAltarTileEnityFluid extends AbstractAltarTileEntit
                 }
         );
 */
-        FluidUtil.getFluidHandler(item).ifPresent(
+        FluidUtil.getFluidHandler(single_item).ifPresent(
                 this::fillFrom
         );
+
+        item.shrink(1);
+
+        playerEntity.inventory.addItemStackToInventory(single_item);
 
     }
 
@@ -183,21 +190,6 @@ public abstract class AbstractAltarTileEnityFluid extends AbstractAltarTileEntit
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }
-
-    /**
-     * Called when the chunk's TE update tag, gotten from {@link #getUpdateTag()}, is received on the client.
-     * <p>
-     * Used to handle this tag in a special way. By default this simply calls {@link #read}.
-     *
-     * @param tag The {@link #CompoundNBT} sent from {@link #getUpdateTag()}
-     */
-    /*
-    @Override
-    public void handleUpdateTag(CompoundNBT tag) {
-        read(tag);
-    }
-    */
-
 
 
     @Nonnull

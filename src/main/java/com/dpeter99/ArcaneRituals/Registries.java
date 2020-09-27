@@ -8,14 +8,14 @@ import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
 import com.dpeter99.ArcaneRituals.arcaneFuel.ArcaneFuelType;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
+import com.dpeter99.ArcaneRituals.block.BlockArcaneAnvil;
 import com.dpeter99.ArcaneRituals.block.WitchAltarBlock;
 import com.dpeter99.ArcaneRituals.client.renderer.FluidHolderRenderer;
 import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import com.dpeter99.ArcaneRituals.fluid.Blood;
 import com.dpeter99.ArcaneRituals.item.*;
-import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
-import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
+import com.dpeter99.ArcaneRituals.item.sacrificialKnife.ItemSacrificialKnife;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
@@ -40,8 +40,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
-
-import java.util.function.Supplier;
 
 // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
 // Event bus for receiving Registry Events)
@@ -81,6 +79,8 @@ public class Registries {
         reg.register(new WitchAltarBlock());
         reg.register(new NecromanticAltarBlock());
         reg.register(new DemonicAltarBlock());
+
+        reg.register(new BlockArcaneAnvil().setRegistryName(ArcaneRituals.location("arcane_anvil")));
     }
 
     @SubscribeEvent
@@ -164,6 +164,7 @@ public class Registries {
         ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
                 FluidHolderRenderer.Loader.INSTANCE);
     }
+
 
     @SubscribeEvent
     public static void onArcaneFuelRegistry(final RegistryEvent.Register<ArcaneFuelType> blockRegistryEvent) {
