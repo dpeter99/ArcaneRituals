@@ -1,0 +1,19 @@
+{
+  "type": "arcanerituals:altar",
+  "fuel": {
+    "type": "arcanerituals:blood",
+    "amount": 2000,
+    "owner": "minecraft:iron_golem"
+  },
+  "altar_type": "demonic_altar",
+  "work_amount": 500,
+  "ingredients": {
+    "0" : {"item": "minecraft:iron_block"},
+    "1" : {"item": "minecraft:iron_block"},
+    "2" : {"item": "minecraft:gold_ingot"},
+    "3" : {"item": "arcanerituals:blood_hammer"},
+    "center" : {"item": "arcanerituals:hammer"}
+  },
+
+  "result": "arcanerituals:blood_hammer"
+}

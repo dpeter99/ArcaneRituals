@@ -19,6 +19,7 @@ import com.dpeter99.ArcaneRituals.item.sacrificialKnife.ItemSacrificialKnife;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -37,7 +38,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 
@@ -54,8 +57,12 @@ public class Registries {
 
     //public static  myRegistryEntry = myRegister.register("cool_entry", () -> /* create registry entry here */)
 
+    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY_REGISTRY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, ArcaneRituals.MODID);
+
     public static void init(){
         group = new ArcaneItemGroup();
+
+        TILE_ENTITY_REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         DeferredRegister.create(ArcaneFuelType.class,ArcaneRituals.MODID);
     }
@@ -72,7 +79,6 @@ public class Registries {
     @SubscribeEvent
     public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
         // register a new block here
-        ArcaneRituals.LOGGER.info("HELLO from Register Block");
 
         IForgeRegistry<Block> reg = blockRegistryEvent.getRegistry();
 
@@ -101,6 +107,9 @@ public class Registries {
          reg.register(new Item(new Item.Properties().group(Registries.group).maxStackSize(1)).setRegistryName("iron_ring"));
 
          reg.register(new ItemRingOfProtection(1).setRegistryName("ring_of_protection"));
+
+
+         reg.register(new BlockItem(ArcaneBlocks.arcane_anvil, new Item.Properties()).setRegistryName("arcane_anvil"));
     }
 
     @SubscribeEvent

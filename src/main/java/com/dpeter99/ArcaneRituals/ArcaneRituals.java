@@ -6,7 +6,9 @@ import com.dpeter99.ArcaneRituals.particles.ArcaneParticles;
 import com.dpeter99.ArcaneRituals.setup.ClientProxy;
 import com.dpeter99.ArcaneRituals.setup.IProxy;
 import com.dpeter99.ArcaneRituals.setup.ServerProxy;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -21,6 +23,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.theillusivec4.curios.api.SlotTypeMessage;
@@ -36,6 +40,8 @@ public class ArcaneRituals {
     public static final Logger LOGGER = LogManager.getLogger();
 
     public static final IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
+
+
 
     public ArcaneRituals() {
         // Register the setup method for modloading
@@ -59,7 +65,6 @@ public class ArcaneRituals {
     private void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
-        LOGGER.info("HELLO FROM PREINIT");
 
         proxy.init();
     }
@@ -67,7 +72,7 @@ public class ArcaneRituals {
     private void doClientStuff(final FMLClientSetupEvent event)
     {
         // do something that can only be done on the client
-        LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
+        //LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
 
     }
 
@@ -84,7 +89,7 @@ public class ArcaneRituals {
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
         // do something when the server starts
-        LOGGER.info("HELLO from server starting");
+        //LOGGER.info("HELLO from server starting");
     }
 
     @SubscribeEvent
