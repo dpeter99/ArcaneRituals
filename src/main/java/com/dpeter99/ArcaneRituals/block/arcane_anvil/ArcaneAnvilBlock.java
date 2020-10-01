@@ -56,6 +56,7 @@ public class ArcaneAnvilBlock extends Block {
     //###################################
     // Tile Entity stuff
     //###################################
+    //region Tile Entity
 
     @Override
     public boolean hasTileEntity(BlockState state) {
@@ -86,6 +87,8 @@ public class ArcaneAnvilBlock extends Block {
         return ActionResultType.CONSUME; // super.onBlockActivated(state, worldIn, pos, player, handIn, p_225533_6_);
     }
 
+
+    //endregion
 
 
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {

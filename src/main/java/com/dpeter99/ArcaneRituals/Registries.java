@@ -11,6 +11,8 @@ import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilContainer;
 import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilBlock;
 
+import com.dpeter99.ArcaneRituals.block.arcane_tank.ArcaneFuelTankBlock;
+import com.dpeter99.ArcaneRituals.block.arcane_tank.ArcaneFuelTankTileEntity;
 import com.dpeter99.ArcaneRituals.client.renderer.FluidHolderRenderer;
 import com.dpeter99.ArcaneRituals.crafting.AltarRecipe;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
@@ -18,7 +20,9 @@ import com.dpeter99.ArcaneRituals.fluid.Blood;
 import com.dpeter99.ArcaneRituals.item.*;
 import com.dpeter99.ArcaneRituals.item.sacrificialKnife.ItemSacrificialKnife;
 import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilTileEntity;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
@@ -55,15 +59,24 @@ public class Registries {
 
     public static ItemGroup group;
 
-    //public static DeferredRegister<ArcaneFuelType> myRegister = DeferredRegister.create(ArcaneFuelType.class, ArcaneRituals.MODID);
-    //public static Supplier<IForgeRegistry<ArcaneFuelType>> myRegistry = myRegister.makeRegistry("cool_registry", () -> { return new RegistryBuilder<ArcaneFuelType>(); });
-
-    //public static  myRegistryEntry = myRegister.register("cool_entry", () -> /* create registry entry here */)
 
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY_REGISTRY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, ArcaneRituals.MODID);
+    public static final DeferredRegister<Block> BLOCK_REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCKS, ArcaneRituals.MODID);
+
 
     public static final RegistryObject<TileEntityType<?>> ARCANE_ANVIL_TILE_ENTITY =
             Registries.TILE_ENTITY_REGISTRY.register("arcane_anvil", () -> TileEntityType.Builder.create(ArcaneAnvilTileEntity::new, ArcaneBlocks.arcane_anvil).build(null));
+
+
+    public static final RegistryObject<TileEntityType<?>> ARCANE_FUEL_TANK_SMALL_TILE_ENTITY =
+            Registries.TILE_ENTITY_REGISTRY.register("small_tank_anvil",
+                    () -> TileEntityType.Builder.create(() -> new ArcaneFuelTankTileEntity(ArcaneTileEntities.small_tank_anvil), ArcaneBlocks.small_tank_anvil).build(null));
+
+    public static final RegistryObject<Block> ARCANE_FUEL_TANK_SMALL_BLOCK =
+            Registries.BLOCK_REGISTRY.register("small_tank_anvil",
+                    () -> new ArcaneFuelTankBlock(ArcaneTileEntities.small_tank_anvil, AbstractBlock.Properties.create(Material.IRON)));
+
+
 
     public static void init(){
         group = new ArcaneItemGroup();

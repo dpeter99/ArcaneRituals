@@ -27,4 +27,6 @@ public class ArcaneTileEntities {
     public static final TileEntityType<ArcaneAnvilTileEntity> arcane_anvil = null;
     public static final ContainerType<ArcaneAnvilContainer> arcane_anvil_container = null;
 
+    public static final TileEntityType<ArcaneAnvilTileEntity> small_tank_anvil = null;
+
 }

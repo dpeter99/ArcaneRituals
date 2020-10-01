@@ -4,17 +4,24 @@ import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
-public class ArcaneFualTankBlock extends Block {
+public class ArcaneFuelTankBlock extends Block {
 
-    public ArcaneFualTankBlock(Properties properties) {
+    TileEntityType<?> tileEntityFactory;
+
+    public ArcaneFuelTankBlock(TileEntityType<?> tileEntityFactory, Properties properties) {
         super(properties.notSolid());
+
+        this.tileEntityFactory = tileEntityFactory;
     }
 
 
+    //region Tile Entity
 
     @Override
     public boolean hasTileEntity(BlockState state) {
@@ -24,8 +31,9 @@ public class ArcaneFualTankBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new ArcaneFuelTankTileEntity();
+        return new ArcaneFuelTankTileEntity(tileEntityFactory);
     }
 
+    //endregion
 
 }
