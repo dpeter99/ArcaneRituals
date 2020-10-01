@@ -4,9 +4,9 @@ import net.minecraft.inventory.container.ContainerType;
 
 import javax.annotation.Nullable;
 
-public abstract class TileEnityContainer extends SimpleContainer {
+public abstract class TileEntityContainer extends SimpleContainer {
 
-    protected TileEnityContainer(@Nullable ContainerType<?> type, int id) {
+    protected TileEntityContainer(@Nullable ContainerType<?> type, int id) {
         super(type, id);
     }
 }

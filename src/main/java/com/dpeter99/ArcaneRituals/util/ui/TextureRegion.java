@@ -1,74 +1,46 @@
 package com.dpeter99.ArcaneRituals.util.ui;
 
+import com.dpeter99.ArcaneRituals.util.Vector2i;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
 
-public class TextureRegion_old {
-    int startX;
-    int startY;
+public class TextureRegion implements IDrawable {
+    Vector2i start;
+    Vector2i size;
 
-    int sizeX;
-    int sizeY;
+    Vector2i destStart;
+    Vector2i destSize;
 
-    int sourceHeight;
-    int sourceWidth;
+    SourceTexture source;
 
-    public TextureRegion_old(int startX, int startY, int sizeX, int sizeY) {
-        this.startX = startX;
-        this.startY = startY;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
+    public TextureRegion(SourceTexture source, int startX, int startY, int sizeX, int sizeY, int destX, int destY, int dest_sizeX, int dest_sizeY) {
+        this.start = new Vector2i(startX, startY);
+        this.size = new Vector2i(sizeX,sizeY);
+
+        this.destStart = new Vector2i(destX,destY);
+        this.destSize = new Vector2i(dest_sizeX,dest_sizeY);
+
+
+        this.source = source;
     }
 
-    public TextureRegion_old(int startX, int startY, int sizeX, int sizeY, int sourceWidth, int sourceHeight) {
-        this.startX = startX;
-        this.startY = startY;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
-
-        this.sourceWidth = sourceWidth;
-        this.sourceHeight = sourceHeight;
+    public TextureRegion(SourceTexture source, int startX, int startY, int sizeX, int sizeY, int destX, int destY) {
+        this(source,startX,startY,sizeX,sizeY,destX,destY,sizeX,sizeY);
     }
 
-    public int getStartX() {
-        return startX;
-    }
-
-    public void setStartX(int startX) {
-        this.startX = startX;
-    }
-
-    public int getStartY() {
-        return startY;
-    }
-
-    public void setStartY(int startY) {
-        this.startY = startY;
-    }
-
-    public int getSizeX() {
-        return sizeX;
-    }
-
-    public void setSizeX(int sizeX) {
-        this.sizeX = sizeX;
-    }
-
-    public int getSizeY() {
-        return sizeY;
-    }
-
-    public void setSizeY(int sizeY) {
-        this.sizeY = sizeY;
-    }
 
     public void blit(MatrixStack matrixStack, int destX, int destY, int blitoffset){
-        AbstractGui.blit(matrixStack, destX, destY, blitoffset, startX, startY, sizeX, sizeY, sourceHeight, sourceWidth);
+        AbstractGui.blit(matrixStack, destX, destY, blitoffset, start.x, start.y, size.x, size.y, source.height, source.width);
     }
 
     public void blitSized(MatrixStack matrixStack, int destX, int destY, int sizeX, int sizeY){
 
-        AbstractGui.blit(matrixStack, destX, destY, sizeX, sizeY, startX, startY, this.sizeX, this.sizeY, sourceWidth, sourceHeight);
+        AbstractGui.blit(matrixStack, destX, destY, sizeX, sizeY, start.x, start.y, this.size.x, this.size.y, source.width, source.height);
 
+    }
+
+    @Override
+    public void draw(MatrixStack matrixStack, int guiLeft, int guiTop) {
+        AbstractGui.blit(matrixStack, destStart.x + guiLeft, destStart.y + guiTop, destSize.x, destSize.y, start.x, start.y, this.size.x, this.size.y, source.width, source.height);
     }
 }

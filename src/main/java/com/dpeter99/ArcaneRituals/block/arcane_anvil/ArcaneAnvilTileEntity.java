@@ -1,15 +1,21 @@
-package com.dpeter99.ArcaneRituals.tileentity;
+package com.dpeter99.ArcaneRituals.block.arcane_anvil;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import com.dpeter99.ArcaneRituals.Registries;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -21,7 +27,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ArcaneAnvilTileEntity extends TileEntity {
+public class ArcaneAnvilTileEntity extends TileEntity implements INamedContainerProvider {
 
 
     public final ItemStackHandler inventory = new ItemStackHandler(3) {
@@ -86,4 +92,14 @@ public class ArcaneAnvilTileEntity extends TileEntity {
         return super.getCapability(cap, side);
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent("HMMMMMM");
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity p_createMenu_3_) {
+        return new ArcaneAnvilContainer(id,world, pos,playerInventory);
+    }
 }
