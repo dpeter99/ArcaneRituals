@@ -1,12 +1,10 @@
 package com.dpeter99.ArcaneRituals.util.container;
 
-import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IWorldPosCallable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -18,10 +16,11 @@ public abstract class SimpleContainer extends Container {
 
     protected SimpleContainer(@Nullable ContainerType<?> type, int id) {
         super(type, id);
+
+        addSlots();
     }
 
-
-
+    protected abstract void addSlots();
 
 
     @Override
@@ -73,7 +72,7 @@ public abstract class SimpleContainer extends Container {
         return index;
     }
 
-    protected void layoutPlayerInventorySlots(int index, int leftCol, int topRow) {
+    protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
         // Player inventory
         addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
 

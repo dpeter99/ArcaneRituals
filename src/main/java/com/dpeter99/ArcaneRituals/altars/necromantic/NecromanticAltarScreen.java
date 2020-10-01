@@ -4,7 +4,7 @@ import com.dpeter99.ArcaneRituals.ArcaneRituals;
 import com.dpeter99.ArcaneRituals.fluid.AdvancedFluid;
 import com.dpeter99.ArcaneRituals.screen.GlyphDrawer;
 import com.dpeter99.ArcaneRituals.util.ui.SimpleScreen;
-import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
+import com.dpeter99.ArcaneRituals.util.ui.TextureRegion_old;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.entity.player.PlayerInventory;
@@ -28,7 +28,7 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
 
     GlyphDrawer glyphs;
 
-    List<TextureRegion> fluidStates = new ArrayList<TextureRegion>();
+    List<TextureRegion_old> fluidStates = new ArrayList<TextureRegion_old>();
 
     public NecromanticAltarScreen(NecromanticAltarContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -45,12 +45,12 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
 
         for (int i = 0; i < 8; i++) {
             int startX = i * 12;
-            glyphs.addGlyph(new TextureRegion(startX, 232, 12, 12), false);
+            glyphs.addGlyph(new TextureRegion_old(startX, 232, 12, 12), false);
         }
 
         for (int i = 0; i < 8; i++) {
             int startX = i * 12;
-            glyphs.addGlyph(new TextureRegion(startX, 244, 12, 12), true);
+            glyphs.addGlyph(new TextureRegion_old(startX, 244, 12, 12), true);
         }
 
         glyphs.addGlyphPos(67, 15);
@@ -77,10 +77,10 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
     }
 
     private void FluidIndicatorSetup() {
-        fluidStates.add(new TextureRegion(180, 0, 22, 22));
-        fluidStates.add(new TextureRegion(180, 22, 44, 44));
-        fluidStates.add(new TextureRegion(180, 66, 59, 61));
-        fluidStates.add(new TextureRegion(176, 128, 80, 80));
+        fluidStates.add(new TextureRegion_old(180, 0, 22, 22));
+        fluidStates.add(new TextureRegion_old(180, 22, 44, 44));
+        fluidStates.add(new TextureRegion_old(180, 66, 59, 61));
+        fluidStates.add(new TextureRegion_old(176, 128, 80, 80));
     }
 
     @Override
@@ -120,7 +120,7 @@ public class NecromanticAltarScreen extends SimpleScreen<NecromanticAltarContain
     }
 
     private void drawFluid(MatrixStack matrixStack,int level) {
-        TextureRegion source = null;
+        TextureRegion_old source = null;
         float step = 5000.0f/4;
         if        (step * 0 < level && level <= step * 1) {
             source = fluidStates.get(0);

@@ -1,11 +1,10 @@
 package com.dpeter99.ArcaneRituals.altars.demonic;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
-import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
 import com.dpeter99.ArcaneRituals.fluid.AdvancedFluid;
 import com.dpeter99.ArcaneRituals.screen.GlyphDrawer;
 import com.dpeter99.ArcaneRituals.util.ui.SimpleScreen;
-import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
+import com.dpeter99.ArcaneRituals.util.ui.TextureRegion_old;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.entity.player.PlayerInventory;
@@ -14,7 +13,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
@@ -23,14 +21,14 @@ import java.util.List;
 
 public class DemonicAltarScreen extends SimpleScreen<DemonicAltarContainer> {
 
-    private ResourceLocation GUI = new ResourceLocation(ArcaneRituals.MODID, "textures/gui/demonic_altar.png");
+    private final ResourceLocation GUI = new ResourceLocation(ArcaneRituals.MODID, "textures/gui/demonic_altar.png");
 
     private static final int WIDTH = 176;
     private static final int HEIGHT = 225;
 
     GlyphDrawer glyphs;
 
-    List<TextureRegion> fluidStates = new ArrayList<TextureRegion>();
+    List<TextureRegion_old> fluidStates = new ArrayList<TextureRegion_old>();
 
     public DemonicAltarScreen(DemonicAltarContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -47,12 +45,12 @@ public class DemonicAltarScreen extends SimpleScreen<DemonicAltarContainer> {
 
         for (int i = 0; i < 8; i++) {
             int startX = i * 12;
-            glyphs.addGlyph(new TextureRegion(startX, 232, 12, 12), false);
+            glyphs.addGlyph(new TextureRegion_old(startX, 232, 12, 12), false);
         }
 
         for (int i = 0; i < 8; i++) {
             int startX = i * 12;
-            glyphs.addGlyph(new TextureRegion(startX, 244, 12, 12), true);
+            glyphs.addGlyph(new TextureRegion_old(startX, 244, 12, 12), true);
         }
 
         glyphs.addGlyphPos(67, 15);
@@ -79,10 +77,10 @@ public class DemonicAltarScreen extends SimpleScreen<DemonicAltarContainer> {
     }
 
     private void FluidIndicatorSetup() {
-        fluidStates.add(new TextureRegion(180, 0, 22, 22));
-        fluidStates.add(new TextureRegion(180, 22, 44, 44));
-        fluidStates.add(new TextureRegion(180, 66, 59, 61));
-        fluidStates.add(new TextureRegion(176, 128, 80, 80));
+        fluidStates.add(new TextureRegion_old(180, 0, 22, 22));
+        fluidStates.add(new TextureRegion_old(180, 22, 44, 44));
+        fluidStates.add(new TextureRegion_old(180, 66, 59, 61));
+        fluidStates.add(new TextureRegion_old(176, 128, 80, 80));
     }
 
     @Override
@@ -122,7 +120,7 @@ public class DemonicAltarScreen extends SimpleScreen<DemonicAltarContainer> {
     }
 
     private void drawFluid(MatrixStack matrixStack,int level) {
-        TextureRegion source = null;
+        TextureRegion_old source = null;
         float step = 5000.0f/4;
         if        (step * 0 < level && level <= step * 1) {
             source = fluidStates.get(0);

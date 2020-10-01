@@ -3,7 +3,7 @@ package com.dpeter99.ArcaneRituals.util.ui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
 
-public class TextureRegion_old {
+public class TextureRegion {
     int startX;
     int startY;
 
@@ -13,14 +13,14 @@ public class TextureRegion_old {
     int sourceHeight;
     int sourceWidth;
 
-    public TextureRegion_old(int startX, int startY, int sizeX, int sizeY) {
+    public TextureRegion(int startX, int startY, int sizeX, int sizeY) {
         this.startX = startX;
         this.startY = startY;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
     }
 
-    public TextureRegion_old(int startX, int startY, int sizeX, int sizeY, int sourceWidth, int sourceHeight) {
+    public TextureRegion(int startX, int startY, int sizeX, int sizeY, int sourceWidth, int sourceHeight) {
         this.startX = startX;
         this.startY = startY;
         this.sizeX = sizeX;

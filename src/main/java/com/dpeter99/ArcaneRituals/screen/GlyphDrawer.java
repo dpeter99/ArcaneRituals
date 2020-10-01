@@ -1,9 +1,8 @@
 package com.dpeter99.ArcaneRituals.screen;
 
 import com.dpeter99.ArcaneRituals.util.ui.SimpleScreen;
-import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
+import com.dpeter99.ArcaneRituals.util.ui.TextureRegion_old;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.math.vector.Vector2f;
 
 import java.util.ArrayList;
@@ -15,8 +14,8 @@ public class GlyphDrawer {
     SimpleScreen screen;
 
     public List<Vector2f> gliph_pos = new ArrayList<>();
-    public List<TextureRegion> glyps_normal = new ArrayList<>();
-    public List<TextureRegion> glyps_active = new ArrayList<>();
+    public List<TextureRegion_old> glyps_normal = new ArrayList<>();
+    public List<TextureRegion_old> glyps_active = new ArrayList<>();
     Random r;
     public int glyph_ids[];
     boolean seeded;
@@ -41,7 +40,7 @@ public class GlyphDrawer {
         gliph_pos.add(new Vector2f(x, y));
     }
 
-    public void addGlyph(TextureRegion textureRegion, boolean active) {
+    public void addGlyph(TextureRegion_old textureRegion, boolean active) {
         if (active) {
             glyps_active.add(textureRegion);
         } else {
@@ -59,7 +58,7 @@ public class GlyphDrawer {
         xPos += screen.getGuiLeft();
         yPos += screen.getGuiTop();
 
-        TextureRegion glyp;
+        TextureRegion_old glyp;
         if (active) glyp = glyps_active.get(glyph_ids[i]);
         else glyp = glyps_normal.get(glyph_ids[i]);
 

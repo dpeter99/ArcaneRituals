@@ -21,10 +21,8 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileArcaneAnvil extends TileEntity {
+public class ArcaneAnvilTileEntity extends TileEntity {
 
-    public static final RegistryObject<TileEntityType<?>> ARCANE_ANVIL_TILE_ENTITY =
-            Registries.TILE_ENTITY_REGISTRY.register("arcane_anvil", () -> TileEntityType.Builder.create(TileArcaneAnvil::new, ArcaneBlocks.arcane_anvil).build(null));
 
     public final ItemStackHandler inventory = new ItemStackHandler(3) {
 
@@ -59,7 +57,7 @@ public class TileArcaneAnvil extends TileEntity {
     private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
 
 
-    public TileArcaneAnvil() {
+    public ArcaneAnvilTileEntity() {
         super(ArcaneTileEntities.arcane_anvil);
     }
 

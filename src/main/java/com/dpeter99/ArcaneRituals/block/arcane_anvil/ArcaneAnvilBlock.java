@@ -1,6 +1,5 @@
-package com.dpeter99.ArcaneRituals.block;
+package com.dpeter99.ArcaneRituals.block.arcane_anvil;
 
-import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -55,7 +54,7 @@ public class BlockArcaneAnvil extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new WitchAltarTileEntity();
+        return new ArcaneAnvilTileEntity();
     }
 
 

@@ -4,10 +4,9 @@ import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarContainer;
 import com.dpeter99.ArcaneRituals.altars.demonic.DemonicAltarTileEntity;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
-import com.dpeter99.ArcaneRituals.tileentity.TileArcaneAnvil;
-import com.dpeter99.ArcaneRituals.tileentity.WitchAltarContainer;
-import com.dpeter99.ArcaneRituals.tileentity.WitchAltarTileEntity;
-import net.minecraft.block.Block;
+import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilContainer;
+import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilTileEntity;
+
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
@@ -15,8 +14,7 @@ import net.minecraftforge.registries.ObjectHolder;
 @ObjectHolder("arcanerituals")
 public class ArcaneTileEntities {
 
-    public static final TileEntityType<WitchAltarTileEntity> witch_altar = null;
-    public static final ContainerType<WitchAltarContainer> witch_altar_continer = null;
+
 
     public static final TileEntityType<NecromanticAltarTileEntity> necromantic_altar = null;
     public static final ContainerType<NecromanticAltarContainer> necromantic_altar_container = null;
@@ -26,6 +24,7 @@ public class ArcaneTileEntities {
 
 
 
-    public static final TileEntityType<TileArcaneAnvil> arcane_anvil = null;
+    public static final TileEntityType<ArcaneAnvilTileEntity> arcane_anvil = null;
+    public static final ContainerType<ArcaneAnvilContainer> arcane_anvil_container = null;
 
 }

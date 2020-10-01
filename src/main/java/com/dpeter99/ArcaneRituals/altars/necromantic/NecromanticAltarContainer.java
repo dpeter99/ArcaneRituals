@@ -36,7 +36,7 @@ public class NecromanticAltarContainer extends AbstractAltarContainer<Necromanti
 
             addSlot(new SlotItemHandler(h, 5, 80, 116));
         });
-        layoutPlayerInventorySlots(5,8,144);
+        layoutPlayerInventorySlots(8,144);
 
 
     }

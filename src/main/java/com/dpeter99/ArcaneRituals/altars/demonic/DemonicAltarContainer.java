@@ -2,11 +2,9 @@ package com.dpeter99.ArcaneRituals.altars.demonic;
 
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarContainer;
-import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
 import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
@@ -14,8 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-
-import javax.annotation.Nullable;
 
 public class DemonicAltarContainer extends AbstractAltarContainer<DemonicAltarTileEntity> {
 
@@ -40,7 +36,7 @@ public class DemonicAltarContainer extends AbstractAltarContainer<DemonicAltarTi
 
             addSlot(new SlotItemHandler(h, 5, 80, 116));
         });
-        layoutPlayerInventorySlots(5,8,144);
+        layoutPlayerInventorySlots(8,144);
     }
 
     /**
