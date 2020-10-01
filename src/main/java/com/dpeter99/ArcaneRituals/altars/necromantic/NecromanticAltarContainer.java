@@ -27,6 +27,13 @@ public class NecromanticAltarContainer extends AbstractAltarContainer<Necromanti
         this.necromanticData = necromanticData;
         trackIntArray(necromanticData);
 
+
+
+
+    }
+
+    @Override
+    protected void addSlots() {
         tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
             addSlot(new SlotItemHandler(h, 0, 28, 12));
             addSlot(new SlotItemHandler(h, 1, 28, 116));
@@ -37,8 +44,6 @@ public class NecromanticAltarContainer extends AbstractAltarContainer<Necromanti
             addSlot(new SlotItemHandler(h, 5, 80, 116));
         });
         layoutPlayerInventorySlots(8,144);
-
-
     }
 
     /**

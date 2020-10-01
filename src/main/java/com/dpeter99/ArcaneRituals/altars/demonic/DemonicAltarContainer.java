@@ -27,6 +27,11 @@ public class DemonicAltarContainer extends AbstractAltarContainer<DemonicAltarTi
         this.demonicData = demonicDta;
         trackIntArray(demonicData);
 
+
+    }
+
+    @Override
+    protected void addSlots() {
         tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
             addSlot(new SlotItemHandler(h, 0, 28, 12));
             addSlot(new SlotItemHandler(h, 1, 28, 116));

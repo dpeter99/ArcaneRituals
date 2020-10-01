@@ -75,7 +75,7 @@ public class ArcaneAnvilBlock extends Block {
             ArcaneAnvilTileEntity tileEntity = (ArcaneAnvilTileEntity) worldIn.getTileEntity(pos);
             if(tileEntity != null){
 
-                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+                NetworkHooks.openGui((ServerPlayerEntity) player, tileEntity, tileEntity.getPos());
 
             }
             else {

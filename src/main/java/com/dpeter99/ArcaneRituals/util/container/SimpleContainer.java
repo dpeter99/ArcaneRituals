@@ -16,8 +16,6 @@ public abstract class SimpleContainer extends Container {
 
     protected SimpleContainer(@Nullable ContainerType<?> type, int id) {
         super(type, id);
-
-        addSlots();
     }
 
     protected abstract void addSlots();

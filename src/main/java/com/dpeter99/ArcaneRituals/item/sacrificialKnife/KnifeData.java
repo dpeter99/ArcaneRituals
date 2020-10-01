@@ -32,8 +32,10 @@ public class KnifeData {
 
         int hit_count = nbt.getInt("hit_count");
         int hit_needed = nbt.getInt("hit_needed");
-        UUID target = nbt.getUniqueId("target");
-
+        UUID target = new UUID(0,0);
+        if(nbt.contains("target")) {
+        target = nbt.getUniqueId("target");
+        }
         return new KnifeData(hit_count, hit_needed, target);
     }
 
