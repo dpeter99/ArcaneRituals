@@ -69,12 +69,12 @@ public class Registries {
 
 
     public static final RegistryObject<TileEntityType<?>> ARCANE_FUEL_TANK_SMALL_TILE_ENTITY =
-            Registries.TILE_ENTITY_REGISTRY.register("small_tank_anvil",
+            Registries.TILE_ENTITY_REGISTRY.register("arcane_fuel_tank_small",
                     () -> TileEntityType.Builder.create(() -> new ArcaneFuelTankTileEntity(ArcaneTileEntities.small_tank_anvil), ArcaneBlocks.small_tank_anvil).build(null));
 
     public static final RegistryObject<Block> ARCANE_FUEL_TANK_SMALL_BLOCK =
-            Registries.BLOCK_REGISTRY.register("small_tank_anvil",
-                    () -> new ArcaneFuelTankBlock(ArcaneTileEntities.small_tank_anvil, AbstractBlock.Properties.create(Material.IRON)));
+            Registries.BLOCK_REGISTRY.register("arcane_fuel_tank_small",
+                    () -> new ArcaneFuelTankBlock(ARCANE_FUEL_TANK_SMALL_TILE_ENTITY.get(), AbstractBlock.Properties.create(Material.IRON)));
 
 
 
