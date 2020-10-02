@@ -15,5 +15,5 @@ public class ArcaneBlocks {
 
     public static final Block arcane_anvil = null;
 
-    public static final Block small_tank_anvil = null;
+    public static final Block arcane_fuel_tank_small = null;
 }

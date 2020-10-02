@@ -3,6 +3,7 @@ package com.dpeter99.ArcaneRituals.util.ui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
 
+@Deprecated
 public class TextureRegion_old {
     int startX;
     int startY;

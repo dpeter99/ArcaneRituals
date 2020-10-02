@@ -1,6 +1,8 @@
 package com.dpeter99.ArcaneRituals.util.ui;
 
 import com.dpeter99.ArcaneRituals.util.Vector2i;
+import com.dpeter99.bloodylib.ui.IDrawable;
+import com.dpeter99.bloodylib.ui.SourceTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
 
@@ -28,7 +30,7 @@ public class TextureRegion implements IDrawable {
         this(source,startX,startY,sizeX,sizeY,destX,destY,sizeX,sizeY);
     }
 
-
+/*
     public void blit(MatrixStack matrixStack, int destX, int destY, int blitoffset){
         AbstractGui.blit(matrixStack, destX, destY, blitoffset, start.x, start.y, size.x, size.y, source.height, source.width);
     }
@@ -38,6 +40,7 @@ public class TextureRegion implements IDrawable {
         AbstractGui.blit(matrixStack, destX, destY, sizeX, sizeY, start.x, start.y, this.size.x, this.size.y, source.width, source.height);
 
     }
+*/
 
     @Override
     public void draw(MatrixStack matrixStack, int guiLeft, int guiTop) {

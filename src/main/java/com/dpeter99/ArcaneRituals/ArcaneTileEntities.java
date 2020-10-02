@@ -7,6 +7,7 @@ import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
 import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilContainer;
 import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilTileEntity;
 
+import com.dpeter99.ArcaneRituals.block.arcane_tank.ArcaneFuelTankTileEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
@@ -27,6 +28,6 @@ public class ArcaneTileEntities {
     public static final TileEntityType<ArcaneAnvilTileEntity> arcane_anvil = null;
     public static final ContainerType<ArcaneAnvilContainer> arcane_anvil_container = null;
 
-    public static final TileEntityType<ArcaneAnvilTileEntity> small_tank_anvil = null;
+    public static final TileEntityType<ArcaneFuelTankTileEntity> arcane_fuel_tank_small = null;
 
 }

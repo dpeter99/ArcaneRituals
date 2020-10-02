@@ -1,4 +1,4 @@
-package com.dpeter99.ArcaneRituals.util;
+package com.dpeter99.bloodylib;
 
 public class Vector2i {
 

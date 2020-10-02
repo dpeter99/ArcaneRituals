@@ -7,6 +7,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+@Deprecated
 public abstract class SimpleScreen<T extends Container> extends ContainerScreen<T> {
 
     public int sourceHeight= 256;

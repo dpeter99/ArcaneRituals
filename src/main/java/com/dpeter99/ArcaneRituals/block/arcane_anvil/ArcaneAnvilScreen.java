@@ -1,11 +1,9 @@
 package com.dpeter99.ArcaneRituals.block.arcane_anvil;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
-import com.dpeter99.ArcaneRituals.util.ui.ModContainerScreen;
-import com.dpeter99.ArcaneRituals.util.ui.SourceTexture;
-import com.dpeter99.ArcaneRituals.util.ui.TextureRegion;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import com.dpeter99.bloodylib.ui.ModContainerScreen;
+import com.dpeter99.bloodylib.ui.SourceTexture;
+import com.dpeter99.bloodylib.ui.TextureRegion;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 

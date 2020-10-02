@@ -70,18 +70,19 @@ public class Registries {
 
     public static final RegistryObject<TileEntityType<?>> ARCANE_FUEL_TANK_SMALL_TILE_ENTITY =
             Registries.TILE_ENTITY_REGISTRY.register("arcane_fuel_tank_small",
-                    () -> TileEntityType.Builder.create(() -> new ArcaneFuelTankTileEntity(ArcaneTileEntities.small_tank_anvil), ArcaneBlocks.small_tank_anvil).build(null));
+                    () -> TileEntityType.Builder.create(
+                            () -> new ArcaneFuelTankTileEntity(ArcaneTileEntities.arcane_fuel_tank_small), ArcaneBlocks.arcane_fuel_tank_small).build(null));
 
     public static final RegistryObject<Block> ARCANE_FUEL_TANK_SMALL_BLOCK =
             Registries.BLOCK_REGISTRY.register("arcane_fuel_tank_small",
-                    () -> new ArcaneFuelTankBlock(ARCANE_FUEL_TANK_SMALL_TILE_ENTITY.get(), AbstractBlock.Properties.create(Material.IRON)));
-
+                    () -> new ArcaneFuelTankBlock(AbstractBlock.Properties.create(Material.IRON)));
 
 
     public static void init(){
         group = new ArcaneItemGroup();
 
         TILE_ENTITY_REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BLOCK_REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         DeferredRegister.create(ArcaneFuelType.class,ArcaneRituals.MODID);
     }
