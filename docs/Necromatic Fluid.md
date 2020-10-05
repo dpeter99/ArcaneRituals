@@ -1,0 +1,1 @@
+Necromatic fluid is created by mixing water and other items such as rotten flesh or even a deead body.

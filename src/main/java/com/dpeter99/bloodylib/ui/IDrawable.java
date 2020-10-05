@@ -1,4 +1,4 @@
-package com.dpeter99.ArcaneRituals.util.ui;
+package com.dpeter99.bloodylib.ui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 

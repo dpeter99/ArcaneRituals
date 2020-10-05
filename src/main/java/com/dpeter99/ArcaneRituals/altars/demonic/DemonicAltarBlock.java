@@ -101,7 +101,7 @@ public class DemonicAltarBlock extends Block {
 
             }
             else {
-                throw new IllegalStateException("Our Tile Entity!");
+                throw new IllegalStateException("Our Tile Entity is missing!");
             }
             return ActionResultType.CONSUME;
         }

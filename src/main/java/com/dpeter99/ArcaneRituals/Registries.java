@@ -20,6 +20,7 @@ import com.dpeter99.ArcaneRituals.fluid.Blood;
 import com.dpeter99.ArcaneRituals.item.*;
 import com.dpeter99.ArcaneRituals.item.sacrificialKnife.ItemSacrificialKnife;
 import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilTileEntity;
+import com.dpeter99.bloodylib.TileEntityBuilder;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -68,14 +69,21 @@ public class Registries {
             Registries.TILE_ENTITY_REGISTRY.register("arcane_anvil", () -> TileEntityType.Builder.create(ArcaneAnvilTileEntity::new, ArcaneBlocks.arcane_anvil).build(null));
 
 
-    public static final RegistryObject<TileEntityType<?>> ARCANE_FUEL_TANK_SMALL_TILE_ENTITY =
-            Registries.TILE_ENTITY_REGISTRY.register("arcane_fuel_tank_small",
-                    () -> TileEntityType.Builder.create(
-                            () -> new ArcaneFuelTankTileEntity(ArcaneTileEntities.arcane_fuel_tank_small), ArcaneBlocks.arcane_fuel_tank_small).build(null));
 
     public static final RegistryObject<Block> ARCANE_FUEL_TANK_SMALL_BLOCK =
             Registries.BLOCK_REGISTRY.register("arcane_fuel_tank_small",
                     () -> new ArcaneFuelTankBlock(AbstractBlock.Properties.create(Material.IRON)));
+
+
+    public static final RegistryObject<TileEntityType<?>> ARCANE_FUEL_TANK_SMALL_TILE_ENTITY =
+            TileEntityBuilder.Build(TILE_ENTITY_REGISTRY,
+                    (t) -> new ArcaneFuelTankTileEntity(t, 10000, ArcaneFluids.blood),
+                    ARCANE_FUEL_TANK_SMALL_BLOCK);
+
+
+
+
+
 
 
     public static void init(){

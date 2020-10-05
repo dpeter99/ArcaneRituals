@@ -1,8 +1,6 @@
-package com.dpeter99.ArcaneRituals.util.ui;
+package com.dpeter99.bloodylib.ui;
 
-import com.dpeter99.ArcaneRituals.util.Vector2i;
-import com.dpeter99.bloodylib.ui.IDrawable;
-import com.dpeter99.bloodylib.ui.SourceTexture;
+import com.dpeter99.bloodylib.Vector2i;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
 

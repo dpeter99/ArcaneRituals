@@ -1,0 +1,5 @@
+- [Blood](Blood)
+	- Used in [Demonic](Demonic-magic)
+- [[Necromatic Fluid]]
+	- Necromatic fluid is a liquid filled with rotting and undead energy XD
+- Holy water
