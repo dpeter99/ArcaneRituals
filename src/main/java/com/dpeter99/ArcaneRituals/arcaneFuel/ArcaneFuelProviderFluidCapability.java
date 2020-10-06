@@ -23,7 +23,7 @@ public class ArcaneFuelProviderFluidCapability implements IArcaneFuelProvider {
 
             if(fluid instanceof IArcaneFuel){
                 if(type instanceof ArcaneFuelIngredientFluid)
-                    
+
                 if(){
                     return fluidHandler.getFluidInTank(i).getAmount();
                 }
