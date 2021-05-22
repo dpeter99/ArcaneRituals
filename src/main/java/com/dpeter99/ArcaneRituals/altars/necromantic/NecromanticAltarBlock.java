@@ -1,6 +1,6 @@
 package com.dpeter99.ArcaneRituals.altars.necromantic;
 
-import com.dpeter99.ArcaneRituals.item.ArcaneItems;
+import com.dpeter99.ArcaneRituals.item.ArcaneItems_old;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -47,7 +47,7 @@ public class NecromanticAltarBlock extends Block {
             ItemStack current_item = player.inventory.getCurrentItem();
             NecromanticAltarTileEntity tileEntity = (NecromanticAltarTileEntity) worldIn.getTileEntity(pos);
 
-            if(current_item.getItem() == ArcaneItems.basic_wand)
+            if(current_item.getItem() == ArcaneItems_old.basic_wand)
             {
                 tileEntity.startCrafting();
             }

@@ -1,5 +1,6 @@
 package com.dpeter99.ArcaneRituals.fluid;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
@@ -8,10 +9,14 @@ import net.minecraft.util.text.TextComponent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.management.BadAttributeValueExpException;
 import java.util.function.Supplier;
 
-public abstract class AdvancedFluid extends UnplaceableFluid {
 
+/**
+ * Adds functions for storing data on the fluid
+ */
+public abstract class AdvancedFluid extends UnplaceableFluid {
 
     public AdvancedFluid(Supplier<? extends Item> bucket, FluidAttributes.Builder builder) {
         super(bucket, builder);
@@ -20,8 +25,6 @@ public abstract class AdvancedFluid extends UnplaceableFluid {
     public ITextComponent getInfoText(FluidStack stack){
         return new StringTextComponent("");
     }
-
-
 
     public void setFluidData(FluidStack stack, FluidData data){
         CompoundNBT nbt = stack.getOrCreateTag();
@@ -40,10 +43,12 @@ public abstract class AdvancedFluid extends UnplaceableFluid {
 
     public abstract void setupFluidStack(FluidStack stack);
 
-    public FluidStack makeFluidStack(int amount, FluidData data){
-        FluidStack stack = new FluidStack(this,amount);
-        setFluidData(stack, data);
+    public static FluidStack makeFluidStack(AdvancedFluid fluid, int amount, FluidData data){
 
-        return stack;
+            FluidStack stack = new FluidStack(fluid, amount);
+             fluid.setFluidData(stack, data);
+
+            return stack;
+
     }
 }

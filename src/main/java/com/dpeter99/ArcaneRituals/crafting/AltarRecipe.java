@@ -2,6 +2,8 @@ package com.dpeter99.ArcaneRituals.crafting;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
 import com.dpeter99.ArcaneRituals.arcaneFuel.ArcaneFuelIngredient;
+import com.dpeter99.ArcaneRituals.arcaneFuel.instance.ArcaneFuelFluidInstance;
+import com.dpeter99.ArcaneRituals.arcaneFuel.instance.ArcaneFuelInstance;
 import com.google.gson.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
@@ -90,7 +92,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
 
                 matches = matches && center.test(inv.getStackInSlot(4));
 
-                matches = matches && fuel.test(inv);
+                matches = matches && fuel.test(inv.getFuel());
 
                 return matches;
             }

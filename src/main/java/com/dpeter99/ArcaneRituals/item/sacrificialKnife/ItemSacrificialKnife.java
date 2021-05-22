@@ -4,6 +4,7 @@ import com.dpeter99.ArcaneRituals.MobBlood;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import com.dpeter99.ArcaneRituals.fluid.Blood;
 import com.dpeter99.ArcaneRituals.item.ArcaneItems;
+import com.dpeter99.ArcaneRituals.item.ArcaneItems_old;
 import com.dpeter99.ArcaneRituals.item.ItemVial;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -21,20 +22,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ItemSacrificialKnife extends Item {
 
-    public ItemSacrificialKnife() {
-        super(new Properties().defaultMaxDamage(55));
-        setRegistryName("sacrificial_knife");
+    public ItemSacrificialKnife(Properties builder) {
+        super(builder);
     }
 
     public void makeFullVial(PlayerEntity playerIn, Blood.BloodData bloodData) {
-        if (playerIn.inventory.hasItemStack(new ItemStack(ArcaneItems.vial))) {
+        if (playerIn.inventory.hasItemStack(new ItemStack(ArcaneItems.vial.get()))) {
             AtomicBoolean done = new AtomicBoolean(false);
             playerIn.inventory.mainInventory.forEach((item) -> {
-                if (!done.get() && item.getItem() == ArcaneItems.vial && ItemVial.isEmpty(item)) {
+                if (!done.get() && item.getItem() == ArcaneItems.vial.get() && ItemVial.isEmpty(item)) {
                     item.shrink(1);
 
-                    ItemStack new_vial = new ItemStack(ArcaneItems.vial);
-                    ItemVial.setFluid(new_vial, ArcaneFluids.blood.makeFluidStack(1000, bloodData));
+                    ItemStack new_vial = new ItemStack(ArcaneItems.vial.get());
+                    ItemVial.setFluid(new_vial, Blood.makeFluidStack(ArcaneFluids.blood.get(),1000, bloodData));
                     playerIn.addItemStackToInventory(new_vial);
 
                     done.set(true);
@@ -58,8 +58,6 @@ public class ItemSacrificialKnife extends Item {
             itemstack.setTag(data.serialzie());
 
         } else {
-
-
             if (playerIn.getHealth() > 1) {
                 playerIn.attackEntityFrom(DamageSource.GENERIC, 5.0f);
 
@@ -125,7 +123,6 @@ public class ItemSacrificialKnife extends Item {
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-
 
     }
 

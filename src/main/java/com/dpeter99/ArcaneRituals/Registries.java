@@ -7,7 +7,8 @@ import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarBlock;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarContainer;
 import com.dpeter99.ArcaneRituals.altars.necromantic.NecromanticAltarTileEntity;
 import com.dpeter99.ArcaneRituals.arcaneFuel.ArcaneFuelType;
-import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
+import com.dpeter99.ArcaneRituals.arcaneFuel.IArcaneFuel;
+import com.dpeter99.ArcaneRituals.block.ArcaneBlocks_OLD;
 import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilContainer;
 import com.dpeter99.ArcaneRituals.block.arcane_anvil.ArcaneAnvilBlock;
 
@@ -40,6 +41,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -57,40 +59,35 @@ import net.minecraftforge.registries.RegistryBuilder;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class Registries {
 
-
     public static ItemGroup group;
 
 
-    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY_REGISTRY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, ArcaneRituals.MODID);
-    public static final DeferredRegister<Block> BLOCK_REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCKS, ArcaneRituals.MODID);
+    public static final DeferredRegister<Item> ITEM_REGISTRY =
+            DeferredRegister.create(ForgeRegistries.ITEMS, ArcaneRituals.MODID);
+
+    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY_REGISTRY =
+            DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, ArcaneRituals.MODID);
+
+    public static final DeferredRegister<Block> BLOCK_REGISTRY =
+            DeferredRegister.create(ForgeRegistries.BLOCKS, ArcaneRituals.MODID);
+
+    public static final DeferredRegister<Fluid> FLUID_REGISTRY =
+            DeferredRegister.create(ForgeRegistries.FLUIDS, ArcaneRituals.MODID);
+
 
 
     public static final RegistryObject<TileEntityType<?>> ARCANE_ANVIL_TILE_ENTITY =
-            Registries.TILE_ENTITY_REGISTRY.register("arcane_anvil", () -> TileEntityType.Builder.create(ArcaneAnvilTileEntity::new, ArcaneBlocks.arcane_anvil).build(null));
-
-
-
-    public static final RegistryObject<Block> ARCANE_FUEL_TANK_SMALL_BLOCK =
-            Registries.BLOCK_REGISTRY.register("arcane_fuel_tank_small",
-                    () -> new ArcaneFuelTankBlock(AbstractBlock.Properties.create(Material.IRON)));
-
-
-    public static final RegistryObject<TileEntityType<?>> ARCANE_FUEL_TANK_SMALL_TILE_ENTITY =
-            TileEntityBuilder.Build(TILE_ENTITY_REGISTRY,
-                    (t) -> new ArcaneFuelTankTileEntity(t, 10000, ArcaneFluids.blood),
-                    ARCANE_FUEL_TANK_SMALL_BLOCK);
-
-
-
-
-
+            Registries.TILE_ENTITY_REGISTRY.register("arcane_anvil",
+                    () -> TileEntityType.Builder.create(ArcaneAnvilTileEntity::new, ArcaneBlocks_OLD.arcane_anvil).build(null));
 
 
     public static void init(){
         group = new ArcaneItemGroup();
 
-        TILE_ENTITY_REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BLOCK_REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        TILE_ENTITY_REGISTRY.register(modEventBus);
+        BLOCK_REGISTRY.register(modEventBus);
 
         DeferredRegister.create(ArcaneFuelType.class,ArcaneRituals.MODID);
     }
@@ -120,31 +117,18 @@ public class Registries {
     public static void onItemRegistry(final RegistryEvent.Register<Item> itemRegistryEvent){
          IForgeRegistry<Item> reg = itemRegistryEvent.getRegistry();
 
-         reg.register(new Item(new Item.Properties()).setRegistryName("bat_wing"));
-
-         reg.register(new Item(new Item.Properties().group(group).maxStackSize(1)).setRegistryName("hammer"));
-         reg.register(new Item(new Item.Properties().group(group).maxStackSize(1)).setRegistryName("blood_hammer"));
-
          reg.register(new BasicWand());
          reg.register(new ArcaneBook());
-         reg.register(new ItemSacrificialKnife());
 
-         reg.register(new ItemVial().setRegistryName("vial"));
-
-         reg.register(new Item(new Item.Properties().group(Registries.group).maxStackSize(1)).setRegistryName("iron_ring"));
-
-         reg.register(new ItemRingOfProtection(1).setRegistryName("ring_of_protection"));
-
-
-         reg.register(new BlockItem(ArcaneBlocks.arcane_anvil, new Item.Properties()).setRegistryName("arcane_anvil"));
+         reg.register(new BlockItem(ArcaneBlocks_OLD.arcane_anvil, new Item.Properties()).setRegistryName("arcane_anvil"));
     }
 
     @SubscribeEvent
     public static void onTileRegistry(final RegistryEvent.Register<TileEntityType<?>> itemRegistryEvent){
         IForgeRegistry<TileEntityType<?>> reg = itemRegistryEvent.getRegistry();
 
-        reg.register(TileEntityType.Builder.create(NecromanticAltarTileEntity::new, ArcaneBlocks.necromantic_altar).build(null).setRegistryName("necromantic_altar"));
-        reg.register(TileEntityType.Builder.create(DemonicAltarTileEntity::new, ArcaneBlocks.demonic_altar).build(null).setRegistryName("demonic_altar"));
+        reg.register(TileEntityType.Builder.create(NecromanticAltarTileEntity::new, ArcaneBlocks_OLD.necromantic_altar).build(null).setRegistryName("necromantic_altar"));
+        reg.register(TileEntityType.Builder.create(DemonicAltarTileEntity::new, ArcaneBlocks_OLD.demonic_altar).build(null).setRegistryName("demonic_altar"));
     }
 
     @SubscribeEvent
@@ -178,7 +162,7 @@ public class Registries {
     public static void onFluidRegistry(RegistryEvent.Register<Fluid> itemRegistryEvent){
         IForgeRegistry<Fluid> reg = itemRegistryEvent.getRegistry();
 
-        reg.register(new Blood());
+        //reg.register(new Blood());
 
 
     }
@@ -206,7 +190,7 @@ public class Registries {
 
         IForgeRegistry<ArcaneFuelType> reg = blockRegistryEvent.getRegistry();
 
-        reg.register(new ArcaneFuelType(() -> ArcaneFluids.blood).setRegistryName(ArcaneRituals.location("blood")));
+        reg.register(new ArcaneFuelType(() -> (IArcaneFuel) ArcaneFluids.blood.get()).setRegistryName(ArcaneRituals.location("blood")));
     }
 
 
@@ -217,11 +201,11 @@ public class Registries {
 
         @Override
         public ItemStack createIcon() {
-            ItemStack stack =new ItemStack(ArcaneItems.vial);
+            ItemStack stack =new ItemStack(ArcaneItems.vial.get());
             FluidUtil.getFluidHandler(stack).ifPresent(
                     fluidcont ->{
                         fluidcont.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
-                        fluidcont.fill(new FluidStack(ArcaneFluids.blood,10000), IFluidHandler.FluidAction.EXECUTE);
+                        fluidcont.fill(new FluidStack(ArcaneFluids.blood.get(),10000), IFluidHandler.FluidAction.EXECUTE);
                     }
             );
 
@@ -237,10 +221,10 @@ public class Registries {
         public void fill(NonNullList<ItemStack> items) {
             super.fill(items);
 
-            items.add(new ItemStack(ArcaneItems.vial));
-            items.add(new ItemStack(ArcaneItems.arcane_book));
-            items.add(new ItemStack(ArcaneItems.bat_wing));
-            items.add(new ItemStack(ArcaneItems.sacrificial_knife));
+            //items.add(new ItemStack(ArcaneItems_old.vial.get()));
+            items.add(new ItemStack(ArcaneItems_old.arcane_book));
+            //items.add(new ItemStack(ArcaneItems_old.bat_wing));
+            items.add(new ItemStack(ArcaneItems_old.sacrificial_knife));
         }
     }
 }

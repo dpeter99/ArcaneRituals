@@ -1,6 +1,6 @@
 package com.dpeter99.ArcaneRituals.altars;
 
-import com.dpeter99.ArcaneRituals.util.container.SimpleContainer;
+import com.dpeter99.bloodylib.container.SimpleContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ContainerType;
@@ -25,7 +25,7 @@ public abstract class AbstractAltarContainer<T extends AbstractAltarTileEntity> 
     }
 
     protected AbstractAltarContainer(@Nullable ContainerType<?> type, int id, World world, BlockPos pos, PlayerInventory playerInventory, IIntArray altarData) {
-        super(type, id);
+        super(type, id, playerInventory);
 
         this.playerInventory = new InvWrapper(playerInventory);
         this.tileEntity = (T) world.getTileEntity(pos);

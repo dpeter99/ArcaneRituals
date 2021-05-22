@@ -1,8 +1,9 @@
 package com.dpeter99.ArcaneRituals.altars.necromantic;
 
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEnityFluid;
+import com.dpeter99.ArcaneRituals.arcaneFuel.instance.ArcaneFuelFluidInstance;
 import com.dpeter99.ArcaneRituals.crafting.AltarContext;
-import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
+//import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import net.minecraft.entity.player.PlayerEntity;
@@ -62,12 +63,12 @@ public class NecromanticAltarTileEntity extends AbstractAltarTileEnityFluid {
 
     @Override
     protected AltarContext getContext() {
-        return new AltarContextFluid(inventory,tank.getFluidInTank(0),getAltarType());
+        return new AltarContext(inventory,new ArcaneFuelFluidInstance(tank.getFluidInTank(0)),getAltarType());
     }
 
     @Override
     protected Fluid getFluidType() {
-        return ArcaneFluids.blood;
+        return ArcaneFluids.blood.get();
     }
 
 

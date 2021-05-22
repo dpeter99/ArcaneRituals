@@ -1,7 +1,7 @@
 package com.dpeter99.ArcaneRituals.altars.necromantic;
 
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarContainer;
-import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
+import com.dpeter99.ArcaneRituals.block.ArcaneBlocks_OLD;
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -53,7 +53,7 @@ public class NecromanticAltarContainer extends AbstractAltarContainer<Necromanti
      */
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(),tileEntity.getPos()),playerIn, ArcaneBlocks.necromantic_altar);
+        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(),tileEntity.getPos()),playerIn, ArcaneBlocks_OLD.necromantic_altar);
     }
 
 

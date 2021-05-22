@@ -39,6 +39,7 @@ public class ArcaneRituals {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
 
+    //TODO: Probably not needed
     public static final IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
 

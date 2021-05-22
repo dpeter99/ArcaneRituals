@@ -2,8 +2,9 @@ package com.dpeter99.ArcaneRituals.altars.demonic;
 
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarTileEnityFluid;
+import com.dpeter99.ArcaneRituals.arcaneFuel.instance.ArcaneFuelFluidInstance;
 import com.dpeter99.ArcaneRituals.crafting.AltarContext;
-import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
+//import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
 import com.dpeter99.ArcaneRituals.fluid.ArcaneFluids;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -49,7 +50,7 @@ public class DemonicAltarTileEntity extends AbstractAltarTileEnityFluid {
 
     @Override
     protected Fluid getFluidType() {
-        return ArcaneFluids.blood;
+        return ArcaneFluids.blood.get();
     }
 
     @Override
@@ -64,7 +65,7 @@ public class DemonicAltarTileEntity extends AbstractAltarTileEnityFluid {
 
     @Override
     protected AltarContext getContext() {
-        return new AltarContextFluid(inventory,tank.getFluidInTank(0),getAltarType());
+        return new AltarContext(inventory,new ArcaneFuelFluidInstance(tank.getFluidInTank(0)),getAltarType());
     }
 
     @Override

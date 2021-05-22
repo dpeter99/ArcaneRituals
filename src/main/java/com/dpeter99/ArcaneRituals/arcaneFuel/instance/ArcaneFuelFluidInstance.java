@@ -13,7 +13,12 @@ public class ArcaneFuelFluidInstance extends ArcaneFuelInstance {
         Fluid f = fluid.getFluid();
         if(f instanceof IArcaneFuel) {
             fuelType = (IArcaneFuel) f;
+            stack = fluid;
         }
 
+    }
+
+    public FluidStack getFuel() {
+        return stack;
     }
 }

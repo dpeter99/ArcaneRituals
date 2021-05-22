@@ -1,12 +1,14 @@
-package com.dpeter99.ArcaneRituals.util.container;
+package com.dpeter99.bloodylib.container;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 
@@ -14,8 +16,9 @@ public abstract class SimpleContainer extends Container {
 
     protected IItemHandler playerInventory;
 
-    protected SimpleContainer(@Nullable ContainerType<?> type, int id) {
+    protected SimpleContainer(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory) {
         super(type, id);
+        this.playerInventory = new InvWrapper(playerInventory);
     }
 
     protected abstract void addSlots();

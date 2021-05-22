@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 public abstract class AbstractAltarTileEnityFluid extends AbstractAltarTileEntity {
 
-    public FluidTank tank = new FluidTank(4000, (FluidStack s) -> { return s.getFluid().isEquivalentTo(ArcaneFluids.blood);} );
+    public FluidTank tank = new FluidTank(4000, (FluidStack s) -> { return s.getFluid().isEquivalentTo(ArcaneFluids.blood.get());} );
 
     private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> tank);
 

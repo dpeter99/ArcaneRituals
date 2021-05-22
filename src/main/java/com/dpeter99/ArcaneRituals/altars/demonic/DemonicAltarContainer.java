@@ -2,7 +2,7 @@ package com.dpeter99.ArcaneRituals.altars.demonic;
 
 import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
 import com.dpeter99.ArcaneRituals.altars.AbstractAltarContainer;
-import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
+import com.dpeter99.ArcaneRituals.block.ArcaneBlocks_OLD;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.IIntArray;
@@ -27,7 +27,7 @@ public class DemonicAltarContainer extends AbstractAltarContainer<DemonicAltarTi
         this.demonicData = demonicDta;
         trackIntArray(demonicData);
 
-
+        addSlots();
     }
 
     @Override
@@ -51,6 +51,6 @@ public class DemonicAltarContainer extends AbstractAltarContainer<DemonicAltarTi
      */
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(),tileEntity.getPos()),playerIn, ArcaneBlocks.demonic_altar);
+        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(),tileEntity.getPos()),playerIn, ArcaneBlocks_OLD.demonic_altar);
     }
 }

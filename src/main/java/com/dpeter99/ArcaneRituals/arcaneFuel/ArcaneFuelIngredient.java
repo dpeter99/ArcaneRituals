@@ -1,7 +1,8 @@
 package com.dpeter99.ArcaneRituals.arcaneFuel;
 
+import com.dpeter99.ArcaneRituals.arcaneFuel.instance.ArcaneFuelInstance;
 import com.dpeter99.ArcaneRituals.crafting.AltarContext;
-import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
+//import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
 import com.google.gson.JsonObject;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -43,7 +44,7 @@ public abstract class ArcaneFuelIngredient<T> {
     public abstract int getAmount();
 
 
-    public abstract boolean test(AltarContext context);
+    public abstract boolean test(ArcaneFuelInstance context);
 
 
 

@@ -1,7 +1,7 @@
 package com.dpeter99.ArcaneRituals.hud;
 
 import com.dpeter99.ArcaneRituals.ArcaneRituals;
-import com.dpeter99.ArcaneRituals.item.ArcaneItems;
+import com.dpeter99.ArcaneRituals.item.ArcaneItems_old;
 import com.dpeter99.ArcaneRituals.item.sacrificialKnife.KnifeData;
 import com.dpeter99.ArcaneRituals.util.ui.TextureRegion_old;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -37,7 +37,7 @@ public class SacrificialKnifeHUD extends AbstractGui {
 
 
         ItemStack itemStack = client.player.getHeldItem(Hand.MAIN_HAND);
-        if(itemStack.getItem().equals(ArcaneItems.sacrificial_knife)){
+        if(itemStack.getItem().equals(ArcaneItems_old.sacrificial_knife)){
 
             KnifeData data = KnifeData.fromStack(itemStack);
             float percent = (float) (data.hit_count) / data.hit_needed;

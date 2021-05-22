@@ -23,21 +23,24 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 public class ArcaneFuelTankTileEntity extends TileEntity implements IActivateTileEntity {
 
     public FluidTank tank;
     private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> tank);
 
-    public ArcaneFuelTankTileEntity(TileEntityType<?> tileEntityTypeIn, int capacity, Fluid type) {
+    //public ArcaneFuelTankTileEntity(TileEntityType<?> tileEntityTypeIn, int capacity, RegistryObject<Fluid> type) {
+    public ArcaneFuelTankTileEntity(TileEntityType<?> tileEntityTypeIn, int capacity, Supplier<Fluid> type) {
         super(tileEntityTypeIn);
 
-        tank = new FluidTank(capacity, (FluidStack s) -> { return s.getFluid().isEquivalentTo(type);} );
+        tank = new FluidTank(capacity, (FluidStack s) -> { return s.getFluid().isEquivalentTo(type.get());} );
     }
 
 

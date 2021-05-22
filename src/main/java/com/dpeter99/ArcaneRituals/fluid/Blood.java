@@ -106,7 +106,7 @@ public class Blood extends AdvancedFluid implements IArcaneFuelFluid {
         BloodData data = new BloodData();
         data.readFromJson(jsonObject);
 
-        FluidStack stack = new FluidStack(ArcaneFluids.blood,amount);
+        FluidStack stack = new FluidStack(ArcaneFluids.blood.get(),amount);
         setFluidData(stack,data);
 
         ArcaneFuelIngredient<FluidStack> ingredient = new ArcaneFuelIngredientFluid(stack);

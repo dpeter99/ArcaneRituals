@@ -1,9 +1,5 @@
 package com.dpeter99.bloodylib;
 
-import com.dpeter99.ArcaneRituals.ArcaneTileEntities;
-import com.dpeter99.ArcaneRituals.Registries;
-import com.dpeter99.ArcaneRituals.block.ArcaneBlocks;
-import com.dpeter99.ArcaneRituals.block.arcane_tank.ArcaneFuelTankTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -13,7 +9,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class TileEntityBuilder {
 

@@ -1,6 +1,7 @@
 package com.dpeter99.ArcaneRituals.altars.demonic;
 
 import com.dpeter99.ArcaneRituals.item.ArcaneItems;
+import com.dpeter99.ArcaneRituals.item.ArcaneItems_old;
 import com.dpeter99.ArcaneRituals.particles.ArcaneParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -87,11 +88,11 @@ public class DemonicAltarBlock extends Block {
             DemonicAltarTileEntity tileEntity = (DemonicAltarTileEntity) worldIn.getTileEntity(pos);
             if(tileEntity != null){
 
-                if (current_item.getItem().equals(ArcaneItems.vial)) {
+                if (current_item.getItem().equals(ArcaneItems.vial.get())) {
 
                     tileEntity.fillFromRightClick(current_item, player);
 
-                } else if (current_item.getItem() == ArcaneItems.basic_wand) {
+                } else if (current_item.getItem() == ArcaneItems_old.basic_wand) {
 
                     tileEntity.startCrafting();
 

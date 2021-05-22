@@ -1,10 +1,8 @@
-package com.dpeter99.ArcaneRituals.util.container;
+package com.dpeter99.bloodylib.container;
 
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.LazyValue;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
@@ -19,7 +17,7 @@ public abstract class TileEntityContainer<T extends TileEntity> extends SimpleCo
     protected IItemHandler inv;
 
     protected TileEntityContainer(@Nullable ContainerType<?> type, int id, World world, BlockPos pos, PlayerInventory playerInventory) {
-        super(type, id);
+        super(type, id, playerInventory);
 
         tileEntity = (T) world.getTileEntity(pos);
 

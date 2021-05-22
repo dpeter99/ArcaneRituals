@@ -24,8 +24,8 @@ public class ItemVial extends Item {
 
     private static ItemStack emptyStack;
 
-    public ItemVial() {
-        super(new Properties());
+    public ItemVial(Properties builder) {
+        super(builder);
     }
 
     public static void setFluid(ItemStack stack, FluidStack f){

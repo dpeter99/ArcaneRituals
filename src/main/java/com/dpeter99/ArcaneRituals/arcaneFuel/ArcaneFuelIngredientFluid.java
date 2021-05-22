@@ -1,12 +1,10 @@
 package com.dpeter99.ArcaneRituals.arcaneFuel;
 
-import com.dpeter99.ArcaneRituals.crafting.AltarContext;
-import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
-import net.minecraft.item.crafting.Ingredient;
+import com.dpeter99.ArcaneRituals.arcaneFuel.instance.ArcaneFuelFluidInstance;
+import com.dpeter99.ArcaneRituals.arcaneFuel.instance.ArcaneFuelInstance;
+//import com.dpeter99.ArcaneRituals.crafting.AltarContextFluid;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.stream.Stream;
 
 public class ArcaneFuelIngredientFluid extends ArcaneFuelIngredient<FluidStack>{
 
@@ -20,10 +18,10 @@ public class ArcaneFuelIngredientFluid extends ArcaneFuelIngredient<FluidStack>{
     }
 
     @Override
-    public boolean test(AltarContext context) {
+    public boolean test(ArcaneFuelInstance context) {
 
-        if(context instanceof AltarContextFluid){
-            FluidStack ctx = ((AltarContextFluid)context).getFuel();
+        if(context instanceof ArcaneFuelFluidInstance){
+            FluidStack ctx = ((ArcaneFuelFluidInstance)context).getFuel();
 
             return ctx.containsFluid(matching);
         }

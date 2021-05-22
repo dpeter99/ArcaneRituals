@@ -95,13 +95,6 @@ public class DemonicAltarScreen extends SimpleScreen<DemonicAltarContainer> {
         //drawString(Minecraft.getInstance().fontRenderer, "Energy: ", 10, 10, 0xffffff);
     }
 
-    /**
-     * Draws the background layer of this container (behind the items).
-     *
-     * @param partialTicks
-     * @param mouseX
-     * @param mouseY
-     */
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
