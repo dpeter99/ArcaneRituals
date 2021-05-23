@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "arcanerituals:item/dagger_of_sacrifice"
+    }
+}
