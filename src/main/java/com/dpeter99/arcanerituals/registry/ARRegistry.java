@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.blocks.DemonicAltarBlock;
+import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -25,10 +26,14 @@ public class ARRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ArcaneRituals.MODID);
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ArcaneRituals.MODID);
 
-    public static final DeferredRegister<TileEntityType<?>> TE_TYPES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, ArcaneRituals.MODID);
+    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, ArcaneRituals.MODID);
     public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, ArcaneRituals.MODID);
 
     public static final RegistryObject<Block> DEMONIC_ALTAR = BLOCKS.register("demonic_altar", ()-> new DemonicAltarBlock(AbstractBlock.Properties.of(Material.METAL)));
+    public static final RegistryObject<TileEntityType<?>> DEMONIC_ALTAR_TE = TILE_ENTITIES.register("demonic_altar", () -> TileEntityType.Builder.of(AltarTileEntity::new, DEMONIC_ALTAR.get()).build(null));
+
+
+
     public static final RegistryObject<BlockItem> DEMONIC_ALTAR_ITEM = ITEMS.register("demonic_altar", () -> new BlockItem(DEMONIC_ALTAR.get(), new Item.Properties().tab(ArcaneRituals.TAB)) );
 
 
@@ -37,7 +42,7 @@ public class ARRegistry {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         ITEMS.register(modBus);
         BLOCKS.register(modBus);
-        TE_TYPES.register(modBus);
+        TILE_ENTITIES.register(modBus);
         CONTAINER_TYPES.register(modBus);
     }
 
