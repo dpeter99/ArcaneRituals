@@ -3,6 +3,7 @@ package com.dpeter99.arcanerituals.datagen;
 import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.datagen.block.model.BlockModelProviders;
 import com.dpeter99.arcanerituals.datagen.block.state.BlockStateProvider;
+import com.dpeter99.arcanerituals.datagen.item.ItemModelProviders;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -38,7 +39,7 @@ public class DataGen {
         if(event.includeClient()){
             LOGGER.info(DATAGEN, "Adding data providers for client assets");
             generator.addProvider(new BlockModelProviders(generator, event.getExistingFileHelper()));
-            //generator.addProvider(new ItemModelProviders(generator, event.getExistingFileHelper()));
+            generator.addProvider(new ItemModelProviders(generator, event.getExistingFileHelper()));
             //generator.addProvider(new EnUsLangProvider(generator));
             generator.addProvider(new BlockStateProvider(generator, event.getExistingFileHelper()));
         }
