@@ -1,5 +1,6 @@
 package com.dpeter99.arcanerituals.tileentities;
 
+import com.dpeter99.arcanerituals.containers.AltarContainer;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -8,6 +9,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.util.LazyOptional;
@@ -75,6 +77,31 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
         }
     };
 
+    public static final int FUEL_AMOUNT = 0;
+    protected final IIntArray data = new IIntArray() {
+        public int get(int index) {
+            switch (index) {
+                case FUEL_AMOUNT:
+                    return 1;// tank.getFluidAmount();
+                default:
+                    return 0;
+            }
+        }
+
+        public void set(int index, int value) {
+            switch (index) {
+                case FUEL_AMOUNT:
+                    //progress = fuel;
+                default:
+            }
+
+        }
+
+        public int getCount() {
+            return 1;
+        }
+    };
+
     private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
 
     @Override
@@ -84,7 +111,7 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
 
     @Nullable
     @Override
-    public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
-        return null;
+    public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity playerEntity) {
+        return new AltarContainer(id,level,worldPosition,playerInv,data);
     }
 }

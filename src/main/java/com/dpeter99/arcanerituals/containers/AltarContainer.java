@@ -3,11 +3,13 @@ package com.dpeter99.arcanerituals.containers;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
 import com.dpeter99.bloodylib.ui.containers.SimpleContainer;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,21 +21,24 @@ import javax.annotation.Nullable;
 
 public class AltarContainer  extends SimpleContainer {
 
-    protected AltarTileEntity tileEntity;
+
+
+    protected Block blocktype;
+
 
     public static AltarContainer createClientContainer(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer) {
         BlockPos pos = packetBuffer.readBlockPos();
         return new AltarContainer(id,playerInventory.player.level,pos, playerInventory,new IntArray(4));
     }
 
-    protected AltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory, IIntArray altarData) {
-        super(ARRegistry.DEMONIC_ALTAR_CONTAINER.get(), id, playerInventory);
+    public AltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory, IIntArray altarData) {
+        super(ARRegistry.DEMONIC_ALTAR_CONTAINER.get(), id, playerInventory, world, pos);
 
-        this.playerInventory = new InvWrapper(playerInventory);
-        this.tileEntity = (AltarTileEntity) world.getBlockEntity(pos);
+        //this.playerInventory = new InvWrapper(playerInventory);
 
-        //this.altarData = altarData;
-        //trackIntArray(altarData);
+
+        //this.blocktype = blocktype;
+
 
     }
 
@@ -52,7 +57,10 @@ public class AltarContainer  extends SimpleContainer {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity p_75145_1_) {
-        return false;
+    public boolean stillValid(PlayerEntity playerEntity) {
+        return stillValid(
+                IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos()),
+                playerEntity,
+                ARRegistry.DEMONIC_ALTAR.get());
     }
 }

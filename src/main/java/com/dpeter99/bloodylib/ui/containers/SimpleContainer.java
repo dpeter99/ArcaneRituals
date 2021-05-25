@@ -1,5 +1,6 @@
 package com.dpeter99.bloodylib.ui.containers;
 
+import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -7,6 +8,9 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -16,13 +20,21 @@ import javax.annotation.Nullable;
 /**
  * Used for handling the player inventory by default.
  */
-public abstract class SimpleContainer extends Container {
+public abstract class SimpleContainer<TILE extends TileEntity> extends Container {
 
     protected IItemHandler playerInventory;
+    protected PlayerEntity playerEntity;
 
-    protected SimpleContainer(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory) {
+    protected TILE tileEntity;
+
+    protected SimpleContainer(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, World world, BlockPos pos) {
         super(type, id);
         this.playerInventory = new InvWrapper(playerInventory);
+        this.playerEntity = playerInventory.player;
+
+        this.tileEntity = (TILE) world.getBlockEntity(pos);
+
+        addSlots();
     }
 
     protected abstract void addSlots();

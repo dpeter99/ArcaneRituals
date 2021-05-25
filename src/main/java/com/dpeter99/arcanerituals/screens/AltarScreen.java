@@ -2,6 +2,9 @@ package com.dpeter99.arcanerituals.screens;
 
 import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.containers.AltarContainer;
+import com.dpeter99.arcanerituals.screens.widgets.GlyphDrawer;
+import com.dpeter99.bloodylib.math.Vector2i;
+import com.dpeter99.bloodylib.ui.screens.BloodyContainerScreen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -16,29 +19,50 @@ import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class AltarScreen extends ContainerScreen<AltarContainer> {
+public class AltarScreen extends BloodyContainerScreen<AltarContainer> {
 
-    private final ResourceLocation GUI = new ResourceLocation(ArcaneRituals.MODID, "textures/gui/demonic_altar.png");
+    private static final ResourceLocation GUI = new ResourceLocation(ArcaneRituals.MODID, "textures/gui/demonic_altar.png");
 
     private static final int WIDTH = 176;
-    private static final int HEIGHT = 225;
+    private static final int HEIGHT = 226;
 
     //GlyphDrawer glyphs;
 
     //List<TextureRegion_old> fluidStates = new ArrayList<TextureRegion_old>();
 
     public AltarScreen(AltarContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
-        super(screenContainer, inv, titleIn);
+        super(screenContainer, inv, titleIn, GUI);
 
-        //this.ySize = HEIGHT;
-        //this.xSize = WIDTH;
+        this.imageHeight = HEIGHT;
+        this.imageWidth = WIDTH;
+
+        List<Vector2i> glyphPos = new ArrayList<>();
+        glyphPos.add(Vector2i.of(67, 15));
+        glyphPos.add(Vector2i.of(53, 22));
+        glyphPos.add(Vector2i.of(42, 33));
+        glyphPos.add(Vector2i.of(35, 47));
+
+        Random r = new Random();
+
+        GlyphDrawer glyphDrawer = new GlyphDrawer(r.nextInt(),glyphPos,
+                GlyphDrawer.glyphListHorizontal(Vector2i.of(0,232),8,12,12),
+                GlyphDrawer.glyphListHorizontal(Vector2i.of(0,244),8,12,12));
+
+        this.addWidget(glyphDrawer);
 
         //InitGlyphs(screenContainer);
         //FluidIndicatorSetup();
     }
 
-/*
+    @Override
+    protected void init() {
+        super.init();
+        this.topPos -= 31;
+    }
+
+    /*
     private void InitGlyphs(AltarContainer screenContainer) {
         glyphs = new GlyphDrawer(this, screenContainer.getGlypSeed());
 
@@ -84,6 +108,8 @@ public class AltarScreen extends ContainerScreen<AltarContainer> {
         fluidStates.add(new TextureRegion_old(176, 128, 80, 80));
     }
  */
+
+    /*
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
@@ -108,10 +134,12 @@ public class AltarScreen extends ContainerScreen<AltarContainer> {
     }
 
     private void drawBackground(MatrixStack matrixStack) {
-        int relX = (this.width - WIDTH) / 2;
-        int relY = (this.height - HEIGHT) / 2;
-        this.blit(matrixStack, relX, relY, 0, 0, WIDTH, HEIGHT);
+        int relX = (this.width - this.imageWidth) / 2;
+        int relY = (this.height - this.imageHeight) / 2;
+        //this.blit(matrixStack, relX, relY, 0, 0, WIDTH, HEIGHT);
+        this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, WIDTH, HEIGHT);
     }
+     */
 /*
     private void drawFluid(MatrixStack matrixStack,int level) {
         TextureRegion_old source = null;
