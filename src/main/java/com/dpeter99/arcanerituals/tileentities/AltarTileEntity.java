@@ -8,12 +8,17 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -25,6 +30,10 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
     public AltarTileEntity() {
         super(ARRegistry.DEMONIC_ALTAR_TE.get());
     }
+
+
+    public FluidTank tank = new FluidTank(4000, (FluidStack s) -> { return s.getFluid().isSame(ARRegistry.BLOOD.get());} );
+
 
     public final ItemStackHandler inventory = new ItemStackHandler(6) {
 
@@ -59,23 +68,24 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            /*
+
             if (slot == 5) {
-                return fluidContainer(stack);
-            }
-            if (isWorking()) {
-                return false;
+                return isFluidContainer(stack);
+            //}
+            //if (isWorking()) {
+            //    return false;
             } else {
                 return super.isItemValid(slot, stack);
             }
-            */
-            return true;
+
+            //return true;
         }
 
-        public boolean fluidContainer(@Nonnull ItemStack stack) {
+        public boolean isFluidContainer(@Nonnull ItemStack stack) {
             return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
         }
     };
+
 
     public static final int FUEL_AMOUNT = 0;
     protected final IIntArray data = new IIntArray() {
@@ -103,6 +113,7 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
     };
 
     private final LazyOptional<IItemHandler> inventory_provider = LazyOptional.of(() -> inventory);
+    private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> tank);
 
     @Override
     public ITextComponent getDisplayName() {
@@ -113,5 +124,17 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
     @Override
     public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity playerEntity) {
         return new AltarContainer(id,level,worldPosition,playerInv,data);
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return inventory_provider.cast();
+        }
+        else if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return fluid_provider.cast();
+        }
+        return super.getCapability(cap, side);
     }
 }

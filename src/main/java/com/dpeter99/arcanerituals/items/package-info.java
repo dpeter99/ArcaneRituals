@@ -1,1 +1,7 @@
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 package com.dpeter99.arcanerituals.items;
+
+import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

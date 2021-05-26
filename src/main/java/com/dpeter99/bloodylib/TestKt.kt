@@ -1,4 +1,7 @@
 package com.dpeter99.bloodylib
 
-object TestKt {
+public object TestKt {
+
+    public var TEST: String = "asdasd";
+
 }
