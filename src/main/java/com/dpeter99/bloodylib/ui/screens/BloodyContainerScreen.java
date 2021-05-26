@@ -34,6 +34,12 @@ public class BloodyContainerScreen<TILE extends Container> extends ContainerScre
         graphicalElements.add(graphicalElement);
     }
 
+    protected void addVerticalOffset(int amount){
+        if(this.topPos + amount > 0){
+            this.topPos += amount;
+        }
+    }
+
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {

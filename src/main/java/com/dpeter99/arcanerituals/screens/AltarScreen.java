@@ -44,6 +44,21 @@ public class AltarScreen extends BloodyContainerScreen<AltarContainer> {
         glyphPos.add(Vector2i.of(42, 33));
         glyphPos.add(Vector2i.of(35, 47));
 
+        glyphPos.add(Vector2i.of(35, 84));
+        glyphPos.add(Vector2i.of(42, 98));
+        glyphPos.add(Vector2i.of(53, 109));
+        glyphPos.add(Vector2i.of(67, 116));
+
+        glyphPos.add(Vector2i.of(97, 116));
+        glyphPos.add(Vector2i.of(111, 109));
+        glyphPos.add(Vector2i.of(122, 98));
+        glyphPos.add(Vector2i.of(129, 84));
+
+        glyphPos.add(Vector2i.of(129, 47));
+        glyphPos.add(Vector2i.of(122, 33));
+        glyphPos.add(Vector2i.of(111, 22));
+        glyphPos.add(Vector2i.of(97, 15));
+
         Random r = new Random();
 
         GlyphDrawer glyphDrawer = new GlyphDrawer(r.nextInt(),glyphPos,
@@ -59,7 +74,8 @@ public class AltarScreen extends BloodyContainerScreen<AltarContainer> {
     @Override
     protected void init() {
         super.init();
-        this.topPos -= 31;
+        //this.topPos -= 31;
+        addVerticalOffset(-31);
     }
 
     /*
