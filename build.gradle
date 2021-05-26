@@ -5,12 +5,15 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+
+apply plugin: 'kotlin'
 
 version = '1.0'
 group = 'com.dpeter99.arcanerituals' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -22,6 +25,12 @@ sourceSets {
     main.resources {
         srcDirs += data.resources.srcDirs
         exclude '.cache/'
+    }
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
