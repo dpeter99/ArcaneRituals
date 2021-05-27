@@ -1,6 +1,5 @@
 package com.dpeter99.arcanerituals.registry.mobblood;
 
-import com.dpeter99.arcanerituals.registry.ARRegistry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 

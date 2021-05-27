@@ -6,11 +6,9 @@ import com.dpeter99.bloodylib.TestKt;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,7 +38,7 @@ public class ArcaneRituals {
     }
 
 
-    public static final ItemGroup TAB = new ItemGroup("NOTravenutils") {
+    public static final ItemGroup TAB = new ItemGroup("arcanerituals") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(ARRegistry.DEMONIC_ALTAR_ITEM.get());

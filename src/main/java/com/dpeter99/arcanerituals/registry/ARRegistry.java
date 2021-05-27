@@ -1,35 +1,31 @@
 package com.dpeter99.arcanerituals.registry;
 
-import java.util.Objects;
-import java.util.function.Supplier;
-
 import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.blocks.DemonicAltarBlock;
 import com.dpeter99.arcanerituals.containers.AltarContainer;
 import com.dpeter99.arcanerituals.fluids.Blood;
 import com.dpeter99.arcanerituals.items.ItemSacrificialKnife;
 import com.dpeter99.arcanerituals.items.ItemVial;
-import com.dpeter99.arcanerituals.registry.mobblood.MobBlood;
 import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
-import com.dpeter99.bloodylib.ui.containers.SimpleContainer;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.*;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public class ARRegistry {
 
