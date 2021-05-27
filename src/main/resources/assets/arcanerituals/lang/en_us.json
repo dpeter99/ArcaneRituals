@@ -5,5 +5,7 @@
 
   "item.arcanerituals.demonic_altar": "Demonic Altar",
   "item.arcanerituals.sacrificial_knife": "Sacrificial Knife",
-  "item.arcanerituals.vial": "Vial"
+  "item.arcanerituals.vial": "Vial",
+
+  "itemGroup.arcanerituals": "Arcane Rituals"
 }
