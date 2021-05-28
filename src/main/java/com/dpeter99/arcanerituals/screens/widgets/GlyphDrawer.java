@@ -3,7 +3,6 @@ package com.dpeter99.arcanerituals.screens.widgets;
 
 import com.dpeter99.bloodylib.math.Vector2i;
 import com.dpeter99.bloodylib.ui.Sprite;
-import com.dpeter99.bloodylib.ui.screens.BloodyContainerScreen;
 import com.dpeter99.bloodylib.ui.screens.GraphicalElement;
 import com.mojang.blaze3d.matrix.MatrixStack;
 

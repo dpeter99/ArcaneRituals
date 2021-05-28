@@ -1,16 +1,13 @@
 package com.dpeter99.arcanerituals.items;
 
-import com.dpeter99.arcanerituals.fluids.Blood;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.bloodylib.fluid.AdvancedFluid;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;

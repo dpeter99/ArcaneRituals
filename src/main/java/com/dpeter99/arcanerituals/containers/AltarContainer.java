@@ -1,12 +1,10 @@
 package com.dpeter99.arcanerituals.containers;
 
 import com.dpeter99.arcanerituals.registry.ARRegistry;
-import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
 import com.dpeter99.bloodylib.ui.containers.SimpleContainer;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IWorldPosCallable;
@@ -15,9 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
-
-import javax.annotation.Nullable;
 
 public class AltarContainer  extends SimpleContainer {
 

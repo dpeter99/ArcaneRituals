@@ -1,7 +1,6 @@
 package com.dpeter99.arcanerituals.fluids;
 
 import com.dpeter99.arcanerituals.ArcaneRituals;
-import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.bloodylib.fluid.AdvancedFluid;
 import com.dpeter99.bloodylib.fluid.FluidData;
 import com.google.gson.JsonObject;

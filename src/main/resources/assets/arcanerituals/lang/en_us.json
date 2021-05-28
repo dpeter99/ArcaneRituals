@@ -1,4 +1,11 @@
 {
+  "block.arcanerituals.demonic_altar": "Demonic Altar",
+
+  "fluid.arcanerituals.blood": "Blood",
+
+  "item.arcanerituals.demonic_altar": "Demonic Altar",
+  "item.arcanerituals.sacrificial_knife": "Sacrificial Knife",
   "item.arcanerituals.vial": "Vial",
-  "fluid.arcanerituals.blood": "Blood"
+
+  "itemGroup.arcanerituals": "Arcane Rituals"
 }

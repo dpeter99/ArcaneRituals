@@ -22,7 +22,7 @@ apply plugin: 'kotlin'
 
 version = '1.0'
 group = 'com.dpeter99.arcanerituals' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+archivesBaseName = 'arcanerituals'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
@@ -71,7 +71,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                arcanerituals {
                     source sourceSets.main
                 }
             }
@@ -85,7 +85,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                arcanerituals {
                     source sourceSets.main
                 }
             }
@@ -104,7 +104,7 @@ minecraft {
             //ideaModule "${project.name}.data"
 
             mods {
-                examplemod {
+                arcanerituals {
                     sources sourceSets.main
                 }
             }
@@ -162,11 +162,11 @@ jar {
     manifest {
         attributes([
             "Specification-Title": "arcanerituals",
-            "Specification-Vendor": "examplemodsareus",
+            "Specification-Vendor": "arcaneritualssareus",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"arcaneritualssareus",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
