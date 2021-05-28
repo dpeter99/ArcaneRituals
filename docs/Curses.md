@@ -1,0 +1,2 @@
+- Cursed items
+- Cursing a player (PvP)

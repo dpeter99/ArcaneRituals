@@ -1,0 +1,21 @@
+- Ring of Protection against X
+	- Entity set by the blood used to make it
+- Ring of Protection
+	- +1 / 2 / 3 to AC
+- Planar Achoring
+	- Can't move to another plane
+- Ring of X Resistance
+	- Necrotic:
+		- Zombies
+		- Zombi pigman
+	- Piercing
+		- Spiders
+	- Poision
+		- Poisin Spiders
+		- Poision potion
+	- Slashing
+		- Sword
+	- Fire
+		- well Fire obw.
+	- Lightning
+		- Well... idk not that common.

@@ -36,12 +36,8 @@ public class ItemSacrificialKnife extends Item {
                     done.set(true);
                 }
             });
-
-
         }
     }
-
-
 
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 

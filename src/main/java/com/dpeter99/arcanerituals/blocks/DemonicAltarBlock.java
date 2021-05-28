@@ -1,6 +1,9 @@
 package com.dpeter99.arcanerituals.blocks;
 
+import javax.annotation.Nullable;
+
 import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,16 +14,25 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nullable;
-
 public class DemonicAltarBlock extends Block {
+    
+    protected static final VoxelShape SHAPE = VoxelShapes.or(box(0, 0, 0, 16, 1, 16), box(0, 0, 0, 2, 13, 16),
+            box(14, 0, 0, 16, 13, 16), box(0, 0, 0, 16, 13, 2), box(0, 0, 14, 16, 13, 16));
 
     public DemonicAltarBlock(Properties p_i48440_1_) {
         super(p_i48440_1_);
+    }
+    
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+        return SHAPE;
     }
 
     @Override

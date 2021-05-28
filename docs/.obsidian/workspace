@@ -1,0 +1,127 @@
+{
+  "main": {
+    "id": "c738c9b136fccaf7",
+    "type": "split",
+    "children": [
+      {
+        "id": "634c79b35276bc20",
+        "type": "leaf",
+        "dimension": 52.455919395466,
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Rings.md",
+            "mode": "source"
+          }
+        },
+        "group": "f5e8addeae166ae2"
+      },
+      {
+        "id": "fc8b1e298a5dca3b",
+        "type": "leaf",
+        "dimension": 47.544080604534,
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Rings.md",
+            "mode": "preview"
+          }
+        },
+        "group": "f5e8addeae166ae2"
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "105f2e01b60eb0a3",
+    "type": "split",
+    "children": [
+      {
+        "id": "dc8b72e483cd156e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1dab4e2b69d5793a",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "a3bb1f71e030887c",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 196
+  },
+  "right": {
+    "id": "fa5aef6fba4b6617",
+    "type": "split",
+    "children": [
+      {
+        "id": "8468423f4991dca2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9a09ec85d8be9358",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Rings.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "155e0514f23f2146",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Rings.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "634c79b35276bc20",
+  "lastOpenFiles": [
+    "Untitled.md",
+    "Dimensions/The Astral.md",
+    "Dimensions.md",
+    "The Astral.md",
+    "Graveyards.md",
+    "Devine magic.md",
+    "Demonic-magic.md",
+    "Curses.md",
+    "Blood.md",
+    "Base.md"
+  ]
+}

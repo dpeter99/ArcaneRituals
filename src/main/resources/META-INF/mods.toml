@@ -37,6 +37,7 @@ authors="dpeter99" #optional
 description='''
 Arcane Rituals description goes here. I've no idea what your mod actually does so you fill this out
 '''
+
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.arcanerituals]] #optional
     # the modid of the dependency
@@ -49,11 +50,20 @@ Arcane Rituals description goes here. I've no idea what your mod actually does s
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
+
 # Here's another dependency
 [[dependencies.arcanerituals]]
     modId="minecraft"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"
+
+# Here's another dependency
+[[dependencies.arcanerituals]]
+    modId="curios"
+    mandatory=true
+    versionRange="[1.16.5-4.0.5.1,)"
     ordering="NONE"
     side="BOTH"
