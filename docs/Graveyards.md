@@ -1,0 +1,1 @@
+Graveyards would generate in villages and contain graves from witch one cna get extra itesm for [[Necromatic magic]] magic. 

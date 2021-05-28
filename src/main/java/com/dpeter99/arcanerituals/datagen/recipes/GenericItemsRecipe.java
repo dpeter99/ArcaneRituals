@@ -41,6 +41,14 @@ public class GenericItemsRecipe extends BloodyRecipeProvider {
                 .define('W',Items.STICK)
                 .unlockedBy("has_iron", has(Items.IRON_INGOT))
                 .save(consumer);
+
+        ShapedRecipeBuilder.shaped(ARRegistry.VIAL.get(), 2)
+                .pattern("C ")
+                .pattern("G ")
+                .define('C',Items.CLAY_BALL)
+                .define('G',Items.GLASS)
+                .unlockedBy("has_glass", has(Items.GLASS))
+                .save(consumer);
     }
 
 
