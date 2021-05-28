@@ -25,7 +25,11 @@ public class ArcaneRituals {
     public ArcaneRituals() {
         ARRegistry.initialize();
 
+        MinecraftForge.EVENT_BUS.register(this);
+
         LOGGER.error(TestKt.INSTANCE.getTEST());
+
+
     }
 
     public static ResourceLocation location(String path)
@@ -40,7 +44,7 @@ public class ArcaneRituals {
     }
 
 
-    public static final ItemGroup TAB = new ItemGroup("NOTravenutils") {
+    public static final ItemGroup TAB = new ItemGroup("arcane_rituals") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(ARRegistry.DEMONIC_ALTAR_ITEM.get());

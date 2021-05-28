@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.blocks.DemonicAltarBlock;
+import com.dpeter99.arcanerituals.client.renderers.FluidHolderRenderer;
 import com.dpeter99.arcanerituals.containers.AltarContainer;
 import com.dpeter99.arcanerituals.fluids.Blood;
 import com.dpeter99.arcanerituals.items.ItemSacrificialKnife;
@@ -25,12 +26,18 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.IModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.*;
 
+@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ARRegistry {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ArcaneRituals.MODID);
@@ -41,7 +48,7 @@ public class ARRegistry {
 
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, ArcaneRituals.MODID);
 
-
+    //public static final DeferredRegister<IModelLoader<?>> MODEL_LOADERS = DeferredRegister.create()
 
 
     public static final RegistryObject<Block> DEMONIC_ALTAR = BLOCKS.register("demonic_altar", ()-> new DemonicAltarBlock(AbstractBlock.Properties.of(Material.METAL)));
@@ -56,8 +63,17 @@ public class ARRegistry {
 
     public static final RegistryObject<Item> VIAL = ITEMS.register("vial", () -> new ItemVial(new Item.Properties().tab(ArcaneRituals.TAB)));
 
-    public static final RegistryObject<Item> SACRIFICIAL_KNIFE = ITEMS.register("sacrificial_knife",
-            () -> new ItemSacrificialKnife(new Item.Properties().durability(55).tab(ArcaneRituals.TAB)));
+    public static final RegistryObject<Item> SACRIFICIAL_KNIFE = ITEMS.register("sacrificial_knife", () -> new ItemSacrificialKnife(defItemProps().durability(55)));
+
+
+    public static final RegistryObject<Item> BAT_WING = ITEMS.register("bat_wing", () -> new Item(defItemProps()));
+
+    public static final RegistryObject<Item> HAMMER = ITEMS.register("hammer", () -> new Item(defItemProps().stacksTo(1)));
+
+    public static final RegistryObject<Item> BLOOD_HAMMER = ITEMS.register("blood_hammer", () -> new Item(defItemProps().stacksTo(1)));
+
+    public static final RegistryObject<Item> IRON_RING = ITEMS.register("iron_ring", () -> new Item(defItemProps().stacksTo(1)));
+
 
     public static void initialize() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -69,6 +85,12 @@ public class ARRegistry {
         CONTAINER_TYPES.register(modBus);
     }
 
+    @SubscribeEvent
+    public static void onModelRegistryEvent(ModelRegistryEvent event){
+        ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
+                FluidHolderRenderer.Loader.INSTANCE);
+    }
+
     public static <T extends IForgeRegistryEntry<?>> ResourceLocation getName(T type) {
         return Objects.requireNonNull(type.getRegistryName());
     }
@@ -77,6 +99,8 @@ public class ARRegistry {
         return getName(supplier.get());
     }
 
-
+    public static Item.Properties defItemProps(){
+        return new Item.Properties().tab(ArcaneRituals.TAB);
+    }
 
 }

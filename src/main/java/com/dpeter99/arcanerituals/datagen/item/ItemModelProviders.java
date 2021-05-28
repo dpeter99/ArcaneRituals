@@ -27,6 +27,11 @@ public class ItemModelProviders extends ItemModelProvider {
 
         generatedItem(ARRegistry.SACRIFICIAL_KNIFE, "dagger_of_sacrifice");
 
+        generatedItem(ARRegistry.BAT_WING);
+        generatedItem(ARRegistry.BLOOD_HAMMER);
+        generatedItem(ARRegistry.HAMMER);
+        generatedItem(ARRegistry.IRON_RING);
+
     }
 
     public void generatedItem(RegistryObject<?> a){
@@ -34,7 +39,7 @@ public class ItemModelProviders extends ItemModelProvider {
         singleTexture("item/" + name,       // destination
                 mcLoc("item/generated"),                // "parent": ###
                 "layer0",                            // ###: TEXTURE
-                modLoc("items/" + name));   // LAYER: ###
+                modLoc("item/" + name));   // LAYER: ###
     }
 
     public void generatedItem(RegistryObject<?> a, String texture){

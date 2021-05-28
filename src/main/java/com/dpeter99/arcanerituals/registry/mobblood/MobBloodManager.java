@@ -11,11 +11,12 @@ import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class MobBloodManager extends JsonReloadListener {
 
-    private static Map<ResourceLocation,MobBlood> bloods = ImmutableMap.of();
+    private static Map<ResourceLocation,MobBlood> bloods = new HashMap<>();
 
     public MobBloodManager() {
         super(new GsonBuilder().create(), "mob_blood");

@@ -4,6 +4,7 @@ import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.datagen.block.model.BlockModelProviders;
 import com.dpeter99.arcanerituals.datagen.block.state.BlockStateProvider;
 import com.dpeter99.arcanerituals.datagen.item.ItemModelProviders;
+import com.dpeter99.arcanerituals.datagen.recipes.RecipeProviders;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,7 +25,7 @@ public class DataGen {
         DataGenerator generator = event.getGenerator();
         if(event.includeServer()){
             LOGGER.info(DATAGEN, "Adding data providers for server data");
-            //generator.addProvider(new RecipeProviders(generator));
+            generator.addProvider(new RecipeProviders(generator));
             //generator.addProvider(new AdvancementsProvider(generator));
             //generator.addProvider(new GLMProvider(generator));
             //generator.addProvider(new LootTableProviders(generator));

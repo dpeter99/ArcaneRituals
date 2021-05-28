@@ -1,18 +1,21 @@
 package com.dpeter99.arcanerituals.registry.mobblood;
 
+import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MobBlood implements IForgeRegistryEntry<MobBlood> {
+public class MobBlood /*implements IRecipe<RecipeWrapper>*/ {
 
-    //static Map<ResourceLocation,MobBlood> reg = new HashMap<>();
-
-
+    public static final String RECIPE_TYPE_NAME = "blood_type";
+    public static final ResourceLocation RECIPE_TYPE_ID = ArcaneRituals.location(RECIPE_TYPE_NAME);
 
     ResourceLocation mob;
     int hppv;
@@ -20,24 +23,6 @@ public class MobBlood implements IForgeRegistryEntry<MobBlood> {
     public MobBlood(ResourceLocation mob, int hppv) {
         this.mob = mob;
         this.hppv = hppv;
-    }
-
-
-
-    @Override
-    public MobBlood setRegistryName(ResourceLocation name) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getRegistryName() {
-        return null;
-    }
-
-    @Override
-    public Class<MobBlood> getRegistryType() {
-        return null;
     }
 
     /**
@@ -48,15 +33,6 @@ public class MobBlood implements IForgeRegistryEntry<MobBlood> {
         return hppv;
     }
 
-    /*
-    public static void register(MobBlood m){
-        reg.put(m.getMob(),m);
-    }
-
-    public static MobBlood get(ResourceLocation loc){
-        return reg.get(loc);
-    }
-    */
 
     /**
      * Return the mob this represents.
@@ -69,6 +45,8 @@ public class MobBlood implements IForgeRegistryEntry<MobBlood> {
     public void setMob(ResourceLocation mob) {
         this.mob = mob;
     }
+
+
 
 
 }
