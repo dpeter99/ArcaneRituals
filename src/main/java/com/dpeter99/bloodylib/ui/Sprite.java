@@ -19,4 +19,13 @@ public class Sprite {
     public Vector2i getSize() {
         return size;
     }
+
+    public int getSizeX() {
+        return size.x;
+    }
+
+    public int getSizeY() {
+        return size.y;
+    }
+
 }

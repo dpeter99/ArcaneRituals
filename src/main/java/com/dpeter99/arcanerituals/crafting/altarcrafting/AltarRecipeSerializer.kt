@@ -17,7 +17,9 @@ import net.minecraft.util.NonNullList
 import net.minecraftforge.fluids.FluidStack
 import java.util.*
 
-class AltarRecipeSerializer : @JvmName("ForgeRegistryEntry") ForgeRegistryEntry<IRecipeSerializer<*>>(), IRecipeSerializer<AltarRecipe> {
+//@file:JvmName("AltarRecipeSerializer")
+
+class AltarRecipeSerializer : @JvmName("ForgeRegistryEntry<IRecipeSerializer<?>>") ForgeRegistryEntry<IRecipeSerializer<*>>(), IRecipeSerializer<AltarRecipe> {
 
     override fun fromJson(recipeId: ResourceLocation, json: JsonObject): AltarRecipe {
         val group = JSONUtils.getAsString(json, "group", "")

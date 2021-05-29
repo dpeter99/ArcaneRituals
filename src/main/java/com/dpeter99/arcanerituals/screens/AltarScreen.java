@@ -2,20 +2,14 @@ package com.dpeter99.arcanerituals.screens;
 
 import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.containers.AltarContainer;
-import com.dpeter99.arcanerituals.screens.widgets.GlyphDrawer;
+import com.dpeter99.arcanerituals.screens.graphicalelements.FluidDisplay;
+import com.dpeter99.arcanerituals.screens.graphicalelements.GlyphDrawer;
 import com.dpeter99.bloodylib.math.Vector2i;
+import com.dpeter99.bloodylib.ui.Sprite;
 import com.dpeter99.bloodylib.ui.screens.BloodyContainerScreen;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +61,20 @@ public class AltarScreen extends BloodyContainerScreen<AltarContainer> {
 
         this.addWidget(glyphDrawer);
 
+        List<Sprite> fluidStates = new ArrayList<>();
+        fluidStates.add(new Sprite(Vector2i.of(180, 0), Vector2i.of(22, 22)));
+        fluidStates.add(new Sprite(Vector2i.of(180, 22), Vector2i.of(44, 44)));
+        fluidStates.add(new Sprite(Vector2i.of(180, 66), Vector2i.of(59, 61)));
+        fluidStates.add(new Sprite(Vector2i.of(176, 128), Vector2i.of(80, 80)));
+
+
+        FluidDisplay blood = new FluidDisplay(screenContainer::getFluidAmount,
+                screenContainer::getMaxFluidAmount,
+                88,72,
+                fluidStates
+        );
+
+        this.addWidget(blood);
         //InitGlyphs(screenContainer);
         //FluidIndicatorSetup();
     }

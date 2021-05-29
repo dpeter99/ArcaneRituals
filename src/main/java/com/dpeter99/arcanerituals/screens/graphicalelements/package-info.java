@@ -1,6 +1,6 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package com.dpeter99.arcanerituals.screens.widgets;
+package com.dpeter99.arcanerituals.screens.graphicalelements;
 
 import mcp.MethodsReturnNonnullByDefault;
 

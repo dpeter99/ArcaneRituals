@@ -127,6 +127,10 @@ repositories {
         name "curios"
         url "https://maven.theillusivec4.top/"
     }
+    maven {
+        name = 'kotlinforforge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+    }
 }
 
 dependencies {
@@ -150,6 +154,8 @@ dependencies {
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
+
+    implementation 'thedarkcolour:kotlinforforge:1.7.0'
 
 }
 

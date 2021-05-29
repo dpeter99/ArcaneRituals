@@ -54,16 +54,21 @@ class ArcaneFuel(
 
             val f = ForgeRegistries.FLUIDS.getValue(ResourceLocation.tryParse(fuel_type))
             f?.let {
-
-                val element = json["nbt"]
-                val nbt =
-                    if (element.isJsonObject)
-                        JsonToNBT.parseTag(GSON.toJson(element))
-                    else JsonToNBT.parseTag(JSONUtils.convertToString(element, "nbt"))
-
-
                 fuel_stack_fluid = FluidStack(f, fuel_amount);
-                fuel_stack_fluid.tag = nbt;
+
+                val element = fuelObject["nbt"]
+                if(element != null) {
+                    val nbt =
+                        if (element.isJsonObject)
+                            JsonToNBT.parseTag(GSON.toJson(element))
+                        else JsonToNBT.parseTag(JSONUtils.convertToString(element, "nbt"))
+
+                    fuel_stack_fluid.tag = nbt;
+                }
+
+
+
+
                 /*
                 if (f.isSame(ARRegistry.BLOOD.get())) {
                     val b = JSONUtils.getAsString(fuelObject, "owner")

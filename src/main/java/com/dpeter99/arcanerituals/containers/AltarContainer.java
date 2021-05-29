@@ -1,6 +1,7 @@
 package com.dpeter99.arcanerituals.containers;
 
 import com.dpeter99.arcanerituals.registry.ARRegistry;
+import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
 import com.dpeter99.bloodylib.ui.containers.SimpleContainer;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,22 +20,22 @@ public class AltarContainer  extends SimpleContainer {
 
 
     protected Block blocktype;
+    private IIntArray altarData;
 
 
     public static AltarContainer createClientContainer(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer) {
         BlockPos pos = packetBuffer.readBlockPos();
-        return new AltarContainer(id,playerInventory.player.level,pos, playerInventory,new IntArray(4));
+        return new AltarContainer(id,playerInventory.player.level,pos, playerInventory,new IntArray(2));
     }
 
     public AltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory, IIntArray altarData) {
         super(ARRegistry.DEMONIC_ALTAR_CONTAINER.get(), id, playerInventory, world, pos);
 
-        //this.playerInventory = new InvWrapper(playerInventory);
+        this.altarData = altarData;
+        //REALLY??? DATA SLOTS??? COMMON MOJANK
+        addDataSlots(altarData);
 
-
-        //this.blocktype = blocktype;
-
-
+        addSlots();
     }
 
     @Override
@@ -47,6 +48,7 @@ public class AltarContainer  extends SimpleContainer {
             addSlot(new SlotItemHandler(h, 4, 80, 13));
 
             addSlot(new SlotItemHandler(h, 5, 80, 116));
+            addSlot(new SlotItemHandler(h, 6, 80+20, 116));
         });
         layoutPlayerInventorySlots(8,144);
     }
@@ -57,5 +59,12 @@ public class AltarContainer  extends SimpleContainer {
                 IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos()),
                 playerEntity,
                 ARRegistry.DEMONIC_ALTAR.get());
+    }
+
+    public int getFluidAmount() {
+        return altarData.get(AltarTileEntity.FUEL_AMOUNT);
+    }
+    public int getMaxFluidAmount() {
+        return altarData.get(AltarTileEntity.FUEL_AMOUNT_MAX);
     }
 }

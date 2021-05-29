@@ -34,7 +34,7 @@ public abstract class SimpleContainer<TILE extends TileEntity> extends Container
 
         this.tileEntity = (TILE) world.getBlockEntity(pos);
 
-        addSlots();
+        //addSlots();
     }
 
     protected abstract void addSlots();

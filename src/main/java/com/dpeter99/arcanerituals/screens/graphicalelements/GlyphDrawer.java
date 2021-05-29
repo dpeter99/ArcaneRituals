@@ -1,4 +1,4 @@
-package com.dpeter99.arcanerituals.screens.widgets;
+package com.dpeter99.arcanerituals.screens.graphicalelements;
 
 
 import com.dpeter99.bloodylib.math.Vector2i;
