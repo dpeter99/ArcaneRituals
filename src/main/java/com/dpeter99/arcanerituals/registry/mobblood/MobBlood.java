@@ -1,5 +1,6 @@
 package com.dpeter99.arcanerituals.registry.mobblood;
 
+import com.dpeter99.arcanerituals.ArcaneRituals;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.IForgeRegistryEntry;

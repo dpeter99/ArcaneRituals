@@ -151,10 +151,6 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
 
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
