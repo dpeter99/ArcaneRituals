@@ -2,10 +2,11 @@ package com.dpeter99.arcanerituals;
 
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.arcanerituals.registry.mobblood.MobBloodManager;
-import com.dpeter99.bloodylib.TestKt;
+//import com.dpeter99.bloodylib.TestKt;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
@@ -31,7 +32,7 @@ public class ArcaneRituals {
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        LOGGER.error(TestKt.INSTANCE.getTEST());
+        //LOGGER.error(TestKt.INSTANCE.getTEST());
 
 
     }
