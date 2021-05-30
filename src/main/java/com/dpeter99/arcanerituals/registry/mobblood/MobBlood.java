@@ -5,6 +5,9 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+
+import com.dpeter99.arcanerituals.ArcaneRituals;
+
 import java.util.HashMap;
 import java.util.Map;
 

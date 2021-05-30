@@ -1,5 +1,8 @@
 package com.dpeter99.arcanerituals.registry;
 
+import java.util.Objects;
+import java.util.function.Supplier;
+
 import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.blocks.DemonicAltarBlock;
 import com.dpeter99.arcanerituals.client.renderers.FluidHolderRenderer;
