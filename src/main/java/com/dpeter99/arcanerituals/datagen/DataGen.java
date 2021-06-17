@@ -26,6 +26,7 @@ public class DataGen {
         if(event.includeServer()){
             LOGGER.info(DATAGEN, "Adding data providers for server data");
             generator.addProvider(new RecipeProviders(generator));
+            generator.addProvider(new MobBloodProvider(generator));
             //generator.addProvider(new AdvancementsProvider(generator));
             //generator.addProvider(new GLMProvider(generator));
             //generator.addProvider(new LootTableProviders(generator));
