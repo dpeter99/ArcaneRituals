@@ -25,34 +25,6 @@ class AltarRecipeSerializer : @JvmName("ForgeRegistryEntry<IRecipeSerializer<?>>
         val group = JSONUtils.getAsString(json, "group", "")
 
 
-        //TODO: Abstact this thing so i can us it in more recipes maybe?
-/*
-        var fuel_stack_fluid: FluidStack? = null
-        var fuel_stack_item: ItemStack? = null
-
-        val fuelObject = json.getAsJsonObject("fuel")
-        val fuel_amount = JSONUtils.getAsInt(fuelObject, "amount");
-        val fuel_type = JSONUtils.getAsString(fuelObject, "type", "###");
-        if(fuel_type.equals("###")){
-            ArcaneRituals.LOGGER.error("Recipe: $recipeId doesn't have a fuel:type");
-        }
-
-        val f = ForgeRegistries.FLUIDS.getValue(ResourceLocation.tryParse(fuel_type))
-        f?.let {
-            if (f.isSame(ARRegistry.BLOOD.get())) {
-                val b = JSONUtils.getAsString(fuelObject, "owner")
-                fuel_stack_fluid = FluidStack(f,fuel_amount);
-            }
-        }
-
-        fuel_stack_fluid?.let {
-            val i = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(fuel_type))
-            i?.let {
-                fuel_stack_item = ItemStack(i, fuel_amount);
-            }
-        }
- */
-
         var fuel = ArcaneFuel.fromJson(recipeId, json)
 
 

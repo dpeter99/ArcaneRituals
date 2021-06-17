@@ -76,12 +76,6 @@ class ArcaneFuel(
 
                     fuel_stack_fluid.tag = nbt;
                 }
-                /*
-                if (f.isSame(ARRegistry.BLOOD.get())) {
-                    val b = JSONUtils.getAsString(fuelObject, "owner")
-
-                }
-                */
             }
 
             if(fuel_stack_fluid == FluidStack.EMPTY) {

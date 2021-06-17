@@ -34,5 +34,4 @@ public class AltarContext extends RecipeWrapper {
         return null;
     }
 
-    //public ArcaneFuelInstance getFuel(){return fuel;};
 }

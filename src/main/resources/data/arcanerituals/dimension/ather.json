@@ -1,0 +1,27 @@
+{
+  "type": {
+    "name": "minecraft:ather",
+    "ultrawarm": false,
+    "natural": false,
+    "piglin_safe": false,
+    "respawn_anchor_works": false,
+    "bed_works": false,
+    "has_raids": false,
+    "has_skylight": false,
+    "has_ceiling": false,
+    "coordinate_scale": 1,
+    "ambient_light": 0,
+    "fixed_time": 0,
+    "logical_height": 256,
+    "infiniburn": "minecraft:infiniburn_overworld"
+  },
+  "generator": {
+    "type": "minecraft:noise",
+    "seed": -1671514115,
+    "settings": "minecraft:overworld",
+    "biome_source": {
+      "type": "minecraft:the_end",
+      "seed": -1671514115
+    }
+  }
+}
