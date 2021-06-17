@@ -103,11 +103,11 @@ class AltarRecipeSerializer : @JvmName("ForgeRegistryEntry<IRecipeSerializer<?>>
 
         buffer.writeUtf(recipe.altar_type)
         buffer.writeVarInt(recipe.work_amount)
+        buffer.writeItemStack(recipe.result,false)
         buffer.writeVarInt(recipe.ingredients.size)
         for (ingredient in recipe.ingredients) {
             ingredient.toNetwork(buffer)
         }
         recipe.center.toNetwork(buffer)
-        buffer.writeItem(recipe.result)
     }
 }

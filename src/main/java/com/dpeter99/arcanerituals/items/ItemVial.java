@@ -17,7 +17,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
+import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -25,7 +27,6 @@ import java.util.Optional;
 
 public class ItemVial extends Item {
 
-    private static ItemStack emptyStack;
 
     public ItemVial(Properties builder) {
         super(builder);
@@ -58,14 +59,6 @@ public class ItemVial extends Item {
             }
         }
         return FluidStack.EMPTY;
-    }
-
-    public static boolean isEmpty(ItemStack stack){
-        LazyOptional<IFluidHandlerItem> capability = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
-        if(capability.isPresent()){
-            return capability.orElse(null).getFluidInTank(0).isEmpty();
-        }
-        return false;
     }
 
     @Override
@@ -111,14 +104,24 @@ public class ItemVial extends Item {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        FluidHandlerItemStackSimple fluid;
+        FluidHandlerItemStack fluid;
 
-        fluid = new FluidHandlerItemStackSimple(stack, 250) {
+        fluid = new FluidHandlerItemStack(stack,250) {
             @Override
             public void setFluid(FluidStack fluid){
                 super.setFluid(fluid);
             }
+
+
+
         };
+
+        /*
+        fluid = new FluidHandlerItemStack(stack,250){
+
+        }
+         */
+
         return fluid;
     }
 }

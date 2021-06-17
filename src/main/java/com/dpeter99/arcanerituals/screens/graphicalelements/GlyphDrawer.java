@@ -9,14 +9,16 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class GlyphDrawer extends GraphicalElement {
 
     List<Glyph> glyphs = new ArrayList<>();
+    private Predicate<Integer> activePredicate;
 
 
-
-    public GlyphDrawer(int seed, List<Vector2i> pos, List<Sprite> active, List<Sprite> inactive) {
+    public GlyphDrawer(int seed, List<Vector2i> pos, List<Sprite> active, List<Sprite> inactive, Predicate<Integer> activePred) {
+        activePredicate = activePred;
 
         Random r = new Random(seed);
 
@@ -36,7 +38,7 @@ public class GlyphDrawer extends GraphicalElement {
     public void render(MatrixStack matrixStack, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
         for (int i = 0; i < glyphs.size(); i++) {
             Glyph g = glyphs.get(i);
-            drawGlyp(matrixStack,g, i < 2);
+            drawGlyp(matrixStack,g, activePredicate.test(i));
         }
     }
 

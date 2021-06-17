@@ -131,6 +131,7 @@ repositories {
         name = 'kotlinforforge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
     }
+    maven { url 'https://modmaven.dev/' }
 }
 
 dependencies {
@@ -156,6 +157,9 @@ dependencies {
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
 
     implementation 'thedarkcolour:kotlinforforge:1.7.0'
+
+    //For testing the tanks and the fluids
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")
 
 }
 

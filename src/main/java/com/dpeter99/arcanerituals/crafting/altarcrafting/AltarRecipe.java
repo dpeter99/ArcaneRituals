@@ -12,7 +12,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AltarRecipe implements IRecipe<AltarContext> {
 
@@ -34,6 +36,11 @@ public class AltarRecipe implements IRecipe<AltarContext> {
     public final String altar_type;
     public final int work_amount;
 
+    public static Optional<AltarRecipe> getRecipe(World world, AltarContext ctx)
+    {
+        return world.getRecipeManager().getRecipeFor(ALTAR_RECIPE_TYPE, ctx, world);
+    }
+
     public AltarRecipe(ResourceLocation id, String group, List<Ingredient> ingredient, Ingredient center, ArcaneFuel fuel, ItemStack result, String altar_type, int work_amount) {
         this.id = id;
         this.group = group;
@@ -47,8 +54,35 @@ public class AltarRecipe implements IRecipe<AltarContext> {
 
 
     @Override
-    public boolean matches(AltarContext p_77569_1_, World worldIn) {
-        return false;
+    public boolean matches(AltarContext ctx, World worldIn) {
+        if(!ctx.altar_type.equals(altar_type)){
+            return false;
+        }
+
+        List<ItemStack> items = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            items.add(ctx.getItem(i));
+        }
+
+        int found = 0;
+        for (Ingredient ing : ingredients) {
+            for (ItemStack item: items) {
+                if(ing.test(item)) {
+                    items.remove(item);
+                    found++;
+                    break;
+                }
+            }
+        }
+
+        boolean matches =  (found == 4)
+                && (items.size() == 0);
+
+        matches = matches && center.test(ctx.getItem(4));
+
+        matches = matches && fuel.test(ctx.getFuel());
+
+        return matches;
     }
 
     /**
@@ -59,7 +93,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
     @Override
     public ItemStack assemble(AltarContext p_77572_1_) {
 
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -70,7 +104,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
 
     @Override
     public ItemStack getResultItem() {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

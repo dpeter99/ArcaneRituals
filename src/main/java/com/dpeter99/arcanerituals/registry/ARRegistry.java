@@ -59,7 +59,7 @@ public class ARRegistry {
 
 
     public static final RegistryObject<Block> DEMONIC_ALTAR = BLOCKS.register("demonic_altar", ()-> new DemonicAltarBlock(AbstractBlock.Properties.of(Material.METAL)));
-    public static final RegistryObject<TileEntityType<?>> DEMONIC_ALTAR_TE = TILE_ENTITIES.register("demonic_altar", () -> TileEntityType.Builder.of(AltarTileEntity::new, DEMONIC_ALTAR.get()).build(null));
+    public static final RegistryObject<TileEntityType<AltarTileEntity>> DEMONIC_ALTAR_TE = TILE_ENTITIES.register("demonic_altar", () -> TileEntityType.Builder.of(AltarTileEntity::new, DEMONIC_ALTAR.get()).build(null));
 
     public static final RegistryObject<ContainerType<AltarContainer>> DEMONIC_ALTAR_CONTAINER = CONTAINER_TYPES.register("altar", () -> IForgeContainerType.create(AltarContainer::createClientContainer));
 
@@ -82,6 +82,8 @@ public class ARRegistry {
     public static final RegistryObject<Item> BLOOD_HAMMER = ITEMS.register("blood_hammer", () -> new Item(defItemProps().stacksTo(1)));
 
     public static final RegistryObject<Item> IRON_RING = ITEMS.register("iron_ring", () -> new Item(defItemProps().stacksTo(1)));
+
+    public static final RegistryObject<Item> RING_OF_PROTECTION = ITEMS.register("ring_of_protection", () -> new Item(defItemProps().stacksTo(1)));
 
 
     //public static final RegistryObject<Item> IRON_RING = ITEMS.register("ring_of_protection", () -> new Item(defItemProps()..stacksTo(1)));

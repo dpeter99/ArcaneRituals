@@ -25,7 +25,7 @@ public class AltarContainer  extends SimpleContainer {
 
     public static AltarContainer createClientContainer(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer) {
         BlockPos pos = packetBuffer.readBlockPos();
-        return new AltarContainer(id,playerInventory.player.level,pos, playerInventory,new IntArray(2));
+        return new AltarContainer(id,playerInventory.player.level,pos, playerInventory,new IntArray(4));
     }
 
     public AltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory, IIntArray altarData) {
@@ -67,4 +67,12 @@ public class AltarContainer  extends SimpleContainer {
     public int getMaxFluidAmount() {
         return altarData.get(AltarTileEntity.FUEL_AMOUNT_MAX);
     }
+
+    public AltarTileEntity getTileEntity() {
+        return (AltarTileEntity) tileEntity;
+    }
+
+    public int getProgress(){return altarData.get(AltarTileEntity.PROGRESS);}
+
+    public int getProgressFrom(){return altarData.get(AltarTileEntity.PROGRESS_FROM);}
 }

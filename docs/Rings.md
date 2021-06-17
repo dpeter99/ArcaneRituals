@@ -19,3 +19,4 @@
 		- well Fire obw.
 	- Lightning
 		- Well... idk not that common.
+	- Ring of astral walking

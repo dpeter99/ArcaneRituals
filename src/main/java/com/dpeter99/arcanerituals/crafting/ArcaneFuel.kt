@@ -32,8 +32,19 @@ class ArcaneFuel(
 
     fun toNetwork(buffer: PacketBuffer, recipe: AltarRecipe) {
         buffer.writeInt(amount);
-        fuelFluid.writeToPacket(buffer);
+        //fuelFluid.writeToPacket(buffer);
+        buffer.writeFluidStack(fuelFluid);
         buffer.writeItemStack(fuelItem,false)
+    }
+
+    fun test(target: Any): Boolean {
+        if(!fuelItem.isEmpty && target is ItemStack) {
+            return target.sameItem(fuelItem);
+        }
+        else if (!fuelFluid.isEmpty && target is FluidStack){
+            return target.fluid.isSame(fuelFluid.fluid) && target.amount > fuelFluid.amount && target.tag.equals( fuelFluid.tag);
+        }
+        return false;
     }
 
     companion object {
@@ -65,17 +76,12 @@ class ArcaneFuel(
 
                     fuel_stack_fluid.tag = nbt;
                 }
-
-
-
-
                 /*
                 if (f.isSame(ARRegistry.BLOOD.get())) {
                     val b = JSONUtils.getAsString(fuelObject, "owner")
 
                 }
                 */
-
             }
 
             if(fuel_stack_fluid == FluidStack.EMPTY) {

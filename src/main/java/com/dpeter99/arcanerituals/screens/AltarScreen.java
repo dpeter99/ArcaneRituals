@@ -4,12 +4,19 @@ import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.containers.AltarContainer;
 import com.dpeter99.arcanerituals.screens.graphicalelements.FluidDisplay;
 import com.dpeter99.arcanerituals.screens.graphicalelements.GlyphDrawer;
+import com.dpeter99.bloodylib.fluid.AdvancedFluid;
 import com.dpeter99.bloodylib.math.Vector2i;
 import com.dpeter99.bloodylib.ui.Sprite;
 import com.dpeter99.bloodylib.ui.screens.BloodyContainerScreen;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,31 +40,38 @@ public class AltarScreen extends BloodyContainerScreen<AltarContainer> {
         this.imageWidth = WIDTH;
 
         List<Vector2i> glyphPos = new ArrayList<>();
-        glyphPos.add(Vector2i.of(67, 15));
-        glyphPos.add(Vector2i.of(53, 22));
-        glyphPos.add(Vector2i.of(42, 33));
-        glyphPos.add(Vector2i.of(35, 47));
+        {
+            glyphPos.add(Vector2i.of(67, 15));
+            glyphPos.add(Vector2i.of(53, 22));
+            glyphPos.add(Vector2i.of(42, 33));
+            glyphPos.add(Vector2i.of(35, 47));
 
-        glyphPos.add(Vector2i.of(35, 84));
-        glyphPos.add(Vector2i.of(42, 98));
-        glyphPos.add(Vector2i.of(53, 109));
-        glyphPos.add(Vector2i.of(67, 116));
+            glyphPos.add(Vector2i.of(35, 84));
+            glyphPos.add(Vector2i.of(42, 98));
+            glyphPos.add(Vector2i.of(53, 109));
+            glyphPos.add(Vector2i.of(67, 116));
 
-        glyphPos.add(Vector2i.of(97, 116));
-        glyphPos.add(Vector2i.of(111, 109));
-        glyphPos.add(Vector2i.of(122, 98));
-        glyphPos.add(Vector2i.of(129, 84));
+            glyphPos.add(Vector2i.of(97, 116));
+            glyphPos.add(Vector2i.of(111, 109));
+            glyphPos.add(Vector2i.of(122, 98));
+            glyphPos.add(Vector2i.of(129, 84));
 
-        glyphPos.add(Vector2i.of(129, 47));
-        glyphPos.add(Vector2i.of(122, 33));
-        glyphPos.add(Vector2i.of(111, 22));
-        glyphPos.add(Vector2i.of(97, 15));
+            glyphPos.add(Vector2i.of(129, 47));
+            glyphPos.add(Vector2i.of(122, 33));
+            glyphPos.add(Vector2i.of(111, 22));
+            glyphPos.add(Vector2i.of(97, 15));
+        }
 
         Random r = new Random();
 
         GlyphDrawer glyphDrawer = new GlyphDrawer(r.nextInt(),glyphPos,
                 GlyphDrawer.glyphListHorizontal(Vector2i.of(0,232),8,12,12),
-                GlyphDrawer.glyphListHorizontal(Vector2i.of(0,244),8,12,12));
+                GlyphDrawer.glyphListHorizontal(Vector2i.of(0,244),8,12,12),
+                i->{
+            float a = ((float) glyphPos.size()/this.getMenu().getProgressFrom())* getMenu().getProgress();
+
+            return i < a;
+        });
 
         this.addWidget(glyphDrawer);
 
@@ -75,8 +89,6 @@ public class AltarScreen extends BloodyContainerScreen<AltarContainer> {
         );
 
         this.addWidget(blood);
-        //InitGlyphs(screenContainer);
-        //FluidIndicatorSetup();
     }
 
     @Override
@@ -85,6 +97,37 @@ public class AltarScreen extends BloodyContainerScreen<AltarContainer> {
         //this.topPos -= 31;
         addVerticalOffset(-31);
     }
+
+    @Override
+    protected void renderTooltip(MatrixStack matrixStack, int mouseX, int mouseY) {
+        super.renderTooltip(matrixStack, mouseX, mouseY);
+
+        int bloodCenterX = getGuiLeft() + 88;
+        int bloodCenterY = getGuiTop() + 72;
+        float d = (float)Math.sqrt(Math.pow(bloodCenterX - mouseX,2) + Math.pow(bloodCenterY - mouseY,2));
+
+        if(d <= 40) {
+            List<ITextComponent> text = new ArrayList<>();
+
+            FluidStack fluidStack = menu.getTileEntity().tank.getFluid();
+            Fluid fluid = fluidStack.getFluid();
+            if(fluid.isSame(Fluids.EMPTY)) {
+                text.add(new StringTextComponent("Empty"));
+            }
+            else{
+                text.add(menu.getTileEntity().tank.getFluid().getDisplayName());
+                text.add(new StringTextComponent(fluidStack.getAmount() + "mB" ));
+
+                if(fluid instanceof AdvancedFluid){
+                    text.add(((AdvancedFluid) fluid).getInfoText(fluidStack));
+                }
+            }
+            //this.renderTooltip(matrixStack,text,mouseX,mouseY);
+            GuiUtils.drawHoveringText(matrixStack,text,mouseX,mouseY, width, height, -1, this.font);
+
+        }
+    }
+
 
     /*
     private void InitGlyphs(AltarContainer screenContainer) {
@@ -193,37 +236,6 @@ public class AltarScreen extends BloodyContainerScreen<AltarContainer> {
         glyphs.drawGlyps(matrixStack,5);
     }
 
-    public void drawTooltip(MatrixStack matrixStack,int mouseX, int mouseY){
-        int bloodCenterX = getGuiLeft() + 88;
-        int bloodCenterY = getGuiTop() + 72;
-        float d = (float)Math.sqrt(Math.pow(bloodCenterX - mouseX,2) + Math.pow(bloodCenterY - mouseY,2));
 
-        if(d <= 40) {
-            List<ITextComponent> text = new ArrayList<>();
-            //text.add("Blood");
-            //ITextComponent test = new net.minecraft.util.text.("asd");
-
-
-            FluidStack fluidStack = container.getTileEntity().tank.getFluid();
-            Fluid fluid = fluidStack.getFluid();
-            if(fluid.isEquivalentTo(Fluids.EMPTY)) {
-                text.add(new StringTextComponent("Empty"));
-            }
-            else{
-                text.add(container.getTileEntity().tank.getFluid().getDisplayName());
-                text.add(new StringTextComponent(fluidStack.getAmount() + "mB" ));
-
-                if(fluid instanceof AdvancedFluid){
-                    text.add(((AdvancedFluid) fluid).getInfoText(fluidStack));
-                }
-            }
-
-
-
-            //this.renderTooltip(matrixStack,text,mouseX,mouseY);
-            GuiUtils.drawHoveringText(matrixStack,text,mouseX,mouseY, width, height, -1, this.font);
-
-        }
-    }
 */
 }
