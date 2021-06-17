@@ -4,6 +4,7 @@ import com.dpeter99.arcanerituals.fluids.Blood;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.arcanerituals.registry.mobblood.MobBlood;
 import com.dpeter99.arcanerituals.registry.mobblood.MobBloodManager;
+import com.dpeter99.bloodylib.FluidHelper;
 import com.dpeter99.bloodylib.NBTData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -27,13 +31,18 @@ public class ItemSacrificialKnife extends Item {
             AtomicBoolean done = new AtomicBoolean(false);
 
             playerIn.inventory.items.forEach((item) -> {
-                if (!done.get() && item.getItem() == ARRegistry.VIAL.get() && ItemVial.isEmpty(item)) {
-                    item.shrink(1);
+                if(!done.get() && item.getItem() == ARRegistry.VIAL.get()){
 
-                    ItemStack new_vial =  ItemVial.make(Blood.makeFluidStack(ARRegistry.BLOOD.get(),1000, bloodData));
-                    playerIn.addItem(new_vial);
+                    Optional<IFluidHandlerItem> cap = FluidUtil.getFluidHandler(item).resolve();
+                    if(cap.isPresent()&& FluidHelper.isEmpty(cap.get())){
+                        item.shrink(1);
 
-                    done.set(true);
+                        ItemStack new_vial =  ItemVial.make(Blood.makeFluidStack(ARRegistry.BLOOD.get(),1000, bloodData));
+                        playerIn.addItem(new_vial);
+
+                        done.set(true);
+                    }
+
                 }
             });
         }

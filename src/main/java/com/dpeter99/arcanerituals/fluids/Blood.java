@@ -78,47 +78,7 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
 
     }
 
-    //#####################################
-    //   ArcaneFuelFluid
-    //#####################################
-/*
-    @Override
-    public boolean match(FluidStack a, FluidStack b) {
-
-        if(a.getFluid().equals(this) && b.getFluid().equals(this)){
-
-            BloodData a_data = getFluidData(a, new BloodData());
-            BloodData b_data = getFluidData(b, new BloodData());
-        }
-        return false;
-    }
-
-    @Override
-    public ResourceLocation getResourceName() {
-        return getRegistryName();
-    }
-
-    @Override
-    public ArcaneFuelIngredient parseIngredient(JsonObject jsonObject) {
-        int amount = jsonObject.get("amount").getAsInt();
-
-        BloodData data = new BloodData();
-        data.readFromJson(jsonObject);
-
-        FluidStack stack = new FluidStack(ARRegistry.BLOOD.get(),amount);
-        setFluidData(stack,data);
-
-        ArcaneFuelIngredient<FluidStack> ingredient = new ArcaneFuelIngredientFluid(stack);
-
-        return ingredient;
-    }
-
-    @Override
-    public Class<? extends ArcaneFuelIngredient<?>> getIngredientType() {
-        return ArcaneFuelIngredientFluid.class;
-    }
-*/
-
+    
     public static class BloodData extends FluidData {
 
         public String owner;

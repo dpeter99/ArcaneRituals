@@ -127,6 +127,11 @@ repositories {
         name "curios"
         url "https://maven.theillusivec4.top/"
     }
+    maven {
+        name = 'kotlinforforge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+    }
+    maven { url 'https://modmaven.dev/' }
 }
 
 dependencies {
@@ -151,9 +156,10 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
 
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    implementation 'thedarkcolour:kotlinforforge:1.7.0'
+
+    //For testing the tanks and the fluids
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")
 
 }
 

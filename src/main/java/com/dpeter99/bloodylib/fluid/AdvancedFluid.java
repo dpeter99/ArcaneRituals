@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 /**
  * Adds functions for storing data on the fluid
  */
-public abstract class AdvancedFluid extends UnplaceableFluid {
+public abstract class AdvancedFluid extends UnplaceableFluid  {
 
     public AdvancedFluid(Supplier<? extends Item> bucket, FluidAttributes.Builder builder) {
         super(bucket, builder);
