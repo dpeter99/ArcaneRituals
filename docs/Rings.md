@@ -1,6 +1,6 @@
 - Ring of Protection against X
 	- Entity set by the blood used to make it
-- Ring of Protection
+- [WIP] Ring of Protection (Needs textures)
 	- +1 / 2 / 3 to AC
 - Planar Achoring
 	- Can't move to another plane
@@ -19,4 +19,4 @@
 		- well Fire obw.
 	- Lightning
 		- Well... idk not that common.
-	- Ring of astral walking
+- Ring of astral walking

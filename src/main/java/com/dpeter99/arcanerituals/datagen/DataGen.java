@@ -5,6 +5,9 @@ import com.dpeter99.arcanerituals.datagen.block.model.BlockModelProviders;
 import com.dpeter99.arcanerituals.datagen.block.state.BlockStateProvider;
 import com.dpeter99.arcanerituals.datagen.item.ItemModelProviders;
 import com.dpeter99.arcanerituals.datagen.recipes.RecipeProviders;
+import com.dpeter99.arcanerituals.datagen.tags.BlockTagProviders;
+import com.dpeter99.arcanerituals.datagen.tags.ItemTagProviders;
+import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,9 +34,9 @@ public class DataGen {
             //generator.addProvider(new GLMProvider(generator));
             //generator.addProvider(new LootTableProviders(generator));
             //generator.addProvider(new RecipeProviders(generator));
-            //BlockTagsProvider blockTags = new BlockTagProviders(generator, event.getExistingFileHelper());
+            BlockTagsProvider blockTags = new BlockTagProviders(generator, event.getExistingFileHelper());
             //generator.addProvider(blockTags);
-            //generator.addProvider(new ItemTagProviders(generator, blockTags, event.getExistingFileHelper()));
+            generator.addProvider(new ItemTagProviders(generator, blockTags, event.getExistingFileHelper()));
             //generator.addProvider(new FluidTagsProviders(generator, event.getExistingFileHelper()));
 
         }

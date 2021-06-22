@@ -40,7 +40,12 @@ class AltarRecipeSerializer : @JvmName("ForgeRegistryEntry<IRecipeSerializer<?>>
 
         val center = Ingredient.fromJson(ingredientsArray.getAsJsonObject("center"))
 
-        val s1 = JSONUtils.getAsString(json, "result")
+        val result = json.getAsJsonObject("result");
+        val s1 = JSONUtils.getAsString(result, "item")
+
+
+
+
         val resourcelocation = ResourceLocation(s1)
         val itemstack = ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(resourcelocation)).orElseThrow {
             IllegalStateException(

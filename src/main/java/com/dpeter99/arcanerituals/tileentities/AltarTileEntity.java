@@ -1,5 +1,6 @@
 package com.dpeter99.arcanerituals.tileentities;
 
+import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.containers.AltarContainer;
 import com.dpeter99.arcanerituals.crafting.altarcrafting.AltarContext;
 import com.dpeter99.arcanerituals.crafting.altarcrafting.AltarRecipe;
@@ -19,6 +20,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -39,12 +41,15 @@ import javax.annotation.Nullable;
 
 public class AltarTileEntity extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
 
+    public static final ResourceLocation BLOOD_ALTAR_TYPE = ArcaneRituals.location("demonic_altar");
+
     public AltarTileEntity() {
         super(ARRegistry.DEMONIC_ALTAR_TE.get());
     }
 
     protected int progress = 0;
     protected int progress_from = 0;
+    public int cool_down = 0;
 
     public boolean isWorking(){
         return progress  > 0;
@@ -54,7 +59,14 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
 
     public FluidTank tank = new FluidTank(4000, (FluidStack s) -> {
         return s.getFluid().isSame(ARRegistry.BLOOD.get());
-    });
+    }){
+        @Override
+        protected void onContentsChanged() {
+            super.onContentsChanged();
+
+            setChanged();
+        }
+    };
 
 
     /**
@@ -165,6 +177,8 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
         if (level.isClientSide)
             return;
 
+
+
         ItemStack stack = inventory.getStackInSlot(5);
         if (!stack.isEmpty() && FluidHelper.isFluidContainer(stack)) {
 
@@ -206,11 +220,17 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
 
                 inventory.setStackInSlot(4, recipe.result.copy());
 
+                cool_down = 100;
+
                 this.setChanged();
-                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+                //level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
             }
             this.setChanged();
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+            //level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+        }
+        if(cool_down > 0) {
+            cool_down--;
+            this.setChanged();
         }
 
         if(!inventory.getStackInSlot(4).isEmpty() && !isWorking()){
@@ -223,8 +243,14 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
 
     }
 
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+    }
+
     protected AltarContext getRecipeContext() {
-        return new AltarContext(inventory,"demonic_altar",tank.getFluidInTank(0));
+        return new AltarContext(inventory,BLOOD_ALTAR_TYPE.toString(),tank.getFluidInTank(0));
     }
 
     private void drainFluid(ItemStack stack, ItemStack itemStack, IFluidHandlerItem fluid_handler) {
@@ -313,6 +339,7 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
 
         nbt.putInt("progress", progress);
         nbt.putInt("progress_from", progress_from);
+        nbt.putInt("cool_down", cool_down);
 
         return super.save(nbt);
     }
@@ -328,6 +355,7 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
 
         progress = nbt.getInt("progress");
         progress_from = nbt.getInt("progress_from");
+        cool_down = nbt.getInt("cool_down");
 
         super.load(p_230337_1_, nbt);
     }

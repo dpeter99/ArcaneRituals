@@ -22,7 +22,7 @@ class ArcaneFuel(
 
 
 
-    constructor(fuelFluid: FluidStack, amount: Int) : this(fuelFluid, ItemStack.EMPTY, amount) {
+    constructor(fuelFluid: FluidStack) : this(fuelFluid, ItemStack.EMPTY, fuelFluid.amount) {
 
     }
 
@@ -45,6 +45,26 @@ class ArcaneFuel(
             return target.fluid.isSame(fuelFluid.fluid) && target.amount > fuelFluid.amount && target.tag.equals( fuelFluid.tag);
         }
         return false;
+    }
+
+    fun getId():ResourceLocation?{
+        if(!fuelItem.isEmpty){
+            return fuelItem.item.registryName!!;
+        }
+        else if(!fuelFluid.isEmpty){
+            return fuelFluid.fluid.registryName!!;
+        }
+        return null;
+    }
+
+    fun getNbt():CompoundNBT?{
+        if(!fuelItem.isEmpty){
+            return fuelItem.tag;
+        }
+        else if(!fuelFluid.isEmpty){
+            return fuelFluid.tag;
+        }
+        return null;
     }
 
     companion object {
@@ -86,7 +106,7 @@ class ArcaneFuel(
             }
 
             if (fuel_stack_fluid != FluidStack.EMPTY) {
-                return ArcaneFuel(fuel_stack_fluid, fuel_amount)
+                return ArcaneFuel(fuel_stack_fluid)
             } else {
                 return ArcaneFuel(fuel_stack_item, fuel_amount)
             }

@@ -23,8 +23,13 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class DemonicAltarBlock extends Block {
     
-    protected static final VoxelShape SHAPE = VoxelShapes.or(box(0, 0, 0, 16, 1, 16), box(0, 0, 0, 2, 13, 16),
-            box(14, 0, 0, 16, 13, 16), box(0, 0, 0, 16, 13, 2), box(0, 0, 14, 16, 13, 16));
+    protected static final VoxelShape SHAPE = VoxelShapes.or(
+            box(0, 0, 0, 16, 1, 16),
+            box(0, 0, 0, 2, 11, 16),
+            box(14, 0, 0, 16, 11, 16),
+            box(0, 0, 0, 16, 11, 2),
+            box(0, 0, 14, 16, 11, 16)
+    );
 
     public DemonicAltarBlock(Properties p_i48440_1_) {
         super(p_i48440_1_);

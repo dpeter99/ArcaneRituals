@@ -29,6 +29,8 @@ public class ItemModelProviders extends ItemModelProvider {
         generatedItem(ARRegistry.BLOOD_HAMMER);
         generatedItem(ARRegistry.HAMMER);
         generatedItem(ARRegistry.IRON_RING);
+        generatedItem(ARRegistry.GOLDEN_RUNE_PLATE);
+        generatedItem(ARRegistry.GOLDEN_PLATE);
 
     }
 

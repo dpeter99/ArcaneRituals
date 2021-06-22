@@ -12,6 +12,7 @@ import com.dpeter99.arcanerituals.crafting.altarcrafting.AltarRecipeSerializer;
 import com.dpeter99.arcanerituals.fluids.Blood;
 import com.dpeter99.arcanerituals.items.ItemSacrificialKnife;
 import com.dpeter99.arcanerituals.items.ItemVial;
+import com.dpeter99.arcanerituals.items.RingOfProtection;
 import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -86,8 +87,14 @@ public class ARRegistry {
 
     public static final RegistryObject<Item> IRON_RING = ITEMS.register("iron_ring", () -> new Item(defItemProps().stacksTo(1)));
 
-    public static final RegistryObject<Item> RING_OF_PROTECTION = ITEMS.register("ring_of_protection", () -> new Item(defItemProps().stacksTo(1)));
 
+    public static final RegistryObject<Item> GOLDEN_RUNE_PLATE = ITEMS.register("golden_rune_plate", () -> new Item(defItemProps()));
+    public static final RegistryObject<Item> GOLDEN_PLATE = ITEMS.register("golden_plate", () -> new Item(defItemProps()));
+
+
+    public static final RegistryObject<Item> RING_OF_PROTECTION_1 = ITEMS.register("ring_of_protection_1", () -> new RingOfProtection(defItemProps().stacksTo(1),1));
+    public static final RegistryObject<Item> RING_OF_PROTECTION_2 = ITEMS.register("ring_of_protection_2", () -> new RingOfProtection(defItemProps().stacksTo(1),2));
+    public static final RegistryObject<Item> RING_OF_PROTECTION_3 = ITEMS.register("ring_of_protection_3", () -> new RingOfProtection(defItemProps().stacksTo(1),3));
 
     //public static final RegistryObject<Item> IRON_RING = ITEMS.register("ring_of_protection", () -> new Item(defItemProps()..stacksTo(1)));
 

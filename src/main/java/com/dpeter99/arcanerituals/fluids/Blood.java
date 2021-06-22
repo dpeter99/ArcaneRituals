@@ -1,6 +1,7 @@
 package com.dpeter99.arcanerituals.fluids;
 
 import com.dpeter99.arcanerituals.ArcaneRituals;
+import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.bloodylib.fluid.AdvancedFluid;
 import com.dpeter99.bloodylib.fluid.FluidData;
 import com.google.gson.JsonObject;
@@ -29,7 +30,7 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
 
     public Blood() {
         super(()-> Items.AIR, FluidAttributes.builder(texture,texture));
-        //setRegistryName("BLOOD");
+
     }
 
     @Override
@@ -70,6 +71,13 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
         return results;
     }
 
+    public static FluidStack makeFluidStack(int amount, BloodData data){
+        return makeFluidStack(ARRegistry.BLOOD.get(), amount,data);
+    }
+
+    public static FluidStack makeFluidStack(int amount, ResourceLocation loc){
+        return makeFluidStack(ARRegistry.BLOOD.get(), amount,new BloodData(loc.toString()));
+    }
 
     @Override
     public ITextComponent getInfoText(FluidStack stack) {
@@ -78,7 +86,7 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
 
     }
 
-    
+
     public static class BloodData extends FluidData {
 
         public String owner;
