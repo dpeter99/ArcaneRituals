@@ -1,5 +1,6 @@
 package com.dpeter99.arcanerituals;
 
+import com.dpeter99.arcanerituals.advancements.TriggerManager;
 import com.dpeter99.arcanerituals.items.RingOfProtection;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.arcanerituals.registry.mobblood.MobBloodManager;
@@ -17,6 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -41,12 +43,19 @@ public class ArcaneRituals {
         ARRegistry.initialize();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
 
         //LOGGER.error(TestKt.INSTANCE.getTEST());
 
 
+    }
+
+    public void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            TriggerManager.init();
+        });
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)

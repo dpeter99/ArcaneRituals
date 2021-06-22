@@ -1,5 +1,6 @@
 package com.dpeter99.arcanerituals.items;
 
+import com.dpeter99.arcanerituals.advancements.BloodDrainTrigger;
 import com.dpeter99.arcanerituals.fluids.Blood;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.arcanerituals.registry.mobblood.MobBlood;
@@ -65,6 +66,8 @@ public class ItemSacrificialKnife extends Item {
                 playerIn.hurt(DamageSource.GENERIC, 5.0f);
 
                 makeFullVial(playerIn, new Blood.BloodData(Blood.PLAYER_BLOOD, playerIn.getUUID()));
+
+
             }
         }
         return ActionResult.success(itemstack);

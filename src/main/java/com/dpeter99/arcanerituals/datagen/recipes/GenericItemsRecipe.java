@@ -1,16 +1,21 @@
 package com.dpeter99.arcanerituals.datagen.recipes;
 
+import com.dpeter99.arcanerituals.advancements.BloodDrainTrigger;
+import com.dpeter99.arcanerituals.fluids.Blood;
+import com.dpeter99.arcanerituals.items.ItemVial;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.bloodylib.datagen.util.BloodyRecipeProvider;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
@@ -48,6 +53,18 @@ public class GenericItemsRecipe extends BloodyRecipeProvider {
                 .define('C',Items.CLAY_BALL)
                 .define('G',Items.GLASS)
                 .unlockedBy("has_glass", has(Items.GLASS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(ARRegistry.DEMONIC_ALTAR_ITEM.get(),1)
+                .pattern("I I")
+                .pattern("SVS")
+                .pattern("SSS")
+                .define('I', Items.IRON_BLOCK)
+                .define('S', Items.COBBLESTONE)
+                //Ingredient.of(ItemVial.make(Blood.makeFluidStack(250, EntityType.SHEEP.getRegistryName())))
+                /*TODO: Vial that has any blood*/
+                .define('V', Items.NETHERITE_INGOT)
+                .unlockedBy("first_blood", new BloodDrainTrigger.Instance(EntityType.SHEEP.getRegistryName(), EntityPredicate.AndPredicate.ANY))
                 .save(consumer);
     }
 

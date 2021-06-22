@@ -59,6 +59,10 @@ public class ARRegistry {
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ArcaneRituals.MODID);
 
 
+
+
+
+
     public static final RegistryObject<AltarRecipeSerializer> ALTAR_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register(AltarRecipe.RECIPE_TYPE_NAME, AltarRecipeSerializer::new);
 
 
@@ -97,6 +101,8 @@ public class ARRegistry {
     public static final RegistryObject<Item> RING_OF_PROTECTION_3 = ITEMS.register("ring_of_protection_3", () -> new RingOfProtection(defItemProps().stacksTo(1),3));
 
     //public static final RegistryObject<Item> IRON_RING = ITEMS.register("ring_of_protection", () -> new Item(defItemProps()..stacksTo(1)));
+
+
 
 
     public static void initialize() {
