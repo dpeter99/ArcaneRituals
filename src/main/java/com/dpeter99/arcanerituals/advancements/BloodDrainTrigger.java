@@ -24,7 +24,9 @@ public class BloodDrainTrigger extends AbstractCriterionTrigger<BloodDrainTrigge
 
     @Override
     protected Instance createInstance(JsonObject jsonObject, EntityPredicate.AndPredicate andPredicate, ConditionArrayParser conditionArrayParser) {
-        return new Instance(ID,andPredicate);
+        ResourceLocation loc = ResourceLocation.tryParse(jsonObject.get("blood_source").getAsString());
+
+        return new Instance(loc,andPredicate);
     }
 
     @Override
@@ -39,6 +41,7 @@ public class BloodDrainTrigger extends AbstractCriterionTrigger<BloodDrainTrigge
             return cInstance.matches(player, bloodSource);
         });
     }
+
 
 
     public static class Instance extends CriterionInstance {
@@ -61,6 +64,8 @@ public class BloodDrainTrigger extends AbstractCriterionTrigger<BloodDrainTrigge
 
             return json;
         }
+
+
     }
 
 }

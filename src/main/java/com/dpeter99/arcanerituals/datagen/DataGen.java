@@ -1,9 +1,11 @@
 package com.dpeter99.arcanerituals.datagen;
 
 import com.dpeter99.arcanerituals.ArcaneRituals;
+import com.dpeter99.arcanerituals.datagen.advancements.AdvancementsProvider;
 import com.dpeter99.arcanerituals.datagen.block.model.BlockModelProviders;
 import com.dpeter99.arcanerituals.datagen.block.state.BlockStateProvider;
 import com.dpeter99.arcanerituals.datagen.item.ItemModelProviders;
+import com.dpeter99.arcanerituals.datagen.lang.EnUsLangProvider;
 import com.dpeter99.arcanerituals.datagen.recipes.RecipeProviders;
 import com.dpeter99.arcanerituals.datagen.tags.BlockTagProviders;
 import com.dpeter99.arcanerituals.datagen.tags.ItemTagProviders;
@@ -30,7 +32,7 @@ public class DataGen {
             LOGGER.info(DATAGEN, "Adding data providers for server data");
             generator.addProvider(new RecipeProviders(generator));
             generator.addProvider(new MobBloodProvider(generator));
-            //generator.addProvider(new AdvancementsProvider(generator));
+            generator.addProvider(new AdvancementsProvider(generator));
             //generator.addProvider(new GLMProvider(generator));
             //generator.addProvider(new LootTableProviders(generator));
             //generator.addProvider(new RecipeProviders(generator));
@@ -45,7 +47,7 @@ public class DataGen {
             LOGGER.info(DATAGEN, "Adding data providers for client assets");
             generator.addProvider(new BlockModelProviders(generator, event.getExistingFileHelper()));
             generator.addProvider(new ItemModelProviders(generator, event.getExistingFileHelper()));
-            //generator.addProvider(new EnUsLangProvider(generator));
+            generator.addProvider(new EnUsLangProvider(generator));
             generator.addProvider(new BlockStateProvider(generator, event.getExistingFileHelper()));
         }
     }
