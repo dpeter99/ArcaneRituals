@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I I",
+    "SVS",
+    "SSS"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "S": {
+      "item": "minecraft:cobblestone"
+    },
+    "V": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "result": {
+    "item": "arcanerituals:demonic_altar"
+  }
+}

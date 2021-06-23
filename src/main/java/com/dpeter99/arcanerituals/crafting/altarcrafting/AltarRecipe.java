@@ -109,7 +109,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
 
     @Override
     public ResourceLocation getId() {
-        return null;
+        return id;
     }
 
     @Override

@@ -1,0 +1,13 @@
+{
+  "arcanerituals:advancements.story.fresh_blood.description": "Fresh Blood",
+  "arcanerituals:advancements.story.fresh_blood.title": "Fresh Blood",
+  "arcanerituals:advancements.story.root.description": "This is where all it starts",
+  "arcanerituals:advancements.story.root.title": "Arcane Rituals",
+  "arcanerituals:blood": "Blood",
+  "block.arcanerituals.demonic_altar": "Demonic Altar",
+  "item.arcanerituals.golden_plate": "Golden Plate",
+  "item.arcanerituals.golden_rune_plate": "Golden Rune Plate",
+  "item.arcanerituals.sacrificial_knife": "Sacrificial Knife",
+  "item.arcanerituals.vial": "Vial",
+  "itemGroup.arcane_rituals": "Arcane Rituals"
+}

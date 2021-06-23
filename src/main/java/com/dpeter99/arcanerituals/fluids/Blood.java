@@ -23,8 +23,10 @@ import java.util.UUID;
 
 public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
 
-    public static final String UNKNOWN_BLOOD = ArcaneRituals.MODID + ":blood_source:unknown";
-    public static final String PLAYER_BLOOD = ArcaneRituals.MODID + ":blood_source:player";
+    public static final ResourceLocation UNKNOWN_BLOOD =  ArcaneRituals.location ("blood_source/unknown");
+    public static final ResourceLocation PLAYER_BLOOD = ArcaneRituals.location("blood_source/player");
+
+    public static final ResourceLocation MIXED_BLOOD = ArcaneRituals.location("blood_source/mixed");
 
     private static final ResourceLocation texture = ArcaneRituals.location("fluid/blood");
 
@@ -59,7 +61,7 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
         res.setAmount(amount);
 
         if(!data.equals(other)){
-            data.owner = "Mixed";
+            data.owner = MIXED_BLOOD;
         }
         setFluidData(res, data);
 
@@ -76,7 +78,7 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
     }
 
     public static FluidStack makeFluidStack(int amount, ResourceLocation loc){
-        return makeFluidStack(ARRegistry.BLOOD.get(), amount,new BloodData(loc.toString()));
+        return makeFluidStack(ARRegistry.BLOOD.get(), amount,new BloodData(loc));
     }
 
     @Override
@@ -89,18 +91,18 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
 
     public static class BloodData extends FluidData {
 
-        public String owner;
+        public ResourceLocation owner;
         public UUID player;
 
         public BloodData() {
             owner = UNKNOWN_BLOOD;
         }
 
-        public BloodData(String owner) {
+        public BloodData(ResourceLocation owner) {
             this.owner = owner;
         }
 
-        public BloodData(String owner, UUID player) {
+        public BloodData(ResourceLocation owner, UUID player) {
             this.owner = owner;
             if(owner.equals(PLAYER_BLOOD)){
                 this.player = player;
@@ -108,7 +110,7 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
         }
 
         public void readFromJson(JsonObject jsonObject){
-            owner = jsonObject.get("owner").getAsString();
+            owner = ResourceLocation.tryParse(jsonObject.get("owner").getAsString());
             if(jsonObject.has("UUID")){
                 player = UUID.fromString(jsonObject.get("UUID").getAsString());
             }
@@ -117,7 +119,7 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
         @Override
         public CompoundNBT writeToNBT() {
             CompoundNBT nbt = new CompoundNBT();
-            nbt.putString("owner", owner);
+            nbt.putString("owner", owner.toString());
             if(player != null){
                 nbt.putUUID("UUID",player);
             }
@@ -126,8 +128,10 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
 
         @Override
         public void readFromNBT(CompoundNBT nbt) {
-            owner = nbt.getString("owner");
-            if(owner.equals(Blood.PLAYER_BLOOD)){
+            owner = ResourceLocation.tryParse(nbt.getString("owner"));
+            if(owner.equals(Blood.PLAYER_BLOOD) && nbt.hasUUID("UUID")){
+                //TODO: this happens... probably some bad syncing issue
+                //ArcaneRituals.LOGGER.warn("No UUID for the player blood");
                 player = nbt.getUUID("UUID");
             }
         }
@@ -144,7 +148,7 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
                 return "Player unknown";
             }
             else{
-                String name = ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryParse(owner)).getRegistryName().toString();
+                String name = ForgeRegistries.ENTITIES.getValue(owner).getRegistryName().toString();
                 return name;
             }
         }
