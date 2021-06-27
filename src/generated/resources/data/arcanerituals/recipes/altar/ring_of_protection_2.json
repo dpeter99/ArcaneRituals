@@ -1,0 +1,34 @@
+{
+  "type": "arcanerituals:altar",
+  "result": {
+    "item": "arcanerituals:ring_of_protection_2"
+  },
+  "fuel": {
+    "type": "arcanerituals:blood",
+    "amount": 100,
+    "nbt": {
+      "data": {
+        "owner": "minecraft:sheep"
+      }
+    }
+  },
+  "altar_type": "arcanerituals:demonic_altar",
+  "ingredients": {
+    "0": {
+      "item": "minecraft:iron_chestplate"
+    },
+    "1": {
+      "item": "minecraft:diamond"
+    },
+    "2": {
+      "item": "arcanerituals:golden_rune_plate"
+    },
+    "3": {
+      "item": "arcanerituals:golden_rune_plate"
+    },
+    "center": {
+      "item": "arcanerituals:ring_of_protection_1"
+    }
+  },
+  "work_amount": 100
+}

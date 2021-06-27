@@ -1,18 +1,25 @@
 package com.dpeter99.arcanerituals.items;
 
+import com.dpeter99.arcanerituals.advancements.BloodDrainTrigger;
+import com.dpeter99.arcanerituals.advancements.TriggerManager;
 import com.dpeter99.arcanerituals.fluids.Blood;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.arcanerituals.registry.mobblood.MobBlood;
 import com.dpeter99.arcanerituals.registry.mobblood.MobBloodManager;
+import com.dpeter99.bloodylib.FluidHelper;
 import com.dpeter99.bloodylib.NBTData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -27,13 +34,18 @@ public class ItemSacrificialKnife extends Item {
             AtomicBoolean done = new AtomicBoolean(false);
 
             playerIn.inventory.items.forEach((item) -> {
-                if (!done.get() && item.getItem() == ARRegistry.VIAL.get() && ItemVial.isEmpty(item)) {
-                    item.shrink(1);
+                if(!done.get() && item.getItem() == ARRegistry.VIAL.get()){
 
-                    ItemStack new_vial =  ItemVial.make(Blood.makeFluidStack(ARRegistry.BLOOD.get(),1000, bloodData));
-                    playerIn.addItem(new_vial);
+                    Optional<IFluidHandlerItem> cap = FluidUtil.getFluidHandler(item).resolve();
+                    if(cap.isPresent()&& FluidHelper.isEmpty(cap.get())){
+                        item.shrink(1);
 
-                    done.set(true);
+                        ItemStack new_vial =  ItemVial.make(Blood.makeFluidStack(ARRegistry.BLOOD.get(),1000, bloodData));
+                        playerIn.addItem(new_vial);
+
+                        done.set(true);
+                    }
+
                 }
             });
         }
@@ -56,6 +68,10 @@ public class ItemSacrificialKnife extends Item {
                 playerIn.hurt(DamageSource.GENERIC, 5.0f);
 
                 makeFullVial(playerIn, new Blood.BloodData(Blood.PLAYER_BLOOD, playerIn.getUUID()));
+
+                if(!worldIn.isClientSide) {
+                    TriggerManager.BLOOD_DRAIN_TRIGGER.trigger((ServerPlayerEntity) playerIn, Blood.PLAYER_BLOOD);
+                }
             }
         }
         return ActionResult.success(itemstack);
@@ -93,8 +109,12 @@ public class ItemSacrificialKnife extends Item {
 
             }
             if (data.hit_count == data.hit_needed) {
-                makeFullVial(player, new Blood.BloodData(target_name.toString()));
+                makeFullVial(player, new Blood.BloodData(target_name));
                 data.hit_count = 0;
+
+                if(!target.level.isClientSide) {
+                    TriggerManager.BLOOD_DRAIN_TRIGGER.trigger((ServerPlayerEntity) attacker, target_name);
+                }
             }
 
             stack.setTag(data.serializeNBT());

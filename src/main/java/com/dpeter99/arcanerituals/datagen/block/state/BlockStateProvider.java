@@ -14,6 +14,6 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
     protected void registerStatesAndModels() {
 
 
-        simpleBlock(ARRegistry.DEMONIC_ALTAR.get(), models().getExistingFile(ArcaneRituals.location("block/demonic_altar_v2")) );
+        simpleBlock(ARRegistry.DEMONIC_ALTAR.get(), models().getExistingFile(ArcaneRituals.location("block/demonic_altar")) );
     }
 }

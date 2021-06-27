@@ -18,6 +18,7 @@ public class RecipeProviders extends RecipeProvider {
     @Override
     protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
         new GenericItemsRecipe(consumer);
+        new AltarRecipes(consumer);
     }
 
     // expose the protected internal methods so we can use them in external classes

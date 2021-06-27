@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "arcanerituals:block/demonic_altar_v2"
+      "model": "arcanerituals:block/demonic_altar"
     }
   }
 }
