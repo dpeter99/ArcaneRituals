@@ -8,14 +8,14 @@ import com.dpeter99.arcanerituals.registry.mobblood.MobBlood;
 import com.dpeter99.arcanerituals.registry.mobblood.MobBloodManager;
 import com.dpeter99.bloodylib.FluidHelper;
 import com.dpeter99.bloodylib.NBTData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.*;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
@@ -23,17 +23,23 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemSacrificialKnife extends Item {
 
     public ItemSacrificialKnife(Properties builder) {
         super(builder);
     }
 
-    public void makeFullVial(PlayerEntity playerIn, Blood.BloodData bloodData) {
-        if (playerIn.inventory.contains(new ItemStack(ARRegistry.VIAL.get()))) {
+    public void makeFullVial(Player playerIn, Blood.BloodData bloodData) {
+        if (playerIn.getInventory().contains(new ItemStack(ARRegistry.VIAL.get()))) {
             AtomicBoolean done = new AtomicBoolean(false);
 
-            playerIn.inventory.items.forEach((item) -> {
+            playerIn.getInventory().items.forEach((item) -> {
                 if(!done.get() && item.getItem() == ARRegistry.VIAL.get()){
 
                     Optional<IFluidHandlerItem> cap = FluidUtil.getFluidHandler(item).resolve();
@@ -51,7 +57,7 @@ public class ItemSacrificialKnife extends Item {
         }
     }
 
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 
         ItemStack itemstack = playerIn.getItemInHand(handIn);
 
@@ -70,11 +76,11 @@ public class ItemSacrificialKnife extends Item {
                 makeFullVial(playerIn, new Blood.BloodData(Blood.PLAYER_BLOOD, playerIn.getUUID()));
 
                 if(!worldIn.isClientSide) {
-                    TriggerManager.BLOOD_DRAIN_TRIGGER.trigger((ServerPlayerEntity) playerIn, Blood.PLAYER_BLOOD);
+                    TriggerManager.BLOOD_DRAIN_TRIGGER.trigger((ServerPlayer) playerIn, Blood.PLAYER_BLOOD);
                 }
             }
         }
-        return ActionResult.success(itemstack);
+        return InteractionResultHolder.success(itemstack);
     }
 
 
@@ -88,8 +94,8 @@ public class ItemSacrificialKnife extends Item {
      */
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (attacker instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) attacker;
+        if (attacker instanceof Player) {
+            Player player = (Player) attacker;
 
             ResourceLocation target_name = target.getType().getRegistryName();
 
@@ -113,7 +119,7 @@ public class ItemSacrificialKnife extends Item {
                 data.hit_count = 0;
 
                 if(!target.level.isClientSide) {
-                    TriggerManager.BLOOD_DRAIN_TRIGGER.trigger((ServerPlayerEntity) attacker, target_name);
+                    TriggerManager.BLOOD_DRAIN_TRIGGER.trigger((ServerPlayer) attacker, target_name);
                 }
             }
 
@@ -141,8 +147,8 @@ public class ItemSacrificialKnife extends Item {
         }
 
         @Override
-        public CompoundNBT serializeNBT() {
-            CompoundNBT nbt = new CompoundNBT();
+        public CompoundTag serializeNBT() {
+            CompoundTag nbt = new CompoundTag();
             nbt.putInt("hit_count", hit_count);
             nbt.putInt("hit_needed", hit_needed);
             nbt.putUUID("target", target);
@@ -150,7 +156,7 @@ public class ItemSacrificialKnife extends Item {
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT nbt) {
+        public void deserializeNBT(CompoundTag nbt) {
             hit_count = nbt.getInt("hit_count");
             hit_needed = nbt.getInt("hit_needed");
             target = new UUID(0,0);

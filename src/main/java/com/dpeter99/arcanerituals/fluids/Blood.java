@@ -5,12 +5,12 @@ import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.bloodylib.fluid.AdvancedFluid;
 import com.dpeter99.bloodylib.fluid.FluidData;
 import com.google.gson.JsonObject;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -82,9 +82,9 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
     }
 
     @Override
-    public ITextComponent getInfoText(FluidStack stack) {
+    public Component getInfoText(FluidStack stack) {
         String owner = "From: " + getFluidData(stack, new BloodData()).getOwnerName();
-        return new StringTextComponent(owner).withStyle(TextFormatting.DARK_RED);
+        return new TextComponent(owner).withStyle(ChatFormatting.DARK_RED);
 
     }
 
@@ -117,8 +117,8 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
         }
 
         @Override
-        public CompoundNBT writeToNBT() {
-            CompoundNBT nbt = new CompoundNBT();
+        public CompoundTag writeToNBT() {
+            CompoundTag nbt = new CompoundTag();
             nbt.putString("owner", owner.toString());
             if(player != null){
                 nbt.putUUID("UUID",player);
@@ -127,7 +127,7 @@ public class Blood extends AdvancedFluid /*implements IArcaneFuelFluid*/ {
         }
 
         @Override
-        public void readFromNBT(CompoundNBT nbt) {
+        public void readFromNBT(CompoundTag nbt) {
             owner = ResourceLocation.tryParse(nbt.getString("owner"));
             if(owner.equals(Blood.PLAYER_BLOOD) && nbt.hasUUID("UUID")){
                 //TODO: this happens... probably some bad syncing issue

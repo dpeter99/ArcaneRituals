@@ -1,10 +1,10 @@
 package com.dpeter99.bloodylib.fluid;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 public abstract class FluidData {
 
-    public abstract CompoundNBT writeToNBT();
-    public abstract void readFromNBT(CompoundNBT nbt);
+    public abstract CompoundTag writeToNBT();
+    public abstract void readFromNBT(CompoundTag nbt);
 
 }

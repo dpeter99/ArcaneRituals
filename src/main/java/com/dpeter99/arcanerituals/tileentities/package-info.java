@@ -2,6 +2,6 @@
 @ParametersAreNonnullByDefault
 package com.dpeter99.arcanerituals.tileentities;
 
-import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

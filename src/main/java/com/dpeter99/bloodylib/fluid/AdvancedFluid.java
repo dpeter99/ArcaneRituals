@@ -1,9 +1,9 @@
 package com.dpeter99.bloodylib.fluid;
 
-import net.minecraft.item.Item;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -18,17 +18,17 @@ public abstract class AdvancedFluid extends UnplaceableFluid  {
         super(bucket, builder);
     }
 
-    public ITextComponent getInfoText(FluidStack stack){
-        return new StringTextComponent("");
+    public Component getInfoText(FluidStack stack){
+        return new TextComponent("");
     }
 
     public void setFluidData(FluidStack stack, FluidData data){
-        CompoundNBT nbt = stack.getOrCreateTag();
+        CompoundTag nbt = stack.getOrCreateTag();
         nbt.put("data", data.writeToNBT());
     }
 
     public <T extends FluidData> T getFluidData(FluidStack stack, T data){
-        CompoundNBT nbt =stack.getTag();
+        CompoundTag nbt =stack.getTag();
         if(nbt != null && nbt.contains("data")){
             data.readFromNBT(nbt.getCompound("data"));
             return data;

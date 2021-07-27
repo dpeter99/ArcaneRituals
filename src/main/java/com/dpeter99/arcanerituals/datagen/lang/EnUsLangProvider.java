@@ -7,8 +7,8 @@ import com.dpeter99.arcanerituals.fluids.Blood;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.bloodylib.datagen.util.AdvancementProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import com.dpeter99.arcanerituals.datagen.advancements.AdvancementsProvider;
@@ -47,7 +47,7 @@ public class EnUsLangProvider extends LanguageProvider {
         add(res.toString(), name);
     }
 
-    private void add(ItemGroup group, String name) {
+    private void add(CreativeModeTab group, String name) {
         add("itemGroup." + Objects.requireNonNull(group.getRecipeFolderName()), name);
     }
 }

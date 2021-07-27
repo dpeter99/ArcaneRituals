@@ -2,22 +2,21 @@ package com.dpeter99.arcanerituals.crafting
 
 import com.dpeter99.arcanerituals.ArcaneRituals
 import com.dpeter99.arcanerituals.crafting.altarcrafting.AltarRecipe
-import com.dpeter99.arcanerituals.registry.ARRegistry
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundNBT
-import net.minecraft.nbt.JsonToNBT
-import net.minecraft.network.PacketBuffer
-import net.minecraft.util.JSONUtils
-import net.minecraft.util.ResourceLocation
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.TagParser
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.GsonHelper
+import net.minecraft.world.item.ItemStack
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.registries.ForgeRegistries
 
 class ArcaneFuel(
-    val fuelFluid: FluidStack,
-    val fuelItem: ItemStack,
-    val amount: Int
+        val fuelFluid: FluidStack,
+        val fuelItem: ItemStack,
+        val amount: Int
 ) {
 
 
@@ -30,7 +29,7 @@ class ArcaneFuel(
 
     }
 
-    fun toNetwork(buffer: PacketBuffer, recipe: AltarRecipe) {
+    fun toNetwork(buffer: FriendlyByteBuf, recipe: AltarRecipe) {
         buffer.writeInt(amount);
         //fuelFluid.writeToPacket(buffer);
         buffer.writeFluidStack(fuelFluid);
@@ -47,7 +46,7 @@ class ArcaneFuel(
         return false;
     }
 
-    fun getId():ResourceLocation?{
+    fun getId(): ResourceLocation?{
         if(!fuelItem.isEmpty){
             return fuelItem.item.registryName!!;
         }
@@ -57,7 +56,7 @@ class ArcaneFuel(
         return null;
     }
 
-    fun getNbt():CompoundNBT?{
+    fun getNbt(): CompoundTag?{
         if(!fuelItem.isEmpty){
             return fuelItem.tag;
         }
@@ -77,8 +76,8 @@ class ArcaneFuel(
             var fuel_stack_item: ItemStack = ItemStack.EMPTY
 
             val fuelObject = json.getAsJsonObject("fuel")
-            val fuel_amount = JSONUtils.getAsInt(fuelObject, "amount");
-            val fuel_type = JSONUtils.getAsString(fuelObject, "type", "###");
+            val fuel_amount = GsonHelper.getAsInt(fuelObject, "amount");
+            val fuel_type = GsonHelper.getAsString(fuelObject, "type", "###");
             if (fuel_type.equals("###")) {
                 ArcaneRituals.LOGGER.error("Recipe: $recipeId doesn't have a fuel:type");
             }
@@ -91,8 +90,8 @@ class ArcaneFuel(
                 if(element != null) {
                     val nbt =
                         if (element.isJsonObject)
-                            JsonToNBT.parseTag(GSON.toJson(element))
-                        else JsonToNBT.parseTag(JSONUtils.convertToString(element, "nbt"))
+                            TagParser.parseTag(GSON.toJson(element))
+                        else TagParser.parseTag(GsonHelper.convertToString(element, "nbt"))
 
                     fuel_stack_fluid.tag = nbt;
                 }
@@ -113,7 +112,7 @@ class ArcaneFuel(
 
         }
 
-        fun fromNetwork(recipeId: ResourceLocation, buffer: PacketBuffer): ArcaneFuel {
+        fun fromNetwork(recipeId: ResourceLocation, buffer: FriendlyByteBuf): ArcaneFuel {
             val amount = buffer.readInt();
             val fluid = FluidStack.readFromPacket(buffer);
             val item = buffer.readItem();

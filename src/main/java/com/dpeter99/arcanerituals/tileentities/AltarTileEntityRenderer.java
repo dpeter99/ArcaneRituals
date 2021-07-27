@@ -1,33 +1,33 @@
 package com.dpeter99.arcanerituals.tileentities;
 
 import com.dpeter99.arcanerituals.ArcaneRituals;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Quaternion;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
 import org.jetbrains.annotations.Nullable;
 
-public class AltarTileEntityRenderer extends TileEntityRenderer<AltarTileEntity> {
+public class AltarTileEntityRenderer implements BlockEntityRenderer<AltarTileEntity> {
 
     public static final ResourceLocation BLOOD_TEXTURE = ArcaneRituals.location("fluid/blood");
 
-    public AltarTileEntityRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
+    public AltarTileEntityRenderer(BlockEntityRenderDispatcher rendererDispatcherIn) {
+        //super(rendererDispatcherIn);
     }
 
     float progress_base = 100;
@@ -35,7 +35,7 @@ public class AltarTileEntityRenderer extends TileEntityRenderer<AltarTileEntity>
     float itemScale = 0.45f;
 
     @Override
-    public void render(AltarTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(AltarTileEntity tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
 
         progress_base -=partialTicks;
         if(progress_base <= 0)
@@ -60,19 +60,19 @@ public class AltarTileEntityRenderer extends TileEntityRenderer<AltarTileEntity>
 
         //Draw items
         {
-            RenderItem(0, tileEntityIn,new Vector3d(0.0625 + delta, y, 0.9375 - delta),new Quaternion(Vector3f.YP, 90.0f+rot, true), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, true);
+            RenderItem(0, tileEntityIn,new Vec3(0.0625 + delta, y, 0.9375 - delta),new Quaternion(Vector3f.YP, 90.0f+rot, true), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, true);
 
-            RenderItem(3, tileEntityIn,new Vector3d(0.9375 - delta, y, 0.9375 - delta),new Quaternion(Vector3f.YP, 90.0f+rot-10, true), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, true);
+            RenderItem(3, tileEntityIn,new Vec3(0.9375 - delta, y, 0.9375 - delta),new Quaternion(Vector3f.YP, 90.0f+rot-10, true), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, true);
 
-            RenderItem(2, tileEntityIn,new Vector3d(0.9375 - delta, y, 0.0625 + delta),new Quaternion(Vector3f.YP, 90.0f+rot+10, true), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, true);
+            RenderItem(2, tileEntityIn,new Vec3(0.9375 - delta, y, 0.0625 + delta),new Quaternion(Vector3f.YP, 90.0f+rot+10, true), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, true);
 
-            RenderItem(1, tileEntityIn,new Vector3d(0.0625 + delta, y, 0.0625 + delta),new Quaternion(Vector3f.YP, 90.0f+rot+20, true), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, true);
+            RenderItem(1, tileEntityIn,new Vec3(0.0625 + delta, y, 0.0625 + delta),new Quaternion(Vector3f.YP, 90.0f+rot+20, true), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, true);
         }
 
 
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(BLOOD_TEXTURE);
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(BLOOD_TEXTURE);
 
-        IVertexBuilder builder = bufferIn.getBuffer(RenderType.translucent());
+        VertexConsumer builder = bufferIn.getBuffer(RenderType.translucent());
 
         float fill = (tileEntityIn.tank.getFluidAmount() / (float)tileEntityIn.tank.getCapacity());
         float step = 1 / 11.0f; //0.758f
@@ -94,11 +94,11 @@ public class AltarTileEntityRenderer extends TileEntityRenderer<AltarTileEntity>
             c_delta *= (tileEntityIn.cool_down/100f);
         }
 
-        RenderItem(4, tileEntityIn,new Vector3d(0.5, level+(itemScale/4)+c_delta, 0.5),null, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, true);
+        RenderItem(4, tileEntityIn,new Vec3(0.5, level+(itemScale/4)+c_delta, 0.5),null, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, true);
 
     }
 
-    private void add(IVertexBuilder renderer, MatrixStack stack, float x, float y, float z, float u, float v, int light) {
+    private void add(VertexConsumer renderer, PoseStack stack, float x, float y, float z, float u, float v, int light) {
         renderer.vertex(stack.last().pose(), x, y, z)
                 .color(1.0f, 0.0f, 0.0f, 1.0f)
                 .uv(u, v)
@@ -108,7 +108,7 @@ public class AltarTileEntityRenderer extends TileEntityRenderer<AltarTileEntity>
                 .endVertex();
     }
 
-    private void RenderItem(int slot_id, AltarTileEntity tileEntityIn, Vector3d pos, @Nullable Quaternion rot, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn, boolean doAutoRot) {
+    private void RenderItem(int slot_id, AltarTileEntity tileEntityIn, Vec3 pos, @Nullable Quaternion rot, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, boolean doAutoRot) {
 
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         ItemStack stack = tileEntityIn.inventory.getStackInSlot(slot_id);
@@ -125,8 +125,9 @@ public class AltarTileEntityRenderer extends TileEntityRenderer<AltarTileEntity>
             matrixStackIn.mulPose(new Quaternion(Vector3f.XP,90.0f,true));
 
         }
-        IBakedModel ibakedmodel = itemRenderer.getModel(stack, tileEntityIn.getLevel(), null);
-        itemRenderer.render(stack, ItemCameraTransforms.TransformType.FIXED, true, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, ibakedmodel);
+        //TODO: Make sure the `1` at the end is correct
+        BakedModel ibakedmodel = itemRenderer.getModel(stack, tileEntityIn.getLevel(),null,1);
+        itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, ibakedmodel);
 
         matrixStackIn.popPose();
     }

@@ -1,26 +1,19 @@
 package com.dpeter99.arcanerituals.datagen.recipes;
 
-import com.dpeter99.arcanerituals.ArcaneRituals;
-import com.dpeter99.arcanerituals.crafting.ArcaneFuel;
 import com.dpeter99.arcanerituals.datagen.recipes.builders.AltarRecipeBuilder;
 import com.dpeter99.arcanerituals.fluids.Blood;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
-import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
 import com.dpeter99.bloodylib.datagen.util.BloodyRecipeProvider;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.item.Items;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Items;
 
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class AltarRecipes extends BloodyRecipeProvider {
 
 
-    public AltarRecipes(Consumer<IFinishedRecipe> consumer) {
+    public AltarRecipes(Consumer<FinishedRecipe> consumer) {
         super(consumer);
     }
 

@@ -1,36 +1,32 @@
 package com.dpeter99.arcanerituals.crafting.altarcrafting
 
-import com.dpeter99.arcanerituals.ArcaneRituals
 import com.dpeter99.arcanerituals.crafting.ArcaneFuel
-import net.minecraftforge.registries.ForgeRegistryEntry
-import net.minecraft.item.crafting.IRecipeSerializer
-import net.minecraft.util.ResourceLocation
 import com.google.gson.JsonObject
-import net.minecraft.util.JSONUtils
+import net.minecraft.core.NonNullList
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.GsonHelper
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraftforge.registries.ForgeRegistries
-import com.dpeter99.arcanerituals.registry.ARRegistry
-import net.minecraft.item.crafting.Ingredient
-import net.minecraft.item.ItemStack
-import java.lang.IllegalStateException
-import net.minecraft.network.PacketBuffer
-import net.minecraft.util.NonNullList
-import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.registries.ForgeRegistryEntry
 import java.util.*
 
 //@file:JvmName("AltarRecipeSerializer")
 
-class AltarRecipeSerializer : @JvmName("ForgeRegistryEntry<IRecipeSerializer<?>>") ForgeRegistryEntry<IRecipeSerializer<*>>(), IRecipeSerializer<AltarRecipe> {
+class AltarRecipeSerializer : @JvmName("ForgeRegistryEntry<IRecipeSerializer<?>>") ForgeRegistryEntry<RecipeSerializer<*>>(), RecipeSerializer<AltarRecipe> {
 
     override fun fromJson(recipeId: ResourceLocation, json: JsonObject): AltarRecipe {
-        val group = JSONUtils.getAsString(json, "group", "")
+        val group = GsonHelper.getAsString(json, "group", "")
 
 
         var fuel = ArcaneFuel.fromJson(recipeId, json)
 
 
-        val altar_type = JSONUtils.getAsString(json, "altar_type", "")
-        val work = JSONUtils.getAsInt(json, "work_amount", 0)
-        val ingredientsArray = JSONUtils.getAsJsonObject(json, "ingredients")
+        val altar_type = GsonHelper.getAsString(json, "altar_type", "")
+        val work = GsonHelper.getAsInt(json, "work_amount", 0)
+        val ingredientsArray = GsonHelper.getAsJsonObject(json, "ingredients")
 
         val ingredient: MutableList<Ingredient> = ArrayList()
         ingredient.add(Ingredient.fromJson(ingredientsArray.getAsJsonObject("0")))
@@ -41,7 +37,7 @@ class AltarRecipeSerializer : @JvmName("ForgeRegistryEntry<IRecipeSerializer<?>>
         val center = Ingredient.fromJson(ingredientsArray.getAsJsonObject("center"))
 
         val result = json.getAsJsonObject("result");
-        val s1 = JSONUtils.getAsString(result, "item")
+        val s1 = GsonHelper.getAsString(result, "item")
 
 
 
@@ -56,7 +52,7 @@ class AltarRecipeSerializer : @JvmName("ForgeRegistryEntry<IRecipeSerializer<?>>
         return AltarRecipe(recipeId, group, ingredient, center, fuel, itemstack, altar_type, work)
     }
 
-    override fun fromNetwork(recipeId: ResourceLocation, buffer: PacketBuffer): AltarRecipe {
+    override fun fromNetwork(recipeId: ResourceLocation, buffer: FriendlyByteBuf): AltarRecipe {
         val group = buffer.readUtf(32767)
 
         val fuel = ArcaneFuel.fromNetwork(recipeId, buffer);
@@ -73,7 +69,7 @@ class AltarRecipeSerializer : @JvmName("ForgeRegistryEntry<IRecipeSerializer<?>>
         return AltarRecipe(recipeId, group, ingredients, center, fuel, itemstack, altar_type, work)
     }
 
-    override fun toNetwork(buffer: PacketBuffer, recipe: AltarRecipe) {
+    override fun toNetwork(buffer: FriendlyByteBuf, recipe: AltarRecipe) {
         buffer.writeUtf(recipe.group)
 
         recipe.fuel.toNetwork(buffer,recipe);

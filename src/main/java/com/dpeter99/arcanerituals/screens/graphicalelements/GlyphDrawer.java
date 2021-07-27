@@ -4,12 +4,14 @@ package com.dpeter99.arcanerituals.screens.graphicalelements;
 import com.dpeter99.bloodylib.math.Vector2i;
 import com.dpeter99.bloodylib.ui.Sprite;
 import com.dpeter99.bloodylib.ui.screens.GraphicalElement;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
+
+import com.dpeter99.bloodylib.ui.screens.GraphicalElement.RenderLayer;
 
 public class GlyphDrawer extends GraphicalElement {
 
@@ -35,14 +37,14 @@ public class GlyphDrawer extends GraphicalElement {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+    public void render(PoseStack matrixStack, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
         for (int i = 0; i < glyphs.size(); i++) {
             Glyph g = glyphs.get(i);
             drawGlyp(matrixStack,g, activePredicate.test(i));
         }
     }
 
-    private void drawGlyp(MatrixStack matrixStack, Glyph g, boolean active) {
+    private void drawGlyp(PoseStack matrixStack, Glyph g, boolean active) {
         Vector2i glyph_pos = g.pos.add(Vector2i.of(screen.getGuiLeft(),screen.getGuiTop()));
 
         Sprite s = g.getSprite(active);

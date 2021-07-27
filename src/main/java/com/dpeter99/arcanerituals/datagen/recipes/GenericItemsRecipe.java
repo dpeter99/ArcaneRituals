@@ -1,30 +1,25 @@
 package com.dpeter99.arcanerituals.datagen.recipes;
 
 import com.dpeter99.arcanerituals.advancements.BloodDrainTrigger;
-import com.dpeter99.arcanerituals.fluids.Blood;
-import com.dpeter99.arcanerituals.items.ItemVial;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.bloodylib.datagen.util.BloodyRecipeProvider;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.criterion.*;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.function.Consumer;
 
 public class GenericItemsRecipe extends BloodyRecipeProvider {
 
-    public GenericItemsRecipe(Consumer<IFinishedRecipe> consumer) {
+    public GenericItemsRecipe(Consumer<FinishedRecipe> consumer) {
         super(consumer);
     }
 
@@ -64,20 +59,20 @@ public class GenericItemsRecipe extends BloodyRecipeProvider {
                 //Ingredient.of(ItemVial.make(Blood.makeFluidStack(250, EntityType.SHEEP.getRegistryName())))
                 /*TODO: Vial that has any blood*/
                 .define('V', Items.NETHERITE_INGOT)
-                .unlockedBy("first_blood", new BloodDrainTrigger.Instance(EntityType.SHEEP.getRegistryName(), EntityPredicate.AndPredicate.ANY))
+                .unlockedBy("first_blood", new BloodDrainTrigger.Instance(EntityType.SHEEP.getRegistryName(), EntityPredicate.Composite.ANY))
                 .save(consumer);
     }
 
 
-    protected static InventoryChangeTrigger.Instance has(IItemProvider p_200403_0_) {
+    protected static InventoryChangeTrigger.TriggerInstance has(ItemLike p_200403_0_) {
         return inventoryTrigger(ItemPredicate.Builder.item().of(p_200403_0_).build());
     }
 
-    protected static InventoryChangeTrigger.Instance has(ITag<Item> p_200409_0_) {
+    protected static InventoryChangeTrigger.TriggerInstance has(Tag<Item> p_200409_0_) {
         return inventoryTrigger(ItemPredicate.Builder.item().of(p_200409_0_).build());
     }
 
-    protected static InventoryChangeTrigger.Instance inventoryTrigger(ItemPredicate... p_200405_0_) {
-        return new InventoryChangeTrigger.Instance(EntityPredicate.AndPredicate.ANY, MinMaxBounds.IntBound.ANY, MinMaxBounds.IntBound.ANY, MinMaxBounds.IntBound.ANY, p_200405_0_);
+    protected static InventoryChangeTrigger.TriggerInstance inventoryTrigger(ItemPredicate... p_200405_0_) {
+        return new InventoryChangeTrigger.TriggerInstance(EntityPredicate.Composite.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, p_200405_0_);
     }
 }

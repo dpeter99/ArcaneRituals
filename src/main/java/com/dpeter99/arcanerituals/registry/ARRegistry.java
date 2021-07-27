@@ -1,11 +1,8 @@
 package com.dpeter99.arcanerituals.registry;
 
-import java.util.Objects;
-import java.util.function.Supplier;
-
 import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.blocks.DemonicAltarBlock;
-import com.dpeter99.arcanerituals.client.renderers.FluidHolderRenderer;
+
 import com.dpeter99.arcanerituals.containers.AltarContainer;
 import com.dpeter99.arcanerituals.crafting.altarcrafting.AltarRecipe;
 import com.dpeter99.arcanerituals.crafting.altarcrafting.AltarRecipeSerializer;
@@ -14,29 +11,24 @@ import com.dpeter99.arcanerituals.items.ItemSacrificialKnife;
 import com.dpeter99.arcanerituals.items.ItemVial;
 import com.dpeter99.arcanerituals.items.RingOfProtection;
 import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -50,13 +42,13 @@ public class ARRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ArcaneRituals.MODID);
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ArcaneRituals.MODID);
 
-    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, ArcaneRituals.MODID);
-    public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, ArcaneRituals.MODID);
+    public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, ArcaneRituals.MODID);
+    public static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, ArcaneRituals.MODID);
 
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, ArcaneRituals.MODID);
 
     //public static final DeferredRegister<IRecipe<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registry.RECIPE_TYPE, ArcaneRituals.MODID);
-    public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ArcaneRituals.MODID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ArcaneRituals.MODID);
 
 
 
@@ -66,10 +58,10 @@ public class ARRegistry {
     public static final RegistryObject<AltarRecipeSerializer> ALTAR_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register(AltarRecipe.RECIPE_TYPE_NAME, AltarRecipeSerializer::new);
 
 
-    public static final RegistryObject<Block> DEMONIC_ALTAR = BLOCKS.register("demonic_altar", ()-> new DemonicAltarBlock(AbstractBlock.Properties.of(Material.METAL)));
-    public static final RegistryObject<TileEntityType<AltarTileEntity>> DEMONIC_ALTAR_TE = TILE_ENTITIES.register("demonic_altar", () -> TileEntityType.Builder.of(AltarTileEntity::new, DEMONIC_ALTAR.get()).build(null));
+    public static final RegistryObject<Block> DEMONIC_ALTAR = BLOCKS.register("demonic_altar", ()-> new DemonicAltarBlock(BlockBehaviour.Properties.of(Material.METAL)));
+    public static final RegistryObject<BlockEntityType<AltarTileEntity>> DEMONIC_ALTAR_TE = TILE_ENTITIES.register("demonic_altar", () -> BlockEntityType.Builder.of(AltarTileEntity::new, DEMONIC_ALTAR.get()).build(null));
 
-    public static final RegistryObject<ContainerType<AltarContainer>> DEMONIC_ALTAR_CONTAINER = CONTAINER_TYPES.register("altar", () -> IForgeContainerType.create(AltarContainer::createClientContainer));
+    public static final RegistryObject<MenuType<AltarContainer>> DEMONIC_ALTAR_CONTAINER = CONTAINER_TYPES.register("altar", () -> IForgeContainerType.create(AltarContainer::createClientContainer));
 
     public static final RegistryObject<BlockItem> DEMONIC_ALTAR_ITEM = ITEMS.register("demonic_altar", () -> new BlockItem(DEMONIC_ALTAR.get(), new Item.Properties().tab(ArcaneRituals.TAB)) );
 
@@ -118,8 +110,10 @@ public class ARRegistry {
 
     @SubscribeEvent
     public static void onModelRegistryEvent(ModelRegistryEvent event){
+        /*
         ModelLoaderRegistry.registerLoader(ArcaneRituals.location("fluid_holder"),
                 FluidHolderRenderer.Loader.INSTANCE);
+         */
     }
 
     public static <T extends IForgeRegistryEntry<?>> ResourceLocation getName(T type) {

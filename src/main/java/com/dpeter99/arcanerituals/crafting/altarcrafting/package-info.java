@@ -2,6 +2,7 @@
 @ParametersAreNonnullByDefault
 package com.dpeter99.arcanerituals.crafting.altarcrafting;
 
-import mcp.MethodsReturnNonnullByDefault;
+
+import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

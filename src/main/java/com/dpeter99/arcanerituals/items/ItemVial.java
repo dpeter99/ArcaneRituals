@@ -2,15 +2,15 @@ package com.dpeter99.arcanerituals.items;
 
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.bloodylib.fluid.AdvancedFluid;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -24,6 +24,8 @@ import org.lwjgl.system.CallbackI;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemVial extends Item {
 
@@ -62,7 +64,7 @@ public class ItemVial extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
 
         FluidStack fluidStack = getFluid(stack);
@@ -73,14 +75,14 @@ public class ItemVial extends Item {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
 
         FluidStack fluid = getFluid(stack);
-        ITextComponent this_name =new TranslationTextComponent(this.getDescriptionId(stack));
+        Component this_name =new TranslatableComponent(this.getDescriptionId(stack));
         if (!fluid.getFluid().isSame(Fluids.EMPTY)) {
-            return new TranslationTextComponent("%s %s",
-                    new TranslationTextComponent(fluid.getTranslationKey()),
-                    new TranslationTextComponent(this.getDescriptionId(stack))
+            return new TranslatableComponent("%s %s",
+                    new TranslatableComponent(fluid.getTranslationKey()),
+                    new TranslatableComponent(this.getDescriptionId(stack))
             );
         }
 
@@ -103,7 +105,7 @@ public class ItemVial extends Item {
      */
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         FluidHandlerItemStack fluid;
 
         fluid = new FluidHandlerItemStack(stack,250) {

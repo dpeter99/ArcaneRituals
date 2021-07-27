@@ -3,15 +3,15 @@ package com.dpeter99.arcanerituals.containers;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
 import com.dpeter99.bloodylib.ui.containers.SimpleContainer;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -20,15 +20,15 @@ public class AltarContainer  extends SimpleContainer {
 
 
     protected Block blocktype;
-    private IIntArray altarData;
+    private ContainerData altarData;
 
 
-    public static AltarContainer createClientContainer(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer) {
+    public static AltarContainer createClientContainer(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer) {
         BlockPos pos = packetBuffer.readBlockPos();
-        return new AltarContainer(id,playerInventory.player.level,pos, playerInventory,new IntArray(4));
+        return new AltarContainer(id,playerInventory.player.level,pos, playerInventory,new SimpleContainerData(4));
     }
 
-    public AltarContainer(int id, World world, BlockPos pos, PlayerInventory playerInventory, IIntArray altarData) {
+    public AltarContainer(int id, Level world, BlockPos pos, Inventory playerInventory, ContainerData altarData) {
         super(ARRegistry.DEMONIC_ALTAR_CONTAINER.get(), id, playerInventory, world, pos);
 
         this.altarData = altarData;
@@ -54,9 +54,9 @@ public class AltarContainer  extends SimpleContainer {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerEntity) {
+    public boolean stillValid(Player playerEntity) {
         return stillValid(
-                IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos()),
+                ContainerLevelAccess.create(tileEntity.getLevel(), tileEntity.getBlockPos()),
                 playerEntity,
                 ARRegistry.DEMONIC_ALTAR.get());
     }

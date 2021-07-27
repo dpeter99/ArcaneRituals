@@ -2,12 +2,14 @@ package com.dpeter99.arcanerituals.screens.graphicalelements;
 
 import com.dpeter99.bloodylib.ui.Sprite;
 import com.dpeter99.bloodylib.ui.screens.GraphicalElement;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.List;
 import java.util.function.Supplier;
+
+import com.dpeter99.bloodylib.ui.screens.GraphicalElement.RenderLayer;
 
 public class FluidDisplay extends GraphicalElement {
 
@@ -33,7 +35,7 @@ public class FluidDisplay extends GraphicalElement {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 
         float increment = max.get()/(fluid_states.size()*1.0f);
         int state = (int)Math.floor( amount.get() / increment);

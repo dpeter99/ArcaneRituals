@@ -1,16 +1,14 @@
 package com.dpeter99.bloodylib.ui.containers;
 
-import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -20,14 +18,14 @@ import javax.annotation.Nullable;
 /**
  * Used for handling the player inventory by default.
  */
-public abstract class SimpleContainer<TILE extends TileEntity> extends Container {
+public abstract class SimpleContainer<TILE extends BlockEntity> extends AbstractContainerMenu {
 
     protected IItemHandler playerInventory;
-    protected PlayerEntity playerEntity;
+    protected Player playerEntity;
 
     protected TILE tileEntity;
 
-    protected SimpleContainer(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, World world, BlockPos pos) {
+    protected SimpleContainer(@Nullable MenuType<?> type, int id, Inventory playerInventory, Level world, BlockPos pos) {
         super(type, id);
         this.playerInventory = new InvWrapper(playerInventory);
         this.playerEntity = playerInventory.player;
@@ -41,7 +39,7 @@ public abstract class SimpleContainer<TILE extends TileEntity> extends Container
 
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

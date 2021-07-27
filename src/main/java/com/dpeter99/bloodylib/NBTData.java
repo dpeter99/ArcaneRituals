@@ -1,18 +1,18 @@
 package com.dpeter99.bloodylib;
 
 import com.dpeter99.arcanerituals.items.ItemSacrificialKnife;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.UUID;
 
-public abstract class NBTData implements INBTSerializable<CompoundNBT> {
+public abstract class NBTData implements INBTSerializable<CompoundTag> {
 
     /*required*/ public NBTData() {
     }
 
-    public static <T extends NBTData> T get(Class<T> clazz, CompoundNBT nbt){
+    public static <T extends NBTData> T get(Class<T> clazz, CompoundTag nbt){
         try {
             T data = (T) clazz.newInstance();
 
@@ -30,7 +30,7 @@ public abstract class NBTData implements INBTSerializable<CompoundNBT> {
     public static <T extends NBTData> T fromStack(Class<T> clazz, ItemStack stack) {
 
         if (stack.hasTag()) {
-            CompoundNBT nbt = stack.getTag();
+            CompoundTag nbt = stack.getTag();
             return NBTData.get(clazz, nbt);
         } else {
             try {

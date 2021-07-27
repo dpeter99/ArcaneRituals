@@ -7,22 +7,25 @@ import com.dpeter99.arcanerituals.crafting.altarcrafting.AltarRecipe;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.bloodylib.FluidHelper;
 import com.dpeter99.bloodylib.StackUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -39,12 +42,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AltarTileEntity extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
+public class AltarTileEntity extends BlockEntity implements MenuProvider {
 
     public static final ResourceLocation BLOOD_ALTAR_TYPE = ArcaneRituals.location("demonic_altar");
 
-    public AltarTileEntity() {
-        super(ARRegistry.DEMONIC_ALTAR_TE.get());
+    public AltarTileEntity(BlockPos pos, BlockState state) {
+        super(ARRegistry.DEMONIC_ALTAR_TE.get(), pos, state);
     }
 
     protected int progress = 0;
@@ -121,7 +124,7 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
     public static final int FUEL_AMOUNT_MAX = 1;
     public static final int PROGRESS = 2;
     public static final int PROGRESS_FROM = 3;
-    protected final IIntArray data = new IIntArray() {
+    protected final ContainerData data = new ContainerData() {
         public int get(int index) {
             switch (index) {
                 case FUEL_AMOUNT:
@@ -163,6 +166,8 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
     private final LazyOptional<IFluidHandler> fluid_provider = LazyOptional.of(() -> tank);
 
 
+
+
     private enum FluidDirection {
         Draining,
         Filling,
@@ -172,72 +177,73 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
     private FluidDirection fluidDirection = FluidDirection.NONE;
 
 
-    @Override
-    public void tick() {
+    public static void serverTick(Level level, BlockPos blockPos, BlockState blockState, AltarTileEntity t) {
+
+    /*
         if (level.isClientSide)
             return;
+    */
 
 
-
-        ItemStack stack = inventory.getStackInSlot(5);
-        if (!stack.isEmpty() && FluidHelper.isFluidContainer(stack)) {
+        ItemStack stack = t.inventory.getStackInSlot(5);
+        if (!(stack.isEmpty()) && FluidHelper.isFluidContainer(stack)) {
 
             ItemStack itemStack = StackUtils.size(stack, 1);
             IFluidHandlerItem fluid_handler = FluidUtil.getFluidHandler(itemStack).resolve().get();
             //Fresh item
-            if (fluidDirection == FluidDirection.NONE) {
+            if (t.fluidDirection == FluidDirection.NONE) {
                 //The tank has something in it
                 if (!FluidHelper.isEmpty(fluid_handler)) {
-                    fluidDirection = FluidDirection.Draining;
+                    t.fluidDirection = FluidDirection.Draining;
                 } else {
-                    fluidDirection = FluidDirection.Filling;
+                    t.fluidDirection = FluidDirection.Filling;
                 }
             }
 
             //transfer fluid from item to internal
-            if (fluidDirection == FluidDirection.Draining) {
-                drainFluid(stack, itemStack, fluid_handler);
+            if (t.fluidDirection == FluidDirection.Draining) {
+                t.drainFluid(stack, itemStack, fluid_handler);
 
-            } else if (fluidDirection == FluidDirection.Filling) {
+            } else if (t.fluidDirection == FluidDirection.Filling) {
                 //transfer out some fluid
-                fillFluid(stack,itemStack,fluid_handler);
+                t.fillFluid(stack,itemStack,fluid_handler);
             }
         } else {
-            fluidDirection = FluidDirection.NONE;
+            t.fluidDirection = FluidDirection.NONE;
         }
 
-        if(progress > 0){
-            progress --;
-            if(progress <= 0){
+        if(t.progress > 0){
+            t.progress --;
+            if(t.progress <= 0){
 
-                inventory.setStackInSlot(0, ItemStack.EMPTY);
-                inventory.setStackInSlot(1, ItemStack.EMPTY);
-                inventory.setStackInSlot(2, ItemStack.EMPTY);
-                inventory.setStackInSlot(3, ItemStack.EMPTY);
-                inventory.setStackInSlot(4, ItemStack.EMPTY);
+                t.inventory.setStackInSlot(0, ItemStack.EMPTY);
+                t.inventory.setStackInSlot(1, ItemStack.EMPTY);
+                t.inventory.setStackInSlot(2, ItemStack.EMPTY);
+                t.inventory.setStackInSlot(3, ItemStack.EMPTY);
+                t.inventory.setStackInSlot(4, ItemStack.EMPTY);
 
-                tank.drain(recipe.fuel.getAmount(), IFluidHandler.FluidAction.EXECUTE);
+                t.tank.drain(t.recipe.fuel.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 
-                inventory.setStackInSlot(4, recipe.result.copy());
+                t.inventory.setStackInSlot(4, t.recipe.result.copy());
 
-                cool_down = 100;
+                t.cool_down = 100;
 
-                this.setChanged();
+                t.setChanged();
                 //level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
             }
-            this.setChanged();
+            t.setChanged();
             //level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
         }
-        if(cool_down > 0) {
-            cool_down--;
-            this.setChanged();
+        if(t.cool_down > 0) {
+            t.cool_down--;
+            t.setChanged();
         }
 
-        if(!inventory.getStackInSlot(4).isEmpty() && !isWorking()){
-            recipe = AltarRecipe.getRecipe(level, getRecipeContext()).orElse(null);
-            if(recipe != null){
-                progress = recipe.work_amount;
-                progress_from = recipe.work_amount;
+        if(!t.inventory.getStackInSlot(4).isEmpty() && !t.isWorking()){
+            t.recipe = AltarRecipe.getRecipe(level, t.getRecipeContext()).orElse(null);
+            if(t.recipe != null){
+                t.progress = t.recipe.work_amount;
+                t.progress_from = t.recipe.work_amount;
             }
         }
 
@@ -329,12 +335,12 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT nbt) {
-        CompoundNBT tank_nbt = new CompoundNBT();
+    public CompoundTag save(CompoundTag nbt) {
+        CompoundTag tank_nbt = new CompoundTag();
         tank.writeToNBT(tank_nbt);
         nbt.put("tank", tank_nbt);
 
-        CompoundNBT inv_tag = inventory.serializeNBT();
+        CompoundTag inv_tag = inventory.serializeNBT();
         nbt.put("inventory", inv_tag);
 
         nbt.putInt("progress", progress);
@@ -344,29 +350,32 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
         return super.save(nbt);
     }
 
-    @Override
-    public void load(BlockState p_230337_1_, CompoundNBT nbt) {
 
-        CompoundNBT tank_nbt = nbt.getCompound("tank");
+
+    @Override
+    public void load(CompoundTag nbt) {
+
+        CompoundTag tank_nbt = nbt.getCompound("tank");
         tank.readFromNBT(tank_nbt);
 
-        CompoundNBT invTag = nbt.getCompound("inventory");
+        CompoundTag invTag = nbt.getCompound("inventory");
         inventory.deserializeNBT(invTag);
 
         progress = nbt.getInt("progress");
         progress_from = nbt.getInt("progress_from");
         cool_down = nbt.getInt("cool_down");
 
-        super.load(p_230337_1_, nbt);
+        super.load(nbt);
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(getType().getRegistryName().getPath());
+    public Component getDisplayName() {
+        return new TextComponent(getType().getRegistryName().getPath());
     }
 
+    //TODO: Later
     @Override
-    public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player playerEntity) {
         return new AltarContainer(id, level, worldPosition, playerInv, data);
     }
 
@@ -388,8 +397,8 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
      * modded TE's, this packet comes back to you clientside in {@link #onDataPacket}
      */
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.getBlockPos(), -1, this.getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(this.getBlockPos(), -1, this.getUpdateTag());
     }
 
     /**
@@ -402,9 +411,9 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
      * @param pkt The data packet
      */
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         super.onDataPacket(net,pkt);
-        this.load( level.getBlockState(pkt.getPos()) ,pkt.getTag());
+        this.load(pkt.getTag());
     }
 
     /**
@@ -412,7 +421,7 @@ public class AltarTileEntity extends TileEntity implements INamedContainerProvid
      * many blocks change at once. This compound comes back to you clientside in {@link #handleUpdateTag}
      */
     @Override
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return this.save(new CompoundTag());
     }
 }

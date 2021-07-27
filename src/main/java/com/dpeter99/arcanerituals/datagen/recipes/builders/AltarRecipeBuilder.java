@@ -7,14 +7,13 @@ import com.dpeter99.arcanerituals.tileentities.AltarTileEntity;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -22,6 +21,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+
 
 public class AltarRecipeBuilder {
 
@@ -37,14 +37,14 @@ public class AltarRecipeBuilder {
 
     private Ingredient center;
 
-    public AltarRecipeBuilder(IItemProvider result, int count, ResourceLocation altarType,int workAmount) {
+    public AltarRecipeBuilder(ItemLike result, int count, ResourceLocation altarType,int workAmount) {
         this.result = result.asItem();
         this.count = count;
         this.altarType = altarType;
         this.workAmount = workAmount;
     }
 
-    public static AltarRecipeBuilder blood(IItemProvider p_200468_0_, int p_200468_1_,int workAmount) {
+    public static AltarRecipeBuilder blood(ItemLike p_200468_0_, int p_200468_1_,int workAmount) {
 
         return new AltarRecipeBuilder(p_200468_0_, p_200468_1_, AltarTileEntity.BLOOD_ALTAR_TYPE,workAmount);
     }
@@ -65,7 +65,7 @@ public class AltarRecipeBuilder {
         return this;
     }
 
-    public AltarRecipeBuilder addIngredient(IItemProvider ing){
+    public AltarRecipeBuilder addIngredient(ItemLike ing){
         this.ingredients.add(Ingredient.of(ing));
         return this;
     }
@@ -75,25 +75,25 @@ public class AltarRecipeBuilder {
         return this;
     }
 
-    public AltarRecipeBuilder setCenterIngredient(IItemProvider ing){
+    public AltarRecipeBuilder setCenterIngredient(ItemLike ing){
         this.center = Ingredient.of(ing);
         return this;
     }
 
 
-    public void save(Consumer<IFinishedRecipe> p_200464_1_) {
+    public void save(Consumer<FinishedRecipe> p_200464_1_) {
         this.save(p_200464_1_, ArcaneRituals.location("altar/"+result.getRegistryName().getPath()));
     }
 
 
-    public void save(Consumer<IFinishedRecipe> consumer, ResourceLocation p_200467_2_) {
+    public void save(Consumer<FinishedRecipe> consumer, ResourceLocation p_200467_2_) {
         //this.ensureValid(p_200467_2_);
         //this.advancement.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(p_200467_2_)).rewards(net.minecraft.advancements.AdvancementRewards.Builder.recipe(p_200467_2_)).requirements(IRequirementsStrategy.OR);
         consumer.accept(new AltarRecipeBuilder.Result(p_200467_2_, this.result, this.count, this.fuel, altarType, ingredients, center, workAmount));
     }
 
 
-    public class Result implements IFinishedRecipe {
+    public class Result implements FinishedRecipe {
         private final ResourceLocation id;
         private final Item result;
         private final int count;
@@ -129,7 +129,7 @@ public class AltarRecipeBuilder {
             fuel.addProperty("type",this.fuel.getId().toString());
             fuel.addProperty("amount",this.fuel.getAmount());
 
-            JsonElement fuel_nbt = NBTDynamicOps.INSTANCE.convertTo(JsonOps.INSTANCE, this.fuel.getNbt());
+            JsonElement fuel_nbt = NbtOps.INSTANCE.convertTo(JsonOps.INSTANCE, this.fuel.getNbt());
             fuel.add("nbt", fuel_nbt);
 
             inJson.add("fuel", fuel);
@@ -147,7 +147,7 @@ public class AltarRecipeBuilder {
             inJson.addProperty("work_amount", workAmount);
         }
 
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
             return ARRegistry.ALTAR_RECIPE_SERIALIZER.get();
         }
 

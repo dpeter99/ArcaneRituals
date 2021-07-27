@@ -6,11 +6,11 @@ import com.dpeter99.arcanerituals.registry.ARRegistry;
 import com.dpeter99.bloodylib.datagen.util.AdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
-import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.function.Consumer;
 
@@ -29,23 +29,23 @@ public class AdvancementsProvider extends AdvancementProvider {
     protected void registerAdvancement(Consumer<Advancement> consumer) {
         Advancement root = Advancement.Builder.advancement()
                 .display(ARRegistry.VIAL.get(),
-                        new TranslationTextComponent(STORY_ROOT_TITLE.toString()),
-                        new TranslationTextComponent(STORY_ROOT_DESCRIPTION.toString()),
+                        new TranslatableComponent(STORY_ROOT_TITLE.toString()),
+                        new TranslatableComponent(STORY_ROOT_DESCRIPTION.toString()),
                         new ResourceLocation("textures/gui/advancements/backgrounds/stone.png"),
                         FrameType.TASK,
                         true, true, true)
-                .addCriterion("test1", new BloodDrainTrigger.Instance(EntityType.SHEEP.getRegistryName(), EntityPredicate.AndPredicate.ANY))
+                .addCriterion("test1", new BloodDrainTrigger.Instance(EntityType.SHEEP.getRegistryName(), EntityPredicate.Composite.ANY))
                 .build(ArcaneRituals.location("main/root"));
         consumer.accept(root);
 
         Advancement fresh_blood = Advancement.Builder.advancement()
                 .display(ARRegistry.VIAL.get(),
-                        new TranslationTextComponent(getTitle(STORY_FRESH_BLOOD)),
-                        new TranslationTextComponent(getDesc(STORY_FRESH_BLOOD)),
+                        new TranslatableComponent(getTitle(STORY_FRESH_BLOOD)),
+                        new TranslatableComponent(getDesc(STORY_FRESH_BLOOD)),
                         new ResourceLocation("textures/gui/advancements/backgrounds/stone.png"),
                         FrameType.TASK,
                         true, true, true)
-                .addCriterion("test1", new BloodDrainTrigger.Instance(EntityType.SHEEP.getRegistryName(), EntityPredicate.AndPredicate.ANY))
+                .addCriterion("test1", new BloodDrainTrigger.Instance(EntityType.SHEEP.getRegistryName(), EntityPredicate.Composite.ANY))
                 .parent(root)
                 .build(ArcaneRituals.location("story/fresh_blood"));
         consumer.accept(fresh_blood);

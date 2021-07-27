@@ -3,25 +3,25 @@ package com.dpeter99.arcanerituals.crafting.altarcrafting;
 import com.dpeter99.arcanerituals.ArcaneRituals;
 import com.dpeter99.arcanerituals.crafting.ArcaneFuel;
 import com.dpeter99.arcanerituals.registry.ARRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AltarRecipe implements IRecipe<AltarContext> {
+
+public class AltarRecipe implements Recipe<AltarContext> {
 
     public static final String RECIPE_TYPE_NAME = "altar";
     public static final ResourceLocation RECIPE_TYPE_ID = ArcaneRituals.location(RECIPE_TYPE_NAME);
 
-    public static final IRecipeType<AltarRecipe> ALTAR_RECIPE_TYPE = IRecipeType.register(RECIPE_TYPE_ID.toString());
+    public static final RecipeType<AltarRecipe> ALTAR_RECIPE_TYPE = RecipeType.register(RECIPE_TYPE_ID.toString());
 
     public final ResourceLocation id;
     public final String group;
@@ -36,7 +36,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
     public final String altar_type;
     public final int work_amount;
 
-    public static Optional<AltarRecipe> getRecipe(World world, AltarContext ctx)
+    public static Optional<AltarRecipe> getRecipe(Level world, AltarContext ctx)
     {
         return world.getRecipeManager().getRecipeFor(ALTAR_RECIPE_TYPE, ctx, world);
     }
@@ -54,7 +54,7 @@ public class AltarRecipe implements IRecipe<AltarContext> {
 
 
     @Override
-    public boolean matches(AltarContext ctx, World worldIn) {
+    public boolean matches(AltarContext ctx, Level worldIn) {
         if(!ctx.altar_type.equals(altar_type)){
             return false;
         }
@@ -113,12 +113,12 @@ public class AltarRecipe implements IRecipe<AltarContext> {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ARRegistry.ALTAR_RECIPE_SERIALIZER.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return ALTAR_RECIPE_TYPE;
     }
 

@@ -14,12 +14,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.resources.ResourceLocation;
 
-public class MobBloodProvider implements IDataProvider {
+public class MobBloodProvider implements DataProvider {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -31,14 +31,14 @@ public class MobBloodProvider implements IDataProvider {
     }
 
     @Override
-    public void run(DirectoryCache cache) throws IOException {
+    public void run(HashCache cache) throws IOException {
         Path folder = generator.getOutputFolder();
         start();
 
         toSerialize.forEach((name, json) -> {
             Path path = folder.resolve("data/" + ArcaneRituals.MODID + "/mob_blood/" + name + ".json");
             try {
-                IDataProvider.save(GSON, cache, json, path);
+                DataProvider.save(GSON, cache, json, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save mob blood {}", path, e);
             }

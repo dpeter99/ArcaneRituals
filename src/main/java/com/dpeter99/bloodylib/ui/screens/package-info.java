@@ -4,4 +4,4 @@ package com.dpeter99.bloodylib.ui.screens;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;

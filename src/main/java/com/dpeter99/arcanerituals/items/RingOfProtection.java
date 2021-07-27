@@ -1,26 +1,16 @@
 package com.dpeter99.arcanerituals.items;
 
 import com.dpeter99.arcanerituals.ArcaneRituals;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.Logging;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.type.capability.ICurioItem;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+//import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.lang.reflect.Method;
-import java.util.UUID;
 
-public class RingOfProtection extends Item implements ICurioItem {
+public class RingOfProtection extends Item /*implements ICurioItem*/ {
 
     private static final int RING_PROTECTION_S = 5;
 
@@ -31,7 +21,8 @@ public class RingOfProtection extends Item implements ICurioItem {
         this.level = level;
     }
 
-
+    //TODO: LATER
+/*
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> atts = LinkedHashMultimap.create();
@@ -40,7 +31,7 @@ public class RingOfProtection extends Item implements ICurioItem {
                         AttributeModifier.Operation.ADDITION));
         return atts;
     }
-
+*/
 
     public int getLevel() {
         return level;
