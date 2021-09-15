@@ -19,8 +19,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-//import top.theillusivec4.curios.api.CuriosApi;
-//import top.theillusivec4.curios.api.SlotTypeMessage;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotTypeMessage;
 
 import java.util.Optional;
 
@@ -75,10 +75,10 @@ public class ArcaneRituals {
     @SubscribeEvent
     public void test(LivingHurtEvent event){
         //TODO: CURIOS
-        /*
+
         Optional<ImmutableTriple<String, Integer, ItemStack>> ring = CuriosApi.getCuriosHelper().findEquippedCurio(i -> (i.getItem() instanceof RingOfProtection), event.getEntityLiving());
         ring.ifPresent(triple -> ((RingOfProtection) triple.right.getItem()).entityDamaged(event));
-         */
+
     }
 
 

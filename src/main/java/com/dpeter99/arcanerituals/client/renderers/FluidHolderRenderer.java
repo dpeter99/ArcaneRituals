@@ -1,4 +1,3 @@
-
 /*
 package com.dpeter99.arcanerituals.client.renderers;
 

@@ -1,11 +1,8 @@
 package com.dpeter99.bloodylib;
 
-import com.dpeter99.arcanerituals.items.ItemSacrificialKnife;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
-
-import java.util.UUID;
 
 public abstract class NBTData implements INBTSerializable<CompoundTag> {
 
