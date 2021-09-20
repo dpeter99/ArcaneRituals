@@ -23,9 +23,12 @@ archivesBaseName = 'arcanerituals'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(16) // Mojang ships MS Java 16 to end users, so your mod should target MS Java 16. 😋
 
+//project.evaluationDependsOn(':shared_resources')
 sourceSets {
+    generated {}
     main.resources {
-        srcDirs += data.resources.srcDirs
+        //srcDirs project(':shared_resources').sourceSets.forge.resources.srcDirs
+        srcDirs sourceSets.generated.resources.srcDirs
         exclude '.cache/'
     }
 }
@@ -141,6 +144,7 @@ dependencies {
 
     //implementation 'thedarkcolour:kotlinforforge:1.7.0'
 
+    library group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib'
 
     //For testing the tanks and the fluids
     //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")
